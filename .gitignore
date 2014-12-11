@@ -3,6 +3,7 @@
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
+/nbproject/*
 
 # Cache and logs (Symfony3)
 /var/cache/*
@@ -32,3 +33,4 @@
 
 # Composer PHAR
 /composer.phar
+/nbproject/private/
