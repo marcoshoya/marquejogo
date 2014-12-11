@@ -1,4 +1,4 @@
 marquejogo
 ==========
 
-A booking system to sports that was developed as conclusion course at PUC - PR
+A booking system to sports that was developed as conclusion course project at PUC - PR
