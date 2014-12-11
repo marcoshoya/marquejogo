@@ -1,3 +1,3 @@
 marcoshoya_marquejogo_homepage:
-    path:     /hello/{name}
+    path:     /
     defaults: { _controller: MarcoshoyaMarquejogoBundle:Default:index }
