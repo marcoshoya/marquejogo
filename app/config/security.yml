@@ -1,12 +1,37 @@
+#security:
+#    providers:
+#        in_memory:
+#            memory: ~
+#
+#    firewalls:
+#        dev:
+#            pattern: ^/(_(profiler|wdt)|css|images|js)/
+#            security: false
+#
+#        default:
+#            anonymous: ~
+
 security:
+    encoders:
+        Marcoshoya\MarquejogoBundle\Entity\AdmUser:
+            algorithm:        sha1
+            encode_as_base64: false
+            iterations:       1
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
+
     providers:
-        in_memory:
-            memory: ~
+        admin:
+            entity: { class: MarcoshoyaMarquejogoBundle:AdmUser, property: username }
 
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        admin:
+            pattern:    ^/adm
+            form_login:
+                login_path:  marquejogo_adm_login
+                check_path:  marquejogo_adm_login_check
 
-        default:
-            anonymous: ~
+    access_control:
+        - { path: ^/adm, roles: ROLE_ADMIN }
