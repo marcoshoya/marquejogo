@@ -1,0 +1,4 @@
+services:
+#    marcoshoya_marquejogo.example:
+#        class: Marcoshoya\MarquejogoBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
