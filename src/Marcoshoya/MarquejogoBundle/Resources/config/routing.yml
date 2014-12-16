@@ -3,35 +3,7 @@ marquejogo_homepage:
     defaults: { _controller: MarcoshoyaMarquejogoBundle:Default:index }
     
 marquejogo_adm:
-    resource: "@MarcoshoyaMarquejogoBundle/Controller/AdmLoginController.php"
+    resource: "@MarcoshoyaMarquejogoBundle/Controller/Adm/"
     type:      annotation
     prefix:    /adm
 
-marquejogo_adm_login:
-    pattern: /login
-    defaults: { _controller: MarcoshoyaMarquejogoBundle:AdmLogin:login }
- 
-marquejogo_adm_logout:
-    pattern: /logout
-    defaults: { _controller: MarcoshoyaMarquejogoBundle:AdmLogin:logout }
-    
-    
-#kpanel:
-#    resource: "@KpanelBackendBundle/Controller/"
-#    type:      annotation
-#    prefix:    /kpanel
-#    
-#dashboard:
-#    pattern: /kpanel/dashboard
-#    defaults: { _controller: KpanelBackendBundle:Dashboard:index }
-#    
-#activelist:
-#    pattern: /dashboard/activelist
-#    defaults: { _controller: KpanelBackendBundle:Dashboard:activeList }
-#    
-#statecity:
-#    pattern: /dashboard/statecity
-#    defaults: { _controller: KpanelBackendBundle:Dashboard:stateCity }
-#
-#elfinder:
-#     resource: "@FMElfinderBundle/Resources/config/routing.yml"

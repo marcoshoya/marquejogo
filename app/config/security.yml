@@ -28,10 +28,14 @@ security:
 
     firewalls:
         admin:
+            anonymous: ~
             pattern:    ^/adm
             form_login:
-                login_path:  marquejogo_adm_login
-                check_path:  marquejogo_adm_login_check
+                check_path: /adm/login_check
+                login_path: /adm/login
+                default_target_path: /adm
 
     access_control:
+        - { path: ^/adm/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/adm, roles: ROLE_ADMIN }
+        
