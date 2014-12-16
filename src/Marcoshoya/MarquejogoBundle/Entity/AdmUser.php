@@ -5,6 +5,8 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Table(name="user")
  * @ORM\Entity
@@ -20,6 +22,7 @@ class AdmUser implements UserInterface, \Serializable {
     
     /**
      * @ORM\Column(type="string", length=25, unique=true)
+     * @Assert\NotBlank(message = "Campo obrigatório")
      */
     private $username;
     
@@ -30,6 +33,7 @@ class AdmUser implements UserInterface, \Serializable {
     
     /**
      * @ORM\Column(type="string", length=40)
+     * @Assert\NotBlank(message = "Campo obrigatório")
      */
     private $password;
 
@@ -119,4 +123,99 @@ class AdmUser implements UserInterface, \Serializable {
         ) = unserialize($serialized);
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return AdmUser
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     * @return AdmUser
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return AdmUser
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return AdmUser
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return AdmUser
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
 }

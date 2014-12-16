@@ -1,3 +1,5 @@
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Adm/Form:fields.html.twig' %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,19 +40,23 @@
                         <h3 class="panel-title">MarqueJogo.com - Administrador</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form">
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+        
+                            {{ form_row (form._token) }}
                             <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                <div class="form-group {% if not form.username.vars.valid %} has-error {% endif %}">
+                                    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'Usuário'} }) }}
+                                    {{ form_errors(form.username) }}
                                 </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Senha" name="password" type="password" value="">
+                                <div class="form-group {% if not form.password.vars.valid %} has-error {% endif %}">
+                                    {{ form_widget(form.password, { 'attr': {'class': 'form-control', 'placeholder': 'Senha'} }) }}
+                                    {{ form_errors(form.password) }}
                                 </div>
                                 
                                 <!-- Change this to a button or input when using this as a form -->
                                 <input type="submit" class="btn btn-lg btn-success btn-block" value="Acessar" />
                             </fieldset>
-                        </form>
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>
