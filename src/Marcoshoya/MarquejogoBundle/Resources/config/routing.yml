@@ -6,4 +6,3 @@ marquejogo_adm:
     resource: "@MarcoshoyaMarquejogoBundle/Controller/Adm/"
     type:      annotation
     prefix:    /adm
-

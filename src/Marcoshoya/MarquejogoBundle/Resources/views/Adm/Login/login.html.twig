@@ -1,95 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
 
-        <title>MarqueJogo.com - Admin</title>
+<head>
 
-        {% block stylesheets %}
-            <!-- Latest compiled and minified CSS -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-            <!-- Optional theme -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-            <!-- Latest compiled and minified JavaScript -->
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-            <style>
+    <title>MarqueJogo.com - Administrador</title>
+    
+    {% block stylesheets %}
 
-                body {
-                    padding-top: 40px;
-                    padding-bottom: 40px;
-                    background-color: #eee;
-                }
+        <!-- Bootstrap Core CSS -->
+        <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
 
-                .form-signin {
-                    max-width: 330px;
-                    padding: 15px;
-                    margin: 0 auto;
-                }
-                .form-signin .form-signin-heading,
-                .form-signin .checkbox {
-                    margin-bottom: 10px;
-                }
-                .form-signin .checkbox {
-                    font-weight: normal;
-                }
-                .form-signin .form-control {
-                    position: relative;
-                    height: auto;
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-                    padding: 10px;
-                    font-size: 16px;
-                }
-                .form-signin .form-control:focus {
-                    z-index: 2;
-                }
-                .form-signin input[type="email"] {
-                    margin-bottom: -1px;
-                    border-bottom-right-radius: 0;
-                    border-bottom-left-radius: 0;
-                }
-                .form-signin input[type="password"] {
-                    margin-bottom: 10px;
-                    border-top-left-radius: 0;
-                    border-top-right-radius: 0;
-                }
-                .container-title{
-                    padding: 15px;
-                    margin: 0 auto;
-                    max-width: 500px;
-                }
+        <!-- Custom CSS -->
+        <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/sb-admin-2.css') }}" rel="stylesheet" type="text/css" />
 
-            </style>
+    {% endblock %}
+    
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-        {% endblock %}
-    </head>
+</head>
 
-    <body>
+<body>
 
-        <div class="container">
-            
-            <div class="container-title">
-                <h2>MarqueJogo.com - Administrador</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">MarqueJogo.com - Administrador</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Senha" name="password" type="password" value="">
+                                </div>
+                                
+                                <!-- Change this to a button or input when using this as a form -->
+                                <input type="submit" class="btn btn-lg btn-success btn-block" value="Acessar" />
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <form class="form-signin" role="form" action="{{path('_marquejogo_adm_login')}}">
-                
-                <label for="inputEmail" class="sr-only">Email</label>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email" autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password">
+</body>
 
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-                
-            </form>
-
-        </div> <!-- /container -->
-
-    </body>
 </html>
