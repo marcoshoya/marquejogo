@@ -4,10 +4,14 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * AdmUser entity class
+ * 
+ * @author  Marcos Joia <marcoshoya at gmail dot com>
+ * @package Marcoshoya\MarquejogoBundle\Entity
+ * 
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
