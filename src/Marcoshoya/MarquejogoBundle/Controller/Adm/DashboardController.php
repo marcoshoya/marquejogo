@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Marcoshoya\MarquejogoBundle\Entity\AdmUser;
 use Marcoshoya\MarquejogoBundle\Form\AdmUserType;
 
-class LoginController extends Controller
+class DashboardController extends Controller
 {
     /**
      * @Route("/", name="_adm_dash")
@@ -21,7 +21,6 @@ class LoginController extends Controller
      */
     public function dashboardAction()
     {
-        
         return array();
     }
     
@@ -104,6 +103,14 @@ class LoginController extends Controller
             
             return false;
         }
+    }
+    
+    public function sidebarAction($view, $item)
+    {
+        return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:sidebar.html.twig', array(
+            'view' => $view, 
+            'item' => $item
+        ));
     }
     
 }
