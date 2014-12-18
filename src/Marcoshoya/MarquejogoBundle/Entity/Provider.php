@@ -24,7 +24,7 @@ class Provider
     private $id;
     
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
+     * @ORM\Column(type="string", length=60)
      * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $email;
@@ -66,7 +66,7 @@ class Provider
     private $number;
     
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $complement;
     
@@ -89,7 +89,7 @@ class Provider
     private $state;
     
     /**
-     * @ORM\Column(name="is_active", type="boolean")
+     * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
     

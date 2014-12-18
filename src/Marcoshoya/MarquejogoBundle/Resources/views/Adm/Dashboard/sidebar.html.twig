@@ -3,16 +3,19 @@
         <ul class="nav" id="side-menu">
 
             <li>
-                <a href="{{ path('_adm_dash') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                <a {{ view == 'dashboard' ? 'class="active"' : '' }} href="{{ path('_adm_dash') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
             </li>
 
-            <li>
+            <li {{ view == 'provider' ? 'class="active"' : '' }}>
                 <a href="#">
                     <i class="fa fa-archive fa-fw"></i> Fornecedores<span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="panels-wells.html">Panels and Wells</a>
+                        <a {{ view == 'provider' and item == 'new' ? 'class="active"' : '' }} href="{{ path('provider_new') }}">Inserir</a>
+                    </li>
+                    <li>
+                        <a {{ view == 'provider' and item == 'list' ? 'class="active"' : '' }} href="{{ path('provider') }}">Listar</a>
                     </li>
                 </ul>
 

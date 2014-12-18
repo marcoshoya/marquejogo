@@ -1,0 +1,139 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Adm:index.html.twig' %}
+
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Adm/Form:fields.html.twig' %}
+
+{% block sidebar %}
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Adm/Dashboard:sidebar', {view : 'provider', item: 'new'})) }}
+{% endblock %}
+
+{% block container %}
+
+    <div id="page-wrapper">
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+
+            {{ form_row (form._token) }}
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Inserir fornecedor</h1>
+                    <p align="right">
+                        <button type="submit" class="submit btn btn-primary" value="Salvar" alt="Salvar" title="Salvar"> 
+                            <i class="icon-save"></i> Salvar 
+                        </button>
+                    </p>
+                </div>
+                <!-- /.col-lg-12 -->
+
+            </div>
+            <!-- /.row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Dados</div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-md-2">{{ form_label(form.isActive, 'Ativo') }}</label>
+                                <div class="col-md-1">
+                                    {{ form_widget(form.isActive, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.isActive) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group {% if not form.cnpj.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.cnpj, 'CNPJ') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.cnpj, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.cnpj) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group {% if not form.name.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.name, 'Nome') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.name) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group {% if not form.phone.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.phone, 'Telefone') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.phone, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.phone) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group {% if not form.address.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.address, 'Endereço') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.address, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.address) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2">{{ form_label(form.number, 'Número') }}</label>
+                                <div class="col-md-2">
+                                    {{ form_widget(form.number, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.number) }}
+                                </div>
+                                <label class="col-md-2">{{ form_label(form.complement, 'Complemento') }}</label>
+                                <div class="col-md-4">
+                                    {{ form_widget(form.complement, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.complement) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group {% if not form.neighborhood.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.neighborhood, 'Bairro') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.neighborhood, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.neighborhood) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2">{{ form_label(form.complement, 'Cidade') }}</label>
+                                <div class="col-md-4">
+                                    {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.city) }}
+                                </div>
+                                <label class="col-md-2">{{ form_label(form.state, 'Estado') }}</label>
+                                <div class="col-md-2">
+                                    {{ form_widget(form.state, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.state) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Acesso</div>
+                        <div class="panel-body">
+                            <div class="form-group {% if not form.email.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.email, 'Email') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.email) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group {% if not form.password.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.password, 'Senha') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.password, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.password) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
