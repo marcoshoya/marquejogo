@@ -52,6 +52,8 @@ class ProviderController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Fornecedor inserido com sucesso.');
 
             return $this->redirect($this->generateUrl('provider'));
         }
@@ -160,6 +162,8 @@ class ProviderController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Fornecedor atualizado com sucesso.');
 
             return $this->redirect($this->generateUrl('provider'));
         }

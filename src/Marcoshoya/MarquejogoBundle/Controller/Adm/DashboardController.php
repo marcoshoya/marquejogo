@@ -105,12 +105,29 @@ class DashboardController extends Controller
         }
     }
     
+    /**
+     * Sidebar action
+     * 
+     * @param string    $view
+     * @param styring   $item
+     * @return string
+     */
     public function sidebarAction($view, $item)
     {
         return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:sidebar.html.twig', array(
             'view' => $view, 
             'item' => $item
         ));
+    }
+    
+    /**
+     * Flash action
+     * 
+     * @return string
+     */
+    public function flashAction()
+    {
+        return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:flash.html.twig', array());
     }
     
 }
