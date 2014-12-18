@@ -54,6 +54,18 @@ class DashboardController extends Controller
     }
     
     /**
+     * @Route("/logout", name="_marquejogo_adm_logout")
+     * @Template()
+     */
+    public function logoutAction()
+    {
+        $this->get('security.context')->setToken(null);
+        $this->get('request')->getSession()->invalidate();
+        
+        return $this->redirect($this->generateUrl('_adm_dash'));
+    }
+    
+    /**
      * Create a login form
      * 
      * @param AdmUser $entity

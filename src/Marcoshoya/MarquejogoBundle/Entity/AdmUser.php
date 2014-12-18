@@ -31,7 +31,7 @@ class AdmUser implements UserInterface, \Serializable {
     private $username;
     
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, nullable=true)
      */
     private $salt;
     
@@ -43,11 +43,12 @@ class AdmUser implements UserInterface, \Serializable {
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
+     * @Assert\NotBlank(message = "Campo obrigatório")
      */
     private $email;
 
     /**
-     * @ORM\Column(name="is_active", type="boolean")
+     * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
     
