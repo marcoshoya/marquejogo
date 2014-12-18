@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Entity\AdmUser;
 use Marcoshoya\MarquejogoBundle\Form\AdmUserType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * AdmUser controller.
@@ -77,7 +78,14 @@ class AdmUserController extends Controller
             'method' => 'POST',
         ));
         
-        $form->remove('salt');
+        $form
+            ->add('email', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->remove('salt')
+        ;
 
         return $form;
     }
@@ -139,7 +147,14 @@ class AdmUserController extends Controller
             'method' => 'PUT',
         ));
         
-        $form->remove('salt');
+        $form
+            ->add('email', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->remove('salt')
+        ;
 
         return $form;
     }

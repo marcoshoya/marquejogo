@@ -43,7 +43,6 @@ class AdmUser implements UserInterface, \Serializable {
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Assert\NotBlank(message = "Campo obrigatório")
      */
     private $email;
 
