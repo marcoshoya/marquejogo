@@ -1,1 +1,83 @@
-MarqueJogo.com home page
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>MarqueJogo.com</title>
+    
+    {% block stylesheets %}
+
+       
+    {% endblock %}
+    
+    <style>
+        
+        *{
+                margin:0;
+                padding:0;
+                outline:none;
+                font-family:Arial, Helvetica, sans-serif;
+                list-style:none;
+                color:#000000;
+                font-size:12px;
+        }
+        html, body, #page {
+                height: 100%;
+        }
+        body > #page {
+                height: auto;
+                min-height: 100%;
+        }
+        body{
+            color: #ffffff;
+        }
+        :focus{
+                outline:none;
+        }
+        a img{
+                border:none;
+        }
+        .clear{
+                clear:both;
+        }
+        #page{
+                width:960px;
+                margin:0 auto;
+                position:relative;
+                padding:0 10px;
+                height:100%;
+        }
+        
+    </style>
+  
+    
+    {% block javascripts %}
+    
+      
+    {% endblock %} 
+
+</head>
+
+<body>
+    
+    <div id="page">
+        
+        <!-- Page Content -->
+        {% block container %}
+            
+        {% endblock %}
+        
+        <!-- /#page-wrapper -->
+        
+    </div>
+   
+
+        
+
+</body>
+
+</html>

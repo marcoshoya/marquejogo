@@ -1,6 +1,6 @@
 marquejogo_homepage:
     path:     /
-    defaults: { _controller: MarcoshoyaMarquejogoBundle:Default:index }
+    defaults: { _controller: MarcoshoyaMarquejogoBundle:Site/Main:index }
     
 marquejogo_adm:
     resource: "@MarcoshoyaMarquejogoBundle/Controller/Adm/"

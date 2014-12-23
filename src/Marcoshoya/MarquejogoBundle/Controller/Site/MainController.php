@@ -1,13 +1,13 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Controller;
+namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class DefaultController extends Controller
+class MainController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('MarcoshoyaMarquejogoBundle:Default:index.html.twig');
+        return $this->render('MarcoshoyaMarquejogoBundle:Site/Main:main.html.twig');
     }
 }
