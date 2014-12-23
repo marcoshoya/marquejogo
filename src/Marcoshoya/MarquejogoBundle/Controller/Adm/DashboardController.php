@@ -23,7 +23,7 @@ class DashboardController extends Controller
     {
         return array();
     }
-    
+
     /**
      * @Route("/login", name="_marquejogo_adm_login")
      * @Template()
@@ -32,27 +32,27 @@ class DashboardController extends Controller
     {
         $entity = new AdmUser();
         $form = $this->createLoginForm($entity);
-        
+
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                
+
                 $auth = $this->doAuth($data);
-                
+
                 if ($auth) {
-                    
+
                     return $this->redirect($this->generateUrl('_adm_dash'));
                 }
             }
         }
-        
+
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/logout", name="_marquejogo_adm_logout")
      * @Template()
@@ -61,23 +61,23 @@ class DashboardController extends Controller
     {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
-        
+
         return $this->redirect($this->generateUrl('_adm_dash'));
     }
-    
+
     /**
      * Create a login form
-     * 
+     *
      * @param AdmUser $entity
      * @return AdmUserType
      */
-    private function createLoginForm(AdmUser $entity) 
+    private function createLoginForm(AdmUser $entity)
     {
         $form = $this->createForm(new AdmUserType(), $entity, array(
             'action' => $this->generateUrl('_marquejogo_adm_login'),
             'method' => 'POST',
         ));
-        
+
         $form
             ->add('username', 'text', array(
                 'required' => true,
@@ -87,21 +87,22 @@ class DashboardController extends Controller
             ->remove('salt')
             ->remove('isActive')
         ;
-        
+
         return $form;
     }
-    
+
     private function doAuth(AdmUser $entity)
     {
         $entity->getPassword();
-                
+
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('MarcoshoyaMarquejogoBundle:AdmUser')->findOneBy(array(
-            'username' => $entity->getUserName(),                    
+            'username' => $entity->getUserName(),
+            'password' => $entity->getPassword(),
         ));
 
         if ($user instanceof AdmUser) {
-            
+
             $providerKey = 'admin';
             $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
 
@@ -109,17 +110,17 @@ class DashboardController extends Controller
 
             $session = $this->getRequest()->getSession();
             $session->set('_security_main',  serialize($token));
-            
+
             return true;
         } else {
-            
+
             return false;
         }
     }
-    
+
     /**
      * Sidebar action
-     * 
+     *
      * @param string    $view
      * @param styring   $item
      * @return string
@@ -127,19 +128,19 @@ class DashboardController extends Controller
     public function sidebarAction($view, $item)
     {
         return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:sidebar.html.twig', array(
-            'view' => $view, 
+            'view' => $view,
             'item' => $item
         ));
     }
-    
+
     /**
      * Flash action
-     * 
+     *
      * @return string
      */
     public function flashAction()
     {
         return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:flash.html.twig', array());
     }
-    
+
 }
