@@ -1,83 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+    <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MarqueJogo.com</title>
-    
-    {% block stylesheets %}
+        <title>MarqueJogo.com</title>
 
-       
-    {% endblock %}
-    
-    <style>
-        
-        *{
-                margin:0;
-                padding:0;
-                outline:none;
-                font-family:Arial, Helvetica, sans-serif;
-                list-style:none;
-                color:#000000;
-                font-size:12px;
-        }
-        html, body, #page {
-                height: 100%;
-        }
-        body > #page {
-                height: auto;
-                min-height: 100%;
-        }
-        body{
-            color: #ffffff;
-        }
-        :focus{
-                outline:none;
-        }
-        a img{
-                border:none;
-        }
-        .clear{
-                clear:both;
-        }
-        #page{
-                width:960px;
-                margin:0 auto;
-                position:relative;
-                padding:0 10px;
-                height:100%;
-        }
-        
-    </style>
-  
-    
-    {% block javascripts %}
-    
-      
-    {% endblock %} 
+        {% block stylesheets %}
 
-</head>
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style.css') }}" rel="stylesheet" type="text/css" />
 
-<body>
-    
-    <div id="page">
-        
-        <!-- Page Content -->
-        {% block container %}
-            
+            <style>
+
+                
+
+            </style>
         {% endblock %}
-        
-        <!-- /#page-wrapper -->
-        
-    </div>
-   
 
-        
+        {% block javascripts %}
 
-</body>
+
+        {% endblock %} 
+
+    </head>
+
+    <body>
+
+        <div id="page">
+
+            <div id="topo">
+                MarqueJogo.com
+            </div>
+            <div id="menu">
+                <ul class="menu">
+                    <li><a class="nav" href="#">Home</a></li>
+                    <li class="divider"></li>
+                    <li><a class="nav" href="#">Contato</a></li>
+                </ul>
+            </div>
+            <div id="content">
+
+                <div id="busca">
+
+                </div>
+
+                <!-- Page Content -->
+                {% block container %}
+
+                {% endblock %}
+
+                <!-- /#page-wrapper -->
+
+            </div>
+
+            <div class="clear"></div>
+
+
+            <div id="rodape">
+
+                <p>Copyright 2014 - MarqueJogo.com <br>
+                    <br>
+                    <span>Fotos ilustrativas - Especificações sujeitas a alterações sem prévio aviso</span></p>
+            </div>
+
+        </div>
+    </body>
 
 </html>
