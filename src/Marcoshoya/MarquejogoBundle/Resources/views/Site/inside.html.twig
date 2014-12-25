@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>MarqueJogo.com</title>
+
+        {% block stylesheets %}
+
+            <style>
+
+                *{
+                    margin:0;
+                    padding:0;
+                    outline:none;
+                    font-family:Arial, Helvetica, sans-serif;
+                    list-style:none;
+                    color:#000000;
+                    font-size:12px;
+                }
+                html, body, #page {
+                    height: 100%;
+                }
+                body > #page {
+                    height: auto;
+                    min-height: 100%;
+                }
+                body{
+                    background: #FFFFFF;
+                }
+                :focus{
+                    outline:none;
+                }
+                a img{
+                    border:none;
+                }
+                .clear{
+                    clear:both;
+                }
+                .page{
+                    width:960px;
+                    margin:0 auto;
+                    position:relative;
+                    padding:0 10px;
+                    height:100%;
+                    background-color: #FFFFFF;
+                }
+
+                .header {
+                    height: 110px;
+                    background-color: #3f903f;
+                    padding: 5px;
+                }
+                .header-logo{
+                    float: left;
+                    margin-top: 5px;
+                }
+
+                .header-logo img {
+                    width: 200px;
+                    height: 102px;
+                    float:left;
+                }
+
+                .header-logo h1 {
+                    margin-top: 25px;
+                    float: left;
+                    margin-left: 25px;
+                    font-size:32px;
+                }
+                
+                .sidebar{
+                    float: left;
+                    padding: 5px;
+                    width: 250px;
+                    min-height: 300px;
+                    background-color: #FFF48C;
+                    margin-top: 10px;
+                    border-radius: 5px;
+                }
+                
+                .container {
+                    float: left;
+                    min-height: 450px;
+                    padding: 5px;
+                    margin-top: 10px;
+                }
+                
+                .containter h1 {
+                    font-size: 32px;
+                }
+                
+                .footer{
+                    padding: 25px 8px;
+                    text-align: center;
+                    background-color: #3f903f;
+                    color: #FFFFFF;
+                }
+
+            </style>
+        {% endblock %}
+
+        {% block javascripts %}
+
+
+        {% endblock %}
+
+    </head>
+
+    <body>
+
+        <div class="page">
+
+            <div class="header">
+                <div class="header-logo">
+                    <img src="/bundles/marcoshoyamarquejogo/images/site/player-logo.png" />
+                    <h1>MarqueJogo.com</h1>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                
+                
+            </div>
+            
+            <div class="container">
+                {% block container %}
+
+                {% endblock %}
+            </div>
+
+            <div class="clear"> </div>
+
+            <div class="footer">
+
+                <p>Copyright 2014 - MarqueJogo.com <br>
+                    <br>
+                    <span>Fotos ilustrativas - Especificações sujeitas a alterações sem prévio aviso</span></p>
+            </div>
+
+        </div>
+    </body>
+
+</html>
