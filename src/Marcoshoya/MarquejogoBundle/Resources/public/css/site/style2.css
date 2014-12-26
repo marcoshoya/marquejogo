@@ -1,0 +1,145 @@
+*{
+    margin:0;
+    padding:0;
+    outline:none;
+    font-family:Arial, Helvetica, sans-serif;
+    list-style:none;
+}
+html { height: 100%;}
+body{
+    height:100%;
+    background: #2D5908;
+}
+* html body {height: 100%;}
+.clear{
+    clear:both;
+}
+
+.header {
+    height: 110px;
+    position: relative;
+    margin: 0 auto;
+    width:960px;
+    background-color: #2D5908;
+    padding: 5px;
+}
+.header-logo{
+    float: left;
+    margin-top: 5px;
+}
+
+.header-logo img {
+    width: 200px;
+    height: 102px;
+    float:left;
+}
+
+.header-logo h1 {
+    margin-top: 25px;
+    float: left;
+    margin-left: 25px;
+    color: #FFFFFF;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 40px;
+}
+
+.footer{
+    padding: 25px 8px;
+    margin: 0 auto;
+    width:960px;
+    text-align: center;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+/**********************************
+ HOME
+**********************************/
+.container {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    height: 620px;
+}
+
+.master-background{
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+.background {
+    background-image: url('../../images/site/bg-campo.jpg');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    min-width: 100%;
+    min-height: 620px;
+    display: block;
+}
+.search-header {
+    position: relative;
+    z-index:10;
+    margin: 0;
+    padding: 50px 0;
+    font-size: 150%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.searchbox {
+    position:relative;
+    z-index:10;
+    width: 550px;
+    background-color: #FFF48C;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+/**********************************
+ INTERNO
+**********************************/
+.container-inside{
+    position: relative;
+    margin: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    height: 100%;
+}
+
+.container-body{
+    margin: 0 auto;
+    width: 960px;
+    height: 100%;
+}
+.container-left {
+    float: left;
+    width: 264px;
+    min-height: 300px;
+    background-color: #FFF48C;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.container-right {
+    float: left;
+    width: auto;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.container-right h1 {
+    margin-bottom: 15px;
+}
+.container-list{
+    float:left;
+}
+.list-item{
+    float:left;
+    width: 100%;
+    border-top: 1px dashed #2D5908;
+    height: 180px;
+    padding: 8px 0;
+}

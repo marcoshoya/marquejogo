@@ -10,111 +10,36 @@
         <title>MarqueJogo.com</title>
 
         {% block stylesheets %}
-
-
-
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />
+            
             <style>
-
-                *{
-                    margin:0;
-                    padding:0;
-                    outline:none;
-                    font-family:Arial, Helvetica, sans-serif;
-                    list-style:none;
-                }
-                html {height: 100%;}
-                body{
-                    height:100%;
-                }
-                * html body {height: 100%;}
-                .clear{
-                    clear:both;
-                }
-
-                .header {
-                    height: 110px;
-                    position: relative;
-                    margin: 0 auto;
-                    width:960px;
-                    
-                }
-                .header-logo{
-                    float: left;
-                    margin-top: 5px;
-                }
-                
-                .header-logo img {
-                    width: 200px;
-                    height: 102px;
-                    float:left;
-                }
-                
-                .header-logo h1 {
-                    margin-top: 25px;
-                    float: left;
-                    margin-left: 25px;
-                }
-
-                .container {
-                    position: relative;
+                .searchbox fieldset {
+                    border: 0 none;
                     margin: 0;
+                    padding: 0;
+                }
+                .form-group {
+                    position: relative;
+                    z-index: 200;
+                    padding: 0 0.9em 1.2em;
+                }
+                
+                .form-group-date{
+                    // width: 50%;
+                    // margin: 5px;
+                    position: relative;
+                }
+                .form-group col-md-1, col-md-2  {
+                    position: relative;
+                }
+                .form-control {
                     width: 100%;
-                    height: 620px;
                 }
-
-                .master-background{
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    top: 0;
-                    margin: 0;
-                    position: absolute;
-                    z-index: 1;
-                }
-
-                .background {
-                    background-image: url('/bundles/marcoshoyamarquejogo/images/site/bg-campo.jpg');
-                    background-repeat: no-repeat;
-                    background-position: center top;
-                    background-size: cover;
-                    min-width: 100%;
-                    min-height: 620px;
-                    display: block;
-                }
-                .search-header {
-                    position: relative;
-                    z-index:10;
-                    margin: 0;
-                    padding: 50px 0;
-                    font-size: 150%;
-                    text-align: center;
-                    color: #FFFFFF;
-                }
-
-                .searchbox {
-                    position:relative;
-                    z-index:10;
-                    width: 550px;
-                    background-color: #f0f4f5;
-                    margin: 0 auto;
-                    border-radius: 8px;
-                    padding: 10px;
-                }
-
-                .footer{
-                    padding: 25px 8px;
-                    margin: 0 auto;
-                    width:960px;
-                    text-align: center;
-                }
-
-
-
             </style>
+                            
         {% endblock %}
 
         {% block javascripts %}
-
 
         {% endblock %}
 
@@ -124,21 +49,17 @@
 
         <div class="header">
             <div class="header-logo">
-                <img src="/bundles/marcoshoyamarquejogo/images/site/player-logo.png" />
-                <h1>MarqueJogo.com</h1>
+                <a href="{{ path('marquejogo_homepage') }}">
+                    <img src="/bundles/marcoshoyamarquejogo/images/site/player-logo.png" />
+                    <h1>MarqueJogo.com</h1>
+                </a>
              </div>
         </div>
-
-        <div class="container">
-            <div class="master-background">
-                <div class="background">  </div>
-            </div>
-            <!-- Page Content -->
-            {% block container %}
-
-            {% endblock %}
-
-        </div>
+        
+        {% block container %}
+        
+        {% endblock %}
+        
         <div class="clear"> </div>
         
         <div class="footer">
