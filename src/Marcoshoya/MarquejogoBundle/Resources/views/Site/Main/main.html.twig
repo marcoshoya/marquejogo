@@ -11,26 +11,45 @@
             <h3>Reserve sua quadra agora mesmo</h3>
         </div>
         <div class="searchbox">
-            <fieldset>
-
-                <div class="form-group">
-                    <label class="col-md-2">Onde</label>
-                    <div class="col-md-1">
-                        <input type="text" class="form-control" />
+            <form action="{{ path('do_search') }}" method="post" >
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-md-2">Onde</label>
+                        <div class="col-md-1">
+                            <input type="text" class="form-control form-where" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group-date">
-                    <label class="col-md-2">Data</label>
-                    <div class="col-md-1">
-                        <input type="text" class="form-control" />
+                    <div class="form-group form-group-date">
+                        <label class="col-md-2">Data</label>
+                        <div class="col-md-1">
+                            <input type="text" class="form-control form-date" />
+                        </div>
                     </div>
-                </div>
 
-            </fieldset>
+                    <div class="form-group form-group-hour">
+                        <label class="col-md-2">Horário</label>
+                        <div class="col-md-1">
+                            <select class="form-control form-date">
+                                <option>00:00</option>
+                                <option>01:00</option>
+                                <option>02:00</option>
+                                <option>03:00</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div class="clear"> </div>
+
+                    <div class="form-group-submit">
+                        <input class="btn btn-search" type="submit" value="Pesquisar" />
+                    </div>
+
+                </fieldset>
+            </form>
 
         </div>
     </div>
+    
 
 {% endblock %}

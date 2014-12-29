@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -13,6 +14,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
  */
 class SearchController extends Controller
 {
+    /**
+     * Do the search
+     *
+     * @Route("/doSearch", name="do_search")
+     * @Method("POST")
+     */
+    public function dosearhAction()
+    {
+        return $this->redirect($this->generateUrl('search_result'));
+    }
+
     /**
      * List all results from search
      *

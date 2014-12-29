@@ -11,6 +11,7 @@ body{
     background: #2D5908;
 }
 * html body {height: 100%;}
+
 .clear{
     clear:both;
 }
@@ -53,7 +54,19 @@ body{
 }
 
 /**********************************
- HOME
+ common
+**********************************/
+
+.btn {
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 0 none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/**********************************
+ HOME / BACKGROUND
 **********************************/
 .container {
     position: relative;
@@ -81,6 +94,11 @@ body{
     min-height: 620px;
     display: block;
 }
+
+/**********************************
+ HOME / SEARCH BOX
+**********************************/
+
 .search-header {
     position: relative;
     z-index:10;
@@ -98,7 +116,67 @@ body{
     background-color: #FFF48C;
     margin: 0 auto;
     border-radius: 8px;
+    padding: 8px 0;
 }
+
+.searchbox fieldset {
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+}
+
+.searchbox label {
+    font-size: 22px;
+    color: #1E3D03;
+}
+
+.form-group {
+    position: relative;
+    z-index: 200;
+    padding: 0 0.9em 1.2em;
+    margin-top: 10px;
+}
+
+.form-control {
+    box-sizing: border-box;
+    border-radius: 3px;
+    border-style: solid !important;
+    border-color: #CEBD23;
+    font-size: 1.4em;
+    padding: 5px;
+    color: #353434;
+    width: 100% !important;
+}
+
+.form-group-submit {
+    padding: 0 0.9em 1.2em;
+    text-align: right;
+    margin-top: 25px;
+}
+
+.form-group-date{
+    width: 40%;
+    float: left;
+}
+
+.form-group-hour {
+    width: 40%;
+    float: right;
+}
+
+.btn-search {
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 1.33;
+    padding: 5px 23px;
+    color: #FFFFFF;
+    background-color: #2D5908;
+    width: 30%;
+}
+.btn-search:hover{
+    background-color: #204401;
+    // border-color: #1E3D03;
+}    
 
 /**********************************
  INTERNO
