@@ -1,32 +1,69 @@
-{% extends 'MarcoshoyaMarquejogoBundle:Site:index2.html.twig' %}
+{% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
 
 {% block container %}
-    
-    <div class="container-inside">
-        
-        <div class="container-body">
-            <div class="container-left">
-                Busca
-            </div>
-            <div class="container-right">
-                <h1>Resultados encontrados</h1>
-                
-                <div class="container-list">
-                    <div class="list-item">
-                        <h2>João da Esquina</h2>
+
+    <div class="container-left">
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar')) }}
+    </div>
+
+    <div class="container-right">
+        <h1>Resultados encontrados</h1>
+
+        <div class="container-list">
+            <div class="list-item">
+                <div class="list-item-image">
+                    <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                </div>
+                <div class="list-item-content">
+                    <h3>João da Esquina</h3>
+                    <div class="list-item-address">
+                        <p>Rebouças, Curitiba, Paraná</p>
                     </div>
-                    <div class="list-item">
-                        <h2>João da Esquina</h2>
+                    <div class="list-item-description">
+                        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consequat aliquet orci, hendrerit consequat arcu semper id. Duis augue turpis, ornare sit amet mollis vel, tristique non risus. Quisque auctor ornare pharetra. In nec congue dui, tempus iaculis purus. Fusce nec dolor eu elit ullamcorper aliquam ut sit amet tellus.</p>
                     </div>
-                    <div class="list-item">
-                        <h2>João da Esquina</h2>
+                    <div class="list-item-btn">
+                        <a href="#" class="btn">Ver detalhes</a>
                     </div>
                 </div>
-                
+            </div>
+            <div class="list-item">
+                <div class="list-item-image">
+                    <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                </div>
+                <div class="list-item-content">
+                    <h3>João da Esquina</h3>
+                    <div class="list-item-address">
+                        <p>Rebouças, Curitiba, Paraná</p>
+                    </div>
+                    <div class="list-item-description">
+                        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consequat aliquet orci, hendrerit consequat arcu semper id. Duis augue turpis, ornare sit amet mollis vel, tristique non risus. Quisque auctor ornare pharetra. In nec congue dui, tempus iaculis purus. Fusce nec dolor eu elit ullamcorper aliquam ut sit amet tellus.</p>
+                    </div>
+                    <div class="list-item-btn">
+                        <a href="#" class="btn">Ver detalhes</a>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-image">
+                    <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                </div>
+                <div class="list-item-content">
+                    <h3>João da Esquina</h3>
+                    <div class="list-item-address">
+                        <p>Rebouças, Curitiba, Paraná</p>
+                    </div>
+                    <div class="list-item-description">
+                        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consequat aliquet orci, hendrerit consequat arcu semper id. Duis augue turpis, ornare sit amet mollis vel, tristique non risus. Quisque auctor ornare pharetra. In nec congue dui, tempus iaculis purus. Fusce nec dolor eu elit ullamcorper aliquam ut sit amet tellus.</p>
+                    </div>
+                    <div class="list-item-btn">
+                        <a href="#" class="btn">Ver detalhes</a>
+                    </div>
+                </div>
             </div>
             
         </div>
 
     </div>
-    
+
 {% endblock %}

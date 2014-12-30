@@ -15,6 +15,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class SearchController extends Controller
 {
     /**
+     * Header action
+     *
+     * @return string
+     */
+    public function sidebarAction()
+    {
+        return $this->render('MarcoshoyaMarquejogoBundle:Site/Search:sidebar.html.twig');
+    }
+    
+    /**
      * Do the search
      *
      * @Route("/doSearch", name="do_search")

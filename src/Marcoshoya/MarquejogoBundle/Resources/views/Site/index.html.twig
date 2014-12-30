@@ -10,63 +10,25 @@
         <title>MarqueJogo.com</title>
 
         {% block stylesheets %}
-
-            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style.css') }}" rel="stylesheet" type="text/css" />
-
-            <style>
-
-                
-
-            </style>
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />
         {% endblock %}
 
         {% block javascripts %}
 
-
-        {% endblock %} 
+        {% endblock %}
 
     </head>
 
     <body>
 
-        <div id="page">
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:header')) }}
 
-            <div id="topo">
-                MarqueJogo.com
-            </div>
-            <div id="menu">
-                <ul class="menu">
-                    <li><a class="nav" href="#">Home</a></li>
-                    <li class="divider"></li>
-                    <li><a class="nav" href="#">Contato</a></li>
-                </ul>
-            </div>
-            <div id="content">
+        {% block container %}
 
-                <div id="busca">
+        {% endblock %}
 
-                </div>
-
-                <!-- Page Content -->
-                {% block container %}
-
-                {% endblock %}
-
-                <!-- /#page-wrapper -->
-
-            </div>
-
-            <div class="clear"></div>
-
-
-            <div id="rodape">
-
-                <p>Copyright 2014 - MarqueJogo.com <br>
-                    <br>
-                    <span>Fotos ilustrativas - Especificações sujeitas a alterações sem prévio aviso</span></p>
-            </div>
-
-        </div>
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:footer')) }}
+        
     </body>
 
 </html>
