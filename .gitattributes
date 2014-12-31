@@ -1,1 +1,1 @@
-*.php linguist-language=PHP
+src/Marcoshoya/MarquejogoBundle/Resources/public/* linguist-vendored
