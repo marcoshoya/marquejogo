@@ -16,10 +16,13 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class DashboardTest extends WebTestCase
 {
     /**
-     * @var object
+     * @var \Symfony\Bundle\FrameworkBundle\Client
      */
     protected $client = null;
     
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
     protected $em = null;
     
     /**
