@@ -11,10 +11,20 @@
             <div class="col-lg-12">
                 <h1 class="page-header">Listando fornecedores</h1>
             </div>
+
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
-        
+        <div class="row">
+            <div class="col-lg-12">
+                <p align="right">
+                    <a class="btn btn-primary" href="{{ path('provider_new') }}" alt="Inserir novo" title="Inserir novo">
+                        Inserir Novo
+                    </a>
+                </p>
+            </div>
+        </div>
+
         {{ render(controller('MarcoshoyaMarquejogoBundle:Adm/Dashboard:flash')) }}
 
         <div class="row">

@@ -1,55 +1,90 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Tests\Controller;
+namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Adm;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Marcoshoya\MarquejogoBundle\Tests\Controller\Adm\DashboardTest;
 
-class ProviderControllerTest extends WebTestCase
+/**
+ * ProviderControllerTest
+ * 
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
+ */
+class ProviderControllerTest extends DashboardTest
 {
-    /*
+    /**
+     * It tests all provider functions
+     */
     public function testCompleteScenario()
     {
-        // Create a new client to browse the application
-        $client = static::createClient();
+        $this->logIn();
+
+        // List all providers
+        $crawler = $this->client->request('GET', '/adm/provider/');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Listando fornecedores")')->count());
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/provider/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /provider/");
-        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
-
+        $crawler = $this->client->click($crawler->selectLink('Inserir Novo')->link());
+        
         // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
-            'marcoshoya_marquejogobundle_provider[field_name]'  => 'Test',
-            // ... other fields to fill
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_provider[name]'  => 'Provider test',
+            'marcoshoya_marquejogobundle_provider[description]'  => 'Provider description',
+            'marcoshoya_marquejogobundle_provider[cnpj]'  => '123456789',
+            'marcoshoya_marquejogobundle_provider[phone]'  => '9876-5432',
+            'marcoshoya_marquejogobundle_provider[address]'  => 'Provider street',
+            'marcoshoya_marquejogobundle_provider[number]'  => '0-00',
+            'marcoshoya_marquejogobundle_provider[complement]'  => '',
+            'marcoshoya_marquejogobundle_provider[neighborhood]'  => 'Downtown',
+            'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
+            'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
+            'marcoshoya_marquejogobundle_provider[email]'  => 'provider@email.com',
+            'marcoshoya_marquejogobundle_provider[password]'  => 'password',
         ));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
+        $this->client->submit($form);
+        $crawler = $this->client->followRedirect();
 
         // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
+        $this->assertGreaterThan(0, $crawler->filter('td:contains("Provider test")')->count());
 
+       
         // Edit the entity
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
+        $crawler = $this->client->click($crawler->selectLink('Provider test')->link());
 
-        $form = $crawler->selectButton('Update')->form(array(
-            'marcoshoya_marquejogobundle_provider[field_name]'  => 'Foo',
-            // ... other fields to fill
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_provider[name]'  => 'Provider edited',
+            'marcoshoya_marquejogobundle_provider[description]'  => 'Provider description',
+            'marcoshoya_marquejogobundle_provider[cnpj]'  => '123456789',
+            'marcoshoya_marquejogobundle_provider[phone]'  => '9876-5432',
+            'marcoshoya_marquejogobundle_provider[address]'  => 'Provider street',
+            'marcoshoya_marquejogobundle_provider[number]'  => '0-00',
+            'marcoshoya_marquejogobundle_provider[complement]'  => '',
+            'marcoshoya_marquejogobundle_provider[neighborhood]'  => 'Downtown',
+            'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
+            'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
+            'marcoshoya_marquejogobundle_provider[email]'  => 'provider@email.com',
+            'marcoshoya_marquejogobundle_provider[password]'  => 'password',
         ));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
+        $this->client->submit($form);
+        $crawler = $this->client->followRedirect();
 
         // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
+        $this->assertGreaterThan(0, $crawler->filter('td:contains("Provider edited")')->count());
+        
+        $provider = $this->em
+            ->getRepository('MarcoshoyaMarquejogoBundle:Provider')
+            ->findOneBy(array(), array('id' => 'DESC'))
+        ;        
 
         // Delete the entity
-        $client->submit($crawler->selectButton('Delete')->form());
-        $crawler = $client->followRedirect();
+        $this->client->request('GET', '/adm/provider/'.$provider->getId().'/delete');
+        $crawler = $this->client->followRedirect();
 
         // Check the entity has been delete on the list
-        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
+        $this->assertNotRegExp('/Provider edited/', $this->client->getResponse()->getContent());
+
     }
 
-    */
 }

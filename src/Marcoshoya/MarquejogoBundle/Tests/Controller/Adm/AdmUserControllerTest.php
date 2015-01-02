@@ -1,10 +1,10 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Tests\Controller;
+namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Adm;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Marcoshoya\MarquejogoBundle\Tests\Controller\Adm\DashboardTest;
 
-class AdmUserControllerTest extends WebTestCase
+class AdmUserControllerTest extends DashboardTest
 {
     /*
     public function testCompleteScenario()
