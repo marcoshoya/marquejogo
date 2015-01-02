@@ -18,6 +18,7 @@ class ProviderType extends AbstractType
             ->add('email')
             ->add('password')
             ->add('name')
+            ->add('description')
             ->add('cnpj')
             ->add('phone')
             ->add('address')

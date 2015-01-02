@@ -42,6 +42,12 @@ class Provider
     private $name;
     
     /**
+     * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Campo obrigatório")
+     */
+    private $description;
+    
+    /**
      * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Campo obrigatório")
      */
@@ -387,5 +393,28 @@ class Provider
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Provider
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

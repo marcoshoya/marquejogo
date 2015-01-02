@@ -107,6 +107,14 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
+                            <div class="form-group {% if not form.description.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.description, 'Descrição') }}</label>
+                                <div class="col-md-8">
+                                    {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.description) }}
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="panel panel-default">
