@@ -241,6 +241,7 @@ body{
     width: 960px;
     background-color: #FFFFFF;
     padding:0 10px;
+    min-height: 350px;
 }
 
 .container-left {
@@ -368,3 +369,92 @@ body{
     box-shadow: 0 0 3px #aaa;
 }
 
+/***********************************
+ * PROVIDER PAGE
+ **********************************/
+.container-provider {
+    float: left;
+    width: 70%;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 50px;
+}
+.container-provider h1 {
+    margin-bottom: 5px;
+    color: #204401;
+}
+.provider-address {
+    float: left;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.provider-images {
+    clear: both;
+    padding: 10px 0;
+}
+.provider-description {
+    padding: 15px 0;
+    font-size: 14px;
+    border-top: 1px solid #DCDCDC;
+    border-bottom: 1px solid #DCDCDC;
+}
+.provider-product {
+    clear: both;
+    padding: 15px 0;
+}
+.provider-product h3 {
+    margin-bottom: 20px;
+}
+.provider-availability {
+    padding: 15px 0; 
+    background-color: #FFF48C;
+    border-radius: 8px;
+}
+
+.provider-availability fieldset {
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+}
+.provider-availability label {
+    font-size: 18px;
+    color: #1E3D03;
+}
+
+.provider-product-list {
+    clear: both;
+    padding: 15px 0;
+}
+.provider-product-list table {
+    border-collapse: collapse;
+    border-color: #377502;
+    width: 100%;
+    border-spacing: 0;
+}
+.provider-product-list table th { 
+    padding: 6px 8px;
+    background-color: #204401;
+    color: #FFFFFF;
+}
+.provider-product-list table td {
+    padding: 6px;
+}
+.provider-product-list table td, .provider-product-list table th {
+    border-left: 1px solid #377502;
+    text-align: left;
+    vertical-align: top;
+}
+.provider-product-list table td.product-type {
+    border-left: 0 none;
+}
+
+.provider-product-list table td {
+    border-top:  1px solid #377502 ;
+    border-collapse: collapse;
+}
+.provider-product-list p.product-bottom {
+    background-color: #FFFFFF;
+    border-top:  1px solid #377502 ;
+    border-collapse: collapse;
+}

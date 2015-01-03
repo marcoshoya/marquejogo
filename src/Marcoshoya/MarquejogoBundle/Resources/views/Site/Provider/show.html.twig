@@ -1,0 +1,101 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
+
+{% block container %}
+
+    <div class="container-left">
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar')) }}
+    </div>
+
+    <div class="container-provider">
+
+        <h1>{{ provider.name }}</h1>
+        <div class="provider-address">
+            <p>Avenida Iguaçu, 13, Rebouças, Curitiba, CEP 80230-100</p>
+        </div>
+        <div class="provider-images">
+            <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor4.jpg" />
+        </div>
+        <div class="provider-description">
+            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consequat aliquet orci, hendrerit consequat arcu semper id. Duis augue turpis, ornare sit amet mollis vel, tristique non risus. Quisque auctor ornare pharetra. In nec congue dui, tempus iaculis purus. Fusce nec dolor eu elit ullamcorper aliquam ut sit amet tellus.</p>
+        </div>
+        <div class="provider-product">
+            <h3>Disponibilidade</h3>
+            <div class="provider-availability">
+
+                <form action="{{ path('do_search') }}" method="post" >
+                    <fieldset> 
+                        <div class="form-group form-sidebar-date">
+                            <label class="col-md-2">Data</label>
+                            <div class="col-md-1">
+                                <input type="text" class="form-control form-date" />
+                            </div>
+                        </div>
+
+                        <div class="form-group form-sidebar-hour">
+                            <label class="col-md-2">Horário</label>
+                            <div class="col-md-1">
+                                <select class="form-control form-date">
+                                    <option>00:00</option>
+                                    <option>01:00</option>
+                                    <option>02:00</option>
+                                    <option>03:00</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-sidebar-submit">
+                            <input class="btn btn-sidebar-search" type="submit" value="Pesquisar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="provider-product-list">
+                <form action="{{ path('do_booking') }}" method="post" >
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo de Quadra</th>
+                                <th>Capacidade</th>
+                                <th>Valor</th>
+                                <th>Número</th>
+                                <th>Reserva</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="product-type">Quadra salão coberta</td>
+                                <td>10</td>
+                                <td>R$ 100,00</td>
+                                <td>
+                                    <select class="form-control form-date">
+                                        <option>00</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                    </select>
+                                </td>
+                                <td><input type="submit" value="Reservar" /></td>
+                            </tr>
+                            <tr>
+                                <td class="product-type">Quadra salão coberta</td>
+                                <td>10</td>
+                                <td>R$ 100,00</td>
+                                <td>
+                                    <select class="form-control form-date">
+                                        <option>00</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                    </select>
+                                </td>
+                                <td><input type="submit" value="Reservar" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="product-bottom"> </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
