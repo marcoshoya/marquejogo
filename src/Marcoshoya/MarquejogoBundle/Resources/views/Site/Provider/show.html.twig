@@ -24,14 +24,14 @@
 
                 <form action="{{ path('do_search') }}" method="post" >
                     <fieldset> 
-                        <div class="form-group form-sidebar-date">
+                        <div class="form-group form-availability-date">
                             <label class="col-md-2">Data</label>
                             <div class="col-md-1">
                                 <input type="text" class="form-control form-date" />
                             </div>
                         </div>
 
-                        <div class="form-group form-sidebar-hour">
+                        <div class="form-group form-availability-hour">
                             <label class="col-md-2">Horário</label>
                             <div class="col-md-1">
                                 <select class="form-control form-date">
@@ -42,8 +42,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-sidebar-submit">
-                            <input class="btn btn-sidebar-search" type="submit" value="Pesquisar" />
+                        <div class="form-availability-submit">
+                            <input class="btn btn-availability-search" type="submit" value="Pesquisar" />
                         </div>
                     </fieldset>
                 </form>
@@ -56,7 +56,7 @@
                                 <th>Tipo de Quadra</th>
                                 <th>Capacidade</th>
                                 <th>Valor</th>
-                                <th>Número</th>
+                                <th>Qtde</th>
                                 <th>Reserva</th>
                             </tr>
                         </thead>
@@ -73,7 +73,11 @@
                                         <option>03</option>
                                     </select>
                                 </td>
-                                <td><input type="submit" value="Reservar" /></td>
+                                <td rowspan="2">
+                                    <div class="product-booking">
+                                        <input type="submit" value="Reservar" />
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="product-type">Quadra salão coberta</td>
@@ -87,7 +91,7 @@
                                         <option>03</option>
                                     </select>
                                 </td>
-                                <td><input type="submit" value="Reservar" /></td>
+                                
                             </tr>
                         </tbody>
                     </table>
