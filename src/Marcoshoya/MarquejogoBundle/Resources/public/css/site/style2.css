@@ -13,6 +13,16 @@ body{
     background: #2D5908;
 }
 
+fieldset {
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+}
+
+a img{
+    border:none;
+}
+
 .clear{
     clear:both;
 }
@@ -166,12 +176,6 @@ body{
     padding: 8px 0;
 }
 
-.searchbox fieldset {
-    border: 0 none;
-    margin: 0;
-    padding: 0;
-}
-
 .searchbox label {
     font-size: 22px;
     color: #1E3D03;
@@ -252,12 +256,6 @@ body{
     border-radius: 8px;
     margin-top: 10px;
     padding: 8px 0;
-}
-
-.container-left fieldset {
-    border: 0 none;
-    margin: 0;
-    padding: 0;
 }
 
 .container-left label {
@@ -420,11 +418,6 @@ body{
     font-size: 1em;
 }
 
-.provider-availability fieldset {
-    border: 0 none;
-    margin: 0;
-    padding: 0;
-}
 .provider-availability label {
     font-size: 16px;
     font-weight: bold;

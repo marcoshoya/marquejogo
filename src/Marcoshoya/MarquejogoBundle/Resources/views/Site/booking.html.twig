@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>MarqueJogo.com - Reservar</title>
+
+        {% block stylesheets %}
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />
+
+            <style>
+
+                .container-booking {
+                    clear: both;
+                    position: relative;
+                    margin: 0 auto;
+                    width: 960px;
+                    background-color: #FFFFFF;
+                    padding:0 10px;
+                    min-height: 350px;
+                }
+                .container-booking h1{
+                    border-bottom: 1px solid #dcdcdc;
+                    padding-bottom: 15px;
+                    margin-top: 10px;
+                    font-size: 24px;
+                    color: #204401;
+                }
+                .container-identify {
+                    min-height: 380px;
+                    padding: 20px 15px 30px;
+                    width: 100%;
+                }
+                .container-identify h3 { 
+                    color: #377502;
+                    font-weight: bold;
+                    font-size: 22px;
+                    margin: 20px 20px 5px;
+                }
+                .container-login, .container-register {
+                    float: left;
+                    width: 50%;
+                    border:none;
+                    height:380px;
+                }
+                .container-login:hover, .container-register:hover {
+                    background-color: #eaf7ee;
+                }
+                .form-login-group {
+                    float: left;
+                    position: relative;
+                    width: 440px;
+                    margin: 20px 20px 5px;
+                }
+                .form-login-group .col-md-1 {
+                    clear: both;
+                    position: relative;
+                    width: 100%;
+                }
+                .login-submit {
+                    text-align: center;
+                }
+                .login-submit input[type="submit"], .login-submit button {
+                    font-size: 23px;
+                    font-weight: bold;
+                    line-height: 1.33;
+                    padding: 5px 23px;
+                    color: #FFFFFF;
+                    background-color: #2D5908;
+                }
+                .login-submit input[type="submit"]:hover, .login-submit button:hover {
+                    background-color: #204401;
+                }  
+                .form-login-group label {
+                    float: left;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #1E3D03;
+                    margin: 5px 0;
+                }
+                .form-login-control {
+                    float:left;
+                    box-sizing: border-box;
+                    border-radius: 3px;
+                    border: 1px solid #738e7b;
+                    font-size: 1.4em;
+                    padding: 5px;
+                    color: #353434;
+                    width: 80%;
+                }
+                .form-login-error {
+                    clear: both;
+                    float: left;
+                    color: #800;
+                    font-style: italic;
+                    font-size: 14px;
+                    margin: 5px 0;
+                }
+
+
+            </style>
+
+        {% endblock %}
+
+        {% block javascripts %}
+
+        {% endblock %}
+
+    </head>
+
+    <body>
+        <div class="container-page">
+            {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:header')) }}
+            <div class="container-booking">
+                {% block container %}
+
+                {% endblock %}
+            </div>
+            {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:footer')) }}
+        </div>
+    </body>
+
+</html>
