@@ -31,15 +31,4 @@ class ProviderController extends Controller
             'provider' => $provider
         ));  
     }
-
-    /**
-     * Do the booking
-     *
-     * @Route("/doBooking", name="do_booking")
-     * @Method("POST")
-     */
-    public function dosearhAction()
-    {
-        return $this->redirect($this->generateUrl('search_result'));
-    }
 }
