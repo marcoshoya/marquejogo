@@ -80,4 +80,14 @@ class BookingController extends Controller
         ));
     }
     
+    /**
+     * Overview action
+     * 
+     * @return string
+     */
+    public function overviewAction()
+    {
+        return $this->render('MarcoshoyaMarquejogoBundle:Site/Booking:overview.html.twig');
+    }
+    
 }
