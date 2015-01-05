@@ -2,14 +2,7 @@
 
 {% block container %}
     
-    <div class="container-progress">
-        <ul>
-            <li>1. Escolha a quadra</li>
-            <li class="active">2. Insira seus dados</li>
-            <li>3. Efetue o pagamento</li>
-            <li>4. Confirmação</li>
-        </ul>
-    </div>
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Booking:progress', {step: 2})) }}
 
     <div class="container-overview">
         <table class="booking-detail">
@@ -59,7 +52,7 @@
                                         <div class="booking-data-user-group-col-md-1">
                                             <label class="col-md-2">Nome</label>
                                             <div class="col-md-1">
-                                                <input type="text" class="booking-data-user-control" />center
+                                                <input type="text" class="booking-data-user-control" />
                                                 <span class="booking-data-user-error">Email obrigatório</span>
                                             </div>
                                         </div>

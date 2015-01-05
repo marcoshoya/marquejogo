@@ -44,9 +44,22 @@ class BookingController extends Controller
      * @Route("/informacao", name="booking_information")
      * @Template()
      */
-    public function informationAction()
+    public function informationAction(Request $request)
     {
         return array();
+    }
+    
+    /**
+     * Progress action
+     * 
+     * @param int $step
+     * @return string
+     */
+    public function progressAction($step)
+    {
+        return $this->render('MarcoshoyaMarquejogoBundle:Site/Booking:progress.html.twig', array(
+            'step' => $step
+        ));
     }
     
 }
