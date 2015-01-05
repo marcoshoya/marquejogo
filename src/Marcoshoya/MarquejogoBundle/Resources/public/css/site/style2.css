@@ -407,6 +407,10 @@ a img{
     margin-bottom: 20px;
     color: #377502;
 }
+
+/***********************************
+ * PROVIDER AVAILABILITY
+ **********************************/
 .provider-availability {
     padding: 5px 0; 
     background-color: #EAF7EE;
@@ -456,6 +460,9 @@ a img{
     background-color: #F5F5F5;
 }   
 
+/***********************************
+ * PROVIDER PRODUCT
+ **********************************/
 .provider-product-list {
     clear: both;
     padding: 35px 0;
@@ -516,4 +523,309 @@ a img{
     background-color: #FFFFFF;
     border-top:  1px solid #377502 ;
     border-collapse: collapse;
+}
+
+/***********************************
+ * CONTAINER BOOKING
+ **********************************/
+.container-booking {
+    clear: both;
+    position: relative;
+    margin: 0 auto;
+    width: 960px;
+    background-color: #FFFFFF;
+    padding:0 10px;
+    min-height: 350px;
+}
+
+.container-booking h1{
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 15px;
+    margin-top: 10px;
+    font-size: 24px;
+    color: #204401;
+}
+
+/*********************************
+ * BOOKING PROGRESS
+ ********************************/
+.container-progress {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.container-progress ul { 
+    padding: 0;
+    margin: 0;
+    display: block;
+    height: 2.08em;
+    list-style: outside none none;
+    width: auto;
+    background-color: #EAF7EE;
+    border: 1px solid #dcdcdc;
+}
+.container-progress ul li {
+    float: left;
+    clear: right;
+    display: block;
+    line-height: 2.08em;
+    text-align: center;
+    width: 25%;
+    color: #1e3d03;
+}
+.container-progress ul li.active {
+    font-weight: bold;
+    background-color: #dcdcdc;
+}
+
+/*********************************
+ * BOOKING overview
+ ********************************/
+.container-overview {
+    clear: both;
+    width: 100%;
+    margin-top: 30px;
+}
+table.booking-detail, table.booking-data {
+    float: left;
+    width: 69%;
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+    font-size: 13px;
+    border-collapse: collapse;
+}
+.container-overview table.booking-detail td {
+    font-weight: normal;
+    border: 0 none;
+    padding: 0;
+    text-align: left;
+    vertical-align: top;
+}
+.container-overview-image {
+    float: left;
+    width: 200px;
+    margin-right: 10px;
+}
+.container-overview-image img {
+    width: 200px;
+    height: 200px;
+    border: 0;
+}
+.container-overview-description {
+    float: left;
+    margin-bottom: 15px;
+}
+.container-overview-description h2 {
+    color: #204401;
+    margin-bottom: 5px;
+    font-size: 22px;
+}
+.container-overview-description p {
+    float: left;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.container-overview-stay {
+    float: left;
+}
+.container-overview-stay p { 
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.overview-price {
+    float: right;
+    width: 28%;
+    background-color: #2E6001;
+    border: 0;
+    border-radius: 3px;
+    font-size: 1.4em;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 11px;
+}
+.overview-price table.booking-price {
+    width: 100%;
+}
+
+/*********************************
+ * BOOKING USER DATA
+ ********************************/
+.container-data {
+    clear: both;
+    float: left;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+.container-data table.booking-data td {
+    width: 100%;
+}
+.booking-data-container {
+    padding: 0;
+    margin: 0;
+    width: auto;
+    background-color: #EAF7EE;
+    border: 1px solid #dcdcdc;
+}
+.booking-data-title {
+    padding: 0.85em;
+    position: relative;
+    color: #FFFFFF;
+    background-color: #79B28A;
+    font-size: 16px;
+    font-weight: bold;
+}
+.booking-data-user {
+    padding: 10px;
+}
+.booking-data-user input, .booking-data-user select{
+    border-color: #738E7B !important;
+    font-size: 1em;
+}
+.booking-data-user label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1E3D03;
+    clear: both;
+}
+.booking-data-user-group-col-md-1 {
+    float: left;
+    position: relative;
+    width: 640px;
+    margin-top: 10px;
+}
+
+.booking-data-user-group-col-md-2 {
+    float: left;
+    position: relative;
+    width: 310px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.booking-data-user-group label {
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1E3D03;
+    margin: 5px 0;
+}
+.booking-data-user-control {
+    float:left;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid #738e7b;
+    font-size: 1.4em;
+    padding: 5px;
+    color: #353434;
+    clear: both;
+    position: relative;
+    width: 100%;
+}
+
+.booking-data-user-error {
+    clear: both;
+    float: left;
+    color: #800;
+    font-style: italic;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.booking-data-user-submit {
+    clear: both;
+    position: relative;
+    width: 640px;
+    margin-top: 30px;
+    float: right;
+    text-align: right;
+}
+
+.booking-data-user-submit input[type="submit"], .booking-data-user-submit button {
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 1.33;
+    padding: 5px 23px;
+    color: #FFFFFF;
+    background-color: #2D5908;
+}
+.booking-data-user-submit input[type="submit"]:hover, .booking-data-user-submit button:hover {
+    background-color: #204401;
+} 
+
+/***********************************
+ * USER IDENTIFY
+ **********************************/
+
+.container-identify {
+    min-height: 380px;
+    padding: 20px 15px 30px;
+    width: 100%;
+}
+.container-identify h3 { 
+    color: #377502;
+    font-weight: bold;
+    font-size: 22px;
+    margin: 20px 20px 5px;
+}
+.container-login, .container-register {
+    float: left;
+    width: 50%;
+    border:none;
+    height:380px;
+}
+.container-login:hover, .container-register:hover {
+    background-color: #eaf7ee;
+}
+.form-login-group {
+    float: left;
+    position: relative;
+    width: 440px;
+    margin: 20px 20px 5px;
+}
+.form-login-group .col-md-1 {
+    clear: both;
+    position: relative;
+    width: 100%;
+}
+.login-submit {
+    text-align: center;
+}
+.login-submit input[type="submit"], .login-submit button {
+    font-size: 23px;
+    font-weight: bold;
+    line-height: 1.33;
+    padding: 5px 23px;
+    color: #FFFFFF;
+    background-color: #2D5908;
+}
+.login-submit input[type="submit"]:hover, .login-submit button:hover {
+    background-color: #204401;
+}  
+.form-login-group label {
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1E3D03;
+    margin: 5px 0;
+}
+.form-login-control {
+    float:left;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: 1px solid #738e7b;
+    font-size: 1.4em;
+    padding: 5px;
+    color: #353434;
+    width: 80%;
+}
+.form-login-error {
+    clear: both;
+    float: left;
+    color: #800;
+    font-style: italic;
+    font-size: 14px;
+    margin: 5px 0;
 }

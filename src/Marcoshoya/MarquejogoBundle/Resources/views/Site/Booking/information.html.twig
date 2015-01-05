@@ -1,0 +1,101 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Site:booking.html.twig' %}
+
+{% block container %}
+    
+    <div class="container-progress">
+        <ul>
+            <li>1. Escolha a quadra</li>
+            <li class="active">2. Insira seus dados</li>
+            <li>3. Efetue o pagamento</li>
+            <li>4. Confirmação</li>
+        </ul>
+    </div>
+
+    <div class="container-overview">
+        <table class="booking-detail">
+            <tr>
+                <td>
+                    <div class="container-overview-image">
+                        <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                    </div>
+                    <div class="container-overview-description">
+                        <h2>Quadra do João</h2>
+                        <p>Avenida Iguaçu, 399, Rebouças, Curitiba</p>
+                    </div>
+                    <div class="container-overview-stay">
+                        <p><b>Data</b> <br />
+                            01 de março as 19h
+                        </p>
+                        <p><b>Quadra</b> <br />
+                            Society interna 1 - 10 pessoas
+                        </p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="overview-price">
+            <table class="booking-price">
+                <tbody>
+                    <tr>
+                        <td>Preço total</td>
+                        <td align="right">R$ 50,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container-data">
+        <table class="booking-data">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="booking-data-container">
+                            <div class="booking-data-title">
+                                Insira seus dados
+                            </div>
+                            <div class="booking-data-user">
+                                <form action="{{ path('booking_information') }}" method="post" >
+                                    <fieldset> 
+                                        <div class="booking-data-user-group-col-md-1">
+                                            <label class="col-md-2">Nome</label>
+                                            <div class="col-md-1">
+                                                <input type="text" class="booking-data-user-control" />center
+                                                <span class="booking-data-user-error">Email obrigatório</span>
+                                            </div>
+                                        </div>
+                                        <div class="booking-data-user-group-col-md-1">
+                                            <label class="col-md-2">E-mail</label>
+                                            <div class="col-md-1">
+                                                <input type="text" class="booking-data-user-control" />
+                                                <span class="booking-data-user-error">Email obrigatório</span>
+                                            </div>
+                                        </div>
+                                        <div class="booking-data-user-group-col-md-2">
+                                            <label class="col-md-2">Telefone</label>
+                                            <div class="col-md-1">
+                                                <input type="text" class="booking-data-user-control" />
+                                                <span class="booking-data-user-error">Email obrigatório</span>
+                                            </div>
+                                        </div>
+                                        <div class="booking-data-user-group-col-md-2">
+                                            <label class="col-md-2">Nome do time</label>
+                                            <div class="col-md-1">
+                                                <input type="text" class="booking-data-user-control" />
+                                                <span class="booking-data-user-error">Email obrigatório</span>
+                                            </div>
+                                        </div>
+                                        <div class="booking-data-user-submit">
+                                            <input type="submit" class="btn" value="Continuar" />
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

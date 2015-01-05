@@ -24,7 +24,7 @@ class BookingController extends Controller
      */
     public function dobookingAction()
     {
-        return $this->redirect($this->generateUrl('booking_login'));
+        return $this->redirect($this->generateUrl('booking_information'));
     }
     
     /**
@@ -37,4 +37,16 @@ class BookingController extends Controller
     {
         return array();
     }
+    
+    /**
+     * User information
+     *
+     * @Route("/informacao", name="booking_information")
+     * @Template()
+     */
+    public function informationAction()
+    {
+        return array();
+    }
+    
 }
