@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * BookingController implements all booking functions
@@ -45,6 +46,23 @@ class BookingController extends Controller
      * @Template()
      */
     public function informationAction(Request $request)
+    {
+        if ($request->getMethod() === 'POST') {
+            
+            
+            return $this->redirect($this->generateUrl('booking_payment'));
+        }
+        
+        return array();
+    }
+    
+    /**
+     * Booking payment
+     *
+     * @Route("/pagamento", name="booking_payment")
+     * @Template()
+     */
+    public function paymentAction()
     {
         return array();
     }
