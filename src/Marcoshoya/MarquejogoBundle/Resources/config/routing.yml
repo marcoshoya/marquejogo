@@ -6,6 +6,11 @@ marquejogo_adm:
     resource: "@MarcoshoyaMarquejogoBundle/Controller/Adm/"
     type:      annotation
     prefix:    /adm
+    
+marquejogo_customer:
+    resource: "@MarcoshoyaMarquejogoBundle/Controller/Customer/"
+    type:      annotation
+    prefix:    /cliente
 
 marquejogo_site:
     resource: "@MarcoshoyaMarquejogoBundle/Controller/Site/"

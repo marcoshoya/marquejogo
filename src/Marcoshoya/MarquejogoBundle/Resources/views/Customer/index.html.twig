@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>MarqueJogo.com</title>
+
+        {% block stylesheets %}
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />
+
+            <style>
+                
+            </style>
+
+        {% endblock %}
+
+        {% block javascripts %}
+
+        {% endblock %}
+
+    </head>
+
+    <body>
+        <div class="container-page">
+            {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:header')) }}
+            <div class="container-inside">
+                {% block container %}
+
+                {% endblock %}
+            </div>
+            {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:footer')) }}
+        </div>
+    </body>
+
+</html>

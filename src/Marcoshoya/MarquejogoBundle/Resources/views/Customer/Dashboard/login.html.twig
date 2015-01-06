@@ -1,0 +1,57 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Site:booking.html.twig' %}
+
+{% block container %}
+
+    <h1>Acesse sua conta</h1>
+    <div class="container-identify">
+        <div class="container-login">
+            <h3>Já sou cadastrado</h3>
+            <form>
+                <fieldset> 
+                    <div class="form-login-group">
+                        <label class="col-md-2">E-mail</label>
+                        <div class="col-md-1">
+                            <input type="text" class="form-login-control" />
+                            <span class="form-login-error">Email obrigatório</span>
+                        </div>
+                    </div>
+                    <div class="form-login-group">
+                        <label class="col-md-2">Senha</label>
+                        <div class="col-md-1">
+                            <input type="text" class="form-login-control" />
+                            <span class="form-login-error">Email obrigatório</span>
+                        </div>
+                    </div>
+                    <div class="form-login-group">
+                        <div class="login-submit">
+                            <input type="submit" class="btn" value="Continuar" />
+                        </div>
+                    </div>
+                </fieldset> 
+            </form>
+        </div>
+        <div class="container-register">
+            <h3>Novo cadastro</h3>
+            <form>
+                <fieldset> 
+                    <div class="form-login-group">
+                        <label class="col-md-2">E-mail</label>
+                        <div class="col-md-1">
+                            <input type="text" class="form-login-control" />
+                            <span class="form-login-error">Email obrigatório</span>
+                        </div>
+                    </div>
+                    <div class="form-login-group" style="margin: 140px 20px 5px !important">
+                        <div class="login-submit">
+                            <input type="submit" class="btn" value="Continuar" />
+                        </div>
+                    </div>
+                </fieldset> 
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
