@@ -40,6 +40,9 @@
                         <h3 class="panel-title">MarqueJogo.com - Administrador</h3>
                     </div>
                     <div class="panel-body">
+                        
+                        {{ render(controller('MarcoshoyaMarquejogoBundle:Adm/Dashboard:flash')) }}
+                        
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
         
                             {{ form_row (form._token) }}

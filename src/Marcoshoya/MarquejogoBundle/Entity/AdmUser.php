@@ -46,11 +46,16 @@ class AdmUser implements UserInterface, \Serializable {
      */
     private $email;
 
+    /** 
+     * @ORM\Column(name="user_type",type="string", columnDefinition="ENUM('adm', 'provider', 'customer')") 
+     */
+    private $userType;
+    
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
-    
+        
     /**
      * @inheritDoc
      */
@@ -97,7 +102,16 @@ class AdmUser implements UserInterface, \Serializable {
      */
     public function getRoles()
     {
-        return array('ROLE_ADMIN');
+        if ($this->getUserType() === 'adm') {
+            
+            return array('ROLE_ADMIN');
+        } if ($this->getUserType() === 'provider') {
+            
+            return array('ROLE_PROVIDER');
+        } else {
+            
+            return array('ROLE_CUSTOMER');
+        }
     }
 
     /**
@@ -221,5 +235,28 @@ class AdmUser implements UserInterface, \Serializable {
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set userType
+     *
+     * @param string $userType
+     * @return AdmUser
+     */
+    public function setUserType($userType)
+    {
+        $this->userType = $userType;
+
+        return $this;
+    }
+
+    /**
+     * Get userType
+     *
+     * @return string 
+     */
+    public function getUserType()
+    {
+        return $this->userType;
     }
 }

@@ -4,23 +4,20 @@ namespace Marcoshoya\MarquejogoBundle\Controller\Adm;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-
 use Marcoshoya\MarquejogoBundle\Entity\AdmUser;
 use Marcoshoya\MarquejogoBundle\Form\AdmUserType;
 
-class DashboardController extends Controller
-{
+class DashboardController extends Controller {
+
     /**
      * @Route("/", name="_adm_dash")
      * @Template()
      */
-    public function dashboardAction()
-    {
+    public function dashboardAction() {
         return array();
     }
 
@@ -28,8 +25,7 @@ class DashboardController extends Controller
      * @Route("/login", name="_marquejogo_adm_login")
      * @Template()
      */
-    public function loginAction(Request $request)
-    {
+    public function loginAction(Request $request) {
         $entity = new AdmUser();
         $form = $this->createLoginForm($entity);
 
@@ -49,7 +45,7 @@ class DashboardController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -57,8 +53,7 @@ class DashboardController extends Controller
      * @Route("/logout", name="_marquejogo_adm_logout")
      * @Template()
      */
-    public function logoutAction()
-    {
+    public function logoutAction() {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
 
@@ -71,8 +66,7 @@ class DashboardController extends Controller
      * @param AdmUser $entity
      * @return AdmUserType
      */
-    private function createLoginForm(AdmUser $entity)
-    {
+    private function createLoginForm(AdmUser $entity) {
         $form = $this->createForm(new AdmUserType(), $entity, array(
             'action' => $this->generateUrl('_marquejogo_adm_login'),
             'method' => 'POST',
@@ -91,8 +85,8 @@ class DashboardController extends Controller
         return $form;
     }
 
-    private function doAuth(AdmUser $entity)
-    {
+    private function doAuth(AdmUser $entity) {
+        
         $entity->getPassword();
 
         $em = $this->getDoctrine()->getManager();
@@ -102,18 +96,31 @@ class DashboardController extends Controller
         ));
 
         if ($user instanceof AdmUser) {
+            try {
+                $providerKey = 'admin';
+                $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
 
-            $providerKey = 'admin';
-            $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+                $this->get('security.context')->setToken($token);
 
-            $this->container->get('security.context')->setToken($token);
+                $session = $this->getRequest()->getSession();
+                $session->set('_security_main', serialize($token));
+                
+                if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                    throw new AccessDeniedHttpException();
+                }
 
-            $session = $this->getRequest()->getSession();
-            $session->set('_security_main',  serialize($token));
-
-            return true;
+                return true;
+                
+            } catch (AccessDeniedHttpException $ex) {
+                $this->get('security.context')->setToken(null);
+                $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
+                $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
+                
+                return false;
+            }
         } else {
-
+            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
+            
             return false;
         }
     }
@@ -125,11 +132,10 @@ class DashboardController extends Controller
      * @param styring   $item
      * @return string
      */
-    public function sidebarAction($view, $item)
-    {
+    public function sidebarAction($view, $item) {
         return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:sidebar.html.twig', array(
-            'view' => $view,
-            'item' => $item
+                'view' => $view,
+                'item' => $item
         ));
     }
 
@@ -138,8 +144,7 @@ class DashboardController extends Controller
      *
      * @return string
      */
-    public function flashAction()
-    {
+    public function flashAction() {
         return $this->render('MarcoshoyaMarquejogoBundle:Adm/Dashboard:flash.html.twig', array());
     }
 
