@@ -99,6 +99,11 @@ class Provider
      */
     private $isActive;
     
+    /** 
+     * @ORM\OneToMany(targetEntity="ProviderProduct", mappedBy="provider") 
+     **/
+    private $providerProduct;
+    
     /**
      * To string class
      * 
@@ -416,5 +421,45 @@ class Provider
     public function getDescription()
     {
         return $this->description;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->providerProduct = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add providerProduct
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct $providerProduct
+     * @return Provider
+     */
+    public function addProviderProduct(\Marcoshoya\MarquejogoBundle\Entity\ProviderProduct $providerProduct)
+    {
+        $this->providerProduct[] = $providerProduct;
+
+        return $this;
+    }
+
+    /**
+     * Remove providerProduct
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct $providerProduct
+     */
+    public function removeProviderProduct(\Marcoshoya\MarquejogoBundle\Entity\ProviderProduct $providerProduct)
+    {
+        $this->providerProduct->removeElement($providerProduct);
+    }
+
+    /**
+     * Get providerProduct
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProviderProduct()
+    {
+        return $this->providerProduct;
     }
 }
