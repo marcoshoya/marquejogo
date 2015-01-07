@@ -1,0 +1,52 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+
+            <li>
+                <a {{ view == 'dashboard' ? 'class="active"' : '' }} href="{{ path('provider_dash') }}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>
+            
+            <li {{ view == 'report' ? 'class="active"' : '' }}>
+                <a href="#">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Relátorios<span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="#"> Reservas</a>
+                    </li>
+                </ul>              
+            </li>
+
+            <li {{ view == 'provider' ? 'class="active"' : '' }}>
+                <a href="#">
+                    <i class="fa fa-archive fa-fw"></i> Quadras<span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a {{ view == 'provider' and item == 'new' ? 'class="active"' : '' }} href="{{ path('provider_new') }}">Inserir</a>
+                    </li>
+                    <li>
+                        <a {{ view == 'provider' and item == 'list' ? 'class="active"' : '' }} href="{{ path('provider') }}">Listar</a>
+                    </li>
+                </ul>
+
+            </li>
+            <li {{ view == 'user' ? 'class="active"' : '' }}>
+                <a href="#">
+                    <i class="fa fa-gear fa-fw"></i> Configurações<span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a {{ view == 'user' and item == 'new' ? 'class="active"' : '' }} href="{{ path('admuser_new') }}">Inserir</a>
+                    </li>
+                    <li>
+                        <a {{ view == 'user' and item == 'list' ? 'class="active"' : '' }} href="{{ path('admuser') }}">Listar</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>

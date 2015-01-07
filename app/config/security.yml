@@ -42,10 +42,20 @@ security:
                 check_path: /cliente/login_check
                 login_path: /cliente/login
                 default_target_path: /cliente
+                
+        provider:
+            anonymous: ~
+            pattern:    ^/fornecedor
+            form_login:
+                check_path: /fornecedor/login_check
+                login_path: /fornecedor/login
+                default_target_path: /fornecedor
 
     access_control:
         - { path: ^/adm/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/adm, roles: ROLE_ADMIN }
         - { path: ^/cliente/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/cliente, roles: [ROLE_ADMIN, ROLE_CUSTOMER] }
+        - { path: ^/fornecedor/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/fornecedor, roles: [ROLE_ADMIN, ROLE_PROVIDER] }
         

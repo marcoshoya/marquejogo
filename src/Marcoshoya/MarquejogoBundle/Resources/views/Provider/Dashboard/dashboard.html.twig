@@ -1,0 +1,20 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Provider:index.html.twig' %}
+
+{% block sidebar %}
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Provider/Dashboard:sidebar', {view : 'dashboard', item: 'dashboard'})) }}
+{% endblock %}
+
+{% block container %}
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Área do Fornecedor</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+{% endblock %}

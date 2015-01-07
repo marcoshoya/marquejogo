@@ -11,6 +11,11 @@ marquejogo_customer:
     resource: "@MarcoshoyaMarquejogoBundle/Controller/Customer/"
     type:      annotation
     prefix:    /cliente
+    
+marquejogo_provider:
+    resource: "@MarcoshoyaMarquejogoBundle/Controller/Provider/"
+    type:      annotation
+    prefix:    /fornecedor
 
 marquejogo_site:
     resource: "@MarcoshoyaMarquejogoBundle/Controller/Site/"
