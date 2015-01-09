@@ -48,7 +48,13 @@ class ProviderProduct
      * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $type;
-
+    
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     * @Assert\NotBlank(message="Campo obrigatório")
+     */
+    private $capacity;
+    
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
@@ -189,4 +195,27 @@ class ProviderProduct
         return $this->provider;
     }
 
+
+    /**
+     * Set capacity
+     *
+     * @param integer $capacity
+     * @return ProviderProduct
+     */
+    public function setCapacity($capacity)
+    {
+        $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    /**
+     * Get capacity
+     *
+     * @return integer 
+     */
+    public function getCapacity()
+    {
+        return $this->capacity;
+    }
 }
