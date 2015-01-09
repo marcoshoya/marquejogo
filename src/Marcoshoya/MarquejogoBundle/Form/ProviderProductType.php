@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\DataTransformer\IntegerToLocalizedStringTransformer;
 
 class ProviderProductType extends AbstractType
 {
@@ -16,10 +17,28 @@ class ProviderProductType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('category')
-            ->add('type')
+            ->add('category', 'choice', array(
+                'choices' => array(
+                    'open' => 'Aberto', 
+                    'close' => 'Fechado'
+                ),
+                'placeholder' => 'Escolha a categoria',
+            ))
+            ->add('type', 'choice', array(
+                'choices' => array(
+                    'soccer' => 'Futebol de salão', 
+                    'swiss' => 'Futebol suiço',
+                    'voley' => 'Voleibol'
+                ),
+                'placeholder' => 'Escolha o tipo',
+            ))
             ->add('isActive')
-            ->add('provider')
+            ->add('provider', 'entity_hidden', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider'
+            ))
+            ->add('capacity', 'integer', array(
+                'rounding_mode' => IntegerToLocalizedStringTransformer::ROUND_CEILING
+            ))
         ;
     }
     

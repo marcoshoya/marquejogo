@@ -1,6 +1,6 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Controller;
+namespace Marcoshoya\MarquejogoBundle\Controller\Provider;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,7 +13,7 @@ use Marcoshoya\MarquejogoBundle\Form\ProviderProductType;
 /**
  * ProviderProduct controller.
  *
- * @Route("/providerproduct")
+ * @Route("/produtos")
  */
 class ProviderProductController extends Controller
 {
@@ -27,20 +27,24 @@ class ProviderProductController extends Controller
      */
     public function indexAction()
     {
+        $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findAll();
+        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(array(
+            'provider' => $user
+        ));
 
         return array(
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new ProviderProduct entity.
      *
      * @Route("/", name="providerproduct_create")
      * @Method("POST")
-     * @Template("MarcoshoyaMarquejogoBundle:ProviderProduct:new.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Provider/ProviderProduct:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -52,13 +56,15 @@ class ProviderProductController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Quadra inserida com sucesso.');
 
-            return $this->redirect($this->generateUrl('providerproduct_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('providerproduct'));
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -75,8 +81,20 @@ class ProviderProductController extends Controller
             'action' => $this->generateUrl('providerproduct_create'),
             'method' => 'POST',
         ));
+        
+        $em = $this->getDoctrine()->getManager();
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $id = (int) $this->get('security.context')->getToken()->getUser()->getId();
+        $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find(1);
+        
+        
+        $form
+            ->add('provider', 'entity_hidden', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                'data' => $provider,
+                'data_class' => null,
+            ))
+        ;
 
         return $form;
     }
@@ -91,11 +109,11 @@ class ProviderProductController extends Controller
     public function newAction()
     {
         $entity = new ProviderProduct();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -119,7 +137,7 @@ class ProviderProductController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -145,19 +163,19 @@ class ProviderProductController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a ProviderProduct entity.
-    *
-    * @param ProviderProduct $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a ProviderProduct entity.
+     *
+     * @param ProviderProduct $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(ProviderProduct $entity)
     {
         $form = $this->createForm(new ProviderProductType(), $entity, array(
@@ -165,10 +183,15 @@ class ProviderProductController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form
+            ->add('provider', 'hidden', array(
+                'data' => $user = $this->get('security.context')->getToken()->getUser()->getId()
+            ))
+        ;
 
         return $form;
     }
+
     /**
      * Edits an existing ProviderProduct entity.
      *
@@ -197,11 +220,12 @@ class ProviderProductController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a ProviderProduct entity.
      *
@@ -238,10 +262,11 @@ class ProviderProductController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('providerproduct_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                ->setAction($this->generateUrl('providerproduct_delete', array('id' => $id)))
+                ->setMethod('DELETE')
+                ->add('submit', 'submit', array('label' => 'Delete'))
+                ->getForm()
         ;
     }
+
 }
