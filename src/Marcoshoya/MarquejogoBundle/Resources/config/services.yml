@@ -1,4 +1,6 @@
 services:
-#    marcoshoya_marquejogo.example:
-#        class: Marcoshoya\MarquejogoBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    marcoshoya_marquejogo.type.entity_hidden:
+        class: Marcoshoya\MarquejogoBundle\Form\Type\EntityHiddenType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: entity_hidden }
