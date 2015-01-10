@@ -4,13 +4,18 @@
             <i class="fa fa-dashboard fa-fw"></i> Dashboard
         </a>
     </li>
+    <li {{ view == 'schedule' ? 'class="active"' : '' }}>
+        <a href="#">
+            <i class="fa fa-calendar fa-fw"></i> Disponibilidade
+        </a>
+    </li>
     <li {{ view == 'product' ? 'class="active"' : '' }}>
         <a href="{{ path('providerproduct') }}">
             <i class="fa fa-archive fa-fw"></i> Quadras
         </a>
     </li>
     <li {{ view == 'config' ? 'class="active"' : '' }}>
-        <a href="#">
+        <a href="{{ path('providerconfig') }}">
             <i class="fa fa-gear fa-fw"></i> Configurações
         </a>
     </li>
