@@ -122,6 +122,19 @@ class Provider
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Provider
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        
+        return $this;
+    }
+    
+    /**
      * Get id
      *
      * @return integer 

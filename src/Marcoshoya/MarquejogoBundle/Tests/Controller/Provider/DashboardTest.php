@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Provider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Marcoshoya\MarquejogoBundle\Entity\Provider;
 
 /**
  * DashboardTest
@@ -37,22 +38,30 @@ class DashboardTest extends WebTestCase
             ->getManager()
         ;
     }
-    
+
     /**
-     * Make login on admin
+     * Make login on provider panel
+     * 
+     * @return Provider
      */
     protected function logIn()
     {
         $session = $this->client->getContainer()->get('session');
-
         $firewall = 'provider';
-        $token = new UsernamePasswordToken('provider', null, $firewall, array('ROLE_PROVIDER'));
+        
+        $provider = new Provider();
+        $provider->setId(1);
+        $provider->setName('Provider test');
+        
+        $token = new UsernamePasswordToken($provider, null, $firewall, array('ROLE_PROVIDER'));
         
         $session->set('_security_'.$firewall, serialize($token));
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $this->client->getCookieJar()->set($cookie);
+        
+        return $provider;
     }
     
     /**
