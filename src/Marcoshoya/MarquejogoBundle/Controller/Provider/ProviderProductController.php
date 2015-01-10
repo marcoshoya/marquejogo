@@ -117,31 +117,6 @@ class ProviderProductController extends Controller
     }
 
     /**
-     * Finds and displays a ProviderProduct entity.
-     *
-     * @Route("/{id}", name="providerproduct_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ProviderProduct entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
      * Displays a form to edit an existing ProviderProduct entity.
      *
      * @Route("/{id}/edit", name="providerproduct_edit")
@@ -159,12 +134,10 @@ class ProviderProductController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         );
     }
 
@@ -181,10 +154,16 @@ class ProviderProductController extends Controller
             'action' => $this->generateUrl('providerproduct_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
+        
+        $em = $this->getDoctrine()->getManager();
+        $id = (int) $this->get('security.context')->getToken()->getUser()->getId();
+        $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
+        
         $form
-            ->add('provider', 'hidden', array(
-                'data' => $user = $this->get('security.context')->getToken()->getUser()->getId()
+            ->add('provider', 'entity_hidden', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                'data' => $provider,
+                'data_class' => null,
             ))
         ;
 
@@ -196,7 +175,7 @@ class ProviderProductController extends Controller
      *
      * @Route("/{id}", name="providerproduct_update")
      * @Method("PUT")
-     * @Template("MarcoshoyaMarquejogoBundle:ProviderProduct:edit.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Provider/ProviderProduct:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
@@ -208,64 +187,21 @@ class ProviderProductController extends Controller
             throw $this->createNotFoundException('Unable to find ProviderProduct entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Quadra atualizada com sucesso.');
 
             return $this->redirect($this->generateUrl('providerproduct_edit', array('id' => $id)));
         }
 
         return array(
             'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         );
-    }
-
-    /**
-     * Deletes a ProviderProduct entity.
-     *
-     * @Route("/{id}", name="providerproduct_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ProviderProduct entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('providerproduct'));
-    }
-
-    /**
-     * Creates a form to delete a ProviderProduct entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-                ->setAction($this->generateUrl('providerproduct_delete', array('id' => $id)))
-                ->setMethod('DELETE')
-                ->add('submit', 'submit', array('label' => 'Delete'))
-                ->getForm()
-        ;
     }
 
 }

@@ -4,12 +4,12 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
  * ProviderProduct entity class
  *
  * @author  Marcos Joia <marcoshoya at gmail dot com>
- * @package Marcoshoya\MarquejogoBundle\Entity
  *
  * @ORM\Table(name="provider_product")
  * @ORM\Entity
@@ -125,6 +125,16 @@ class ProviderProduct
     {
         return $this->category;
     }
+    
+    /**
+     * Get category name
+     *
+     * @return string
+     */
+    public function getCategoryName()
+    {
+        return BundleHelper::productCategory($this->category);
+    }
 
     /**
      * Set type
@@ -147,6 +157,16 @@ class ProviderProduct
     public function getType()
     {
         return $this->type;
+    }
+    
+    /**
+     * Get type name
+     *
+     * @return string
+     */
+    public function getTypeName()
+    {
+        return BundleHelper::productType($this->type);
     }
 
     /**
