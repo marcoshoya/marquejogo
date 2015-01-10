@@ -49,9 +49,10 @@ class DashboardTest extends WebTestCase
         $session = $this->client->getContainer()->get('session');
         $firewall = 'provider';
         
-        $provider = new Provider();
-        $provider->setId(1);
-        $provider->setName('Provider test');
+        $provider = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find(1);
+        if (!$provider) {
+            $this->fail("Provider not found");
+        }
         
         $token = new UsernamePasswordToken($provider, null, $firewall, array('ROLE_PROVIDER'));
         
