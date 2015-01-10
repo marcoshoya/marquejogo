@@ -8,8 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Marcoshoya\MarquejogoBundle\Entity\AdmUser;
-use Marcoshoya\MarquejogoBundle\Form\AdmUserType;
+use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Form\ProviderType;
 
 class DashboardController extends Controller
 {
@@ -29,7 +29,7 @@ class DashboardController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $entity = new AdmUser();
+        $entity = new Provider();
         $form = $this->createLoginForm($entity);
 
         if ($request->getMethod() === 'POST') {
@@ -70,20 +70,32 @@ class DashboardController extends Controller
      * @param AdmUser $entity
      * @return AdmUserType
      */
-    private function createLoginForm(AdmUser $entity)
+    private function createLoginForm(Provider $entity)
     {
-        $form = $this->createForm(new AdmUserType(), $entity, array(
+        $form = $this->createForm(new ProviderType(), $entity, array(
             'action' => $this->generateUrl('provider_login'),
             'method' => 'POST',
         ));
 
         $form
-            ->add('username', 'text', array(
+            ->add('email', 'text', array(
                 'required' => true,
                 'trim' => true
             ))
-            ->remove('email')
-            ->remove('salt')
+            ->add('password', 'password', array(
+                'required' => true,
+                'trim' => true
+            ))
+            ->remove('name')
+            ->remove('description')
+            ->remove('cnpj')
+            ->remove('phone')
+            ->remove('address')
+            ->remove('number')
+            ->remove('complement')
+            ->remove('neighborhood')
+            ->remove('city')
+            ->remove('state')
             ->remove('isActive')
         ;
 
@@ -96,20 +108,20 @@ class DashboardController extends Controller
      * @return boolean
      * @throws AccessDeniedHttpException
      */
-    private function doAuth(AdmUser $entity)
+    private function doAuth(Provider $entity)
     {
 
         $entity->getPassword();
 
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:AdmUser')->findOneBy(array(
-            'username' => $entity->getUserName(),
+        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->findOneBy(array(
+            'email' => $entity->getEmail(),
             'password' => $entity->getPassword(),
         ));
 
-        if ($user instanceof AdmUser) {
+        if ($user instanceof Provider) {
             try {
-                $providerKey = 'admin';
+                $providerKey = 'provider';
                 $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
 
                 $this->get('security.context')->setToken($token);

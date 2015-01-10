@@ -37,37 +37,31 @@ class Provider
     
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $name;
     
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $description;
     
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $cnpj;
     
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $phone;
     
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $address;
     
     /**
      * @ORM\Column(type="string", length=25)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $number;
     
@@ -78,19 +72,16 @@ class Provider
     
     /**
      * @ORM\Column(type="string", length=150)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $neighborhood;
     
     /**
      * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $city;
     
     /**
      * @ORM\Column(type="string", length=2)
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $state;
     
@@ -105,6 +96,14 @@ class Provider
     private $providerProduct;
     
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->providerProduct = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
      * To string class
      * 
      * @return string
@@ -112,6 +111,14 @@ class Provider
     public function __toString()
     {
         return $this->name;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return array('ROLE_PROVIDER');
     }
 
     /**
@@ -421,13 +428,6 @@ class Provider
     public function getDescription()
     {
         return $this->description;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->providerProduct = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

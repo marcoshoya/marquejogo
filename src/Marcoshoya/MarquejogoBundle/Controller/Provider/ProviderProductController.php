@@ -85,8 +85,7 @@ class ProviderProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $id = (int) $this->get('security.context')->getToken()->getUser()->getId();
-        $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find(1);
-        
+        $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
         
         $form
             ->add('provider', 'entity_hidden', array(

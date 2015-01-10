@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Controller\Adm;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -35,6 +36,7 @@ class ProviderController extends Controller
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new Provider entity.
      *
@@ -52,7 +54,7 @@ class ProviderController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
+
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor inserido com sucesso.');
 
             return $this->redirect($this->generateUrl('provider'));
@@ -60,7 +62,7 @@ class ProviderController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -78,6 +80,54 @@ class ProviderController extends Controller
             'method' => 'POST',
         ));
 
+        $form
+            ->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('description', 'textarea', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('cnpj', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('phone', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('address', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('number', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('neighborhood', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('city', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('state', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+        ;
+
         return $form;
     }
 
@@ -91,11 +141,11 @@ class ProviderController extends Controller
     public function newAction()
     {
         $entity = new Provider();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -119,27 +169,76 @@ class ProviderController extends Controller
         $editForm = $this->createEditForm($entity);
 
         return array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Provider entity.
-    *
-    * @param Provider $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Provider entity.
+     *
+     * @param Provider $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Provider $entity)
     {
         $form = $this->createForm(new ProviderType(), $entity, array(
             'action' => $this->generateUrl('provider_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
+        
+        $form
+            ->add('name', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('description', 'textarea', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('cnpj', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('phone', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('address', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('number', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('neighborhood', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('city', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+            ->add('state', 'text', array(
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
+            ))
+        ;
 
         return $form;
     }
+
     /**
      * Edits an existing Provider entity.
      *
@@ -162,17 +261,18 @@ class ProviderController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            
+
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor atualizado com sucesso.');
 
             return $this->redirect($this->generateUrl('provider'));
         }
 
         return array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
         );
     }
+
     /**
      * Deletes a Provider entity.
      *
@@ -181,7 +281,7 @@ class ProviderController extends Controller
     public function deleteAction($id)
     {
         try {
-            
+
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
 
@@ -191,11 +291,11 @@ class ProviderController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->get('logger')->error('{Provider} Error: ' . $e->getMessage());
         }
 
         return $this->redirect($this->generateUrl('provider'));
     }
+
 }

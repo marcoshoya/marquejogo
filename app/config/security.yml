@@ -25,12 +25,15 @@ security:
     providers:
         admin:
             entity: { class: MarcoshoyaMarquejogoBundle:AdmUser, property: username }
+        provider:
+            entity: { class: MarcoshoyaMarquejogoBundle:Provider, property: email }
 
     firewalls:
         admin:
             anonymous: ~
             pattern:    ^/adm
             form_login:
+                provider: admin
                 check_path: /adm/login_check
                 login_path: /adm/login
                 default_target_path: /adm
@@ -47,6 +50,7 @@ security:
             anonymous: ~
             pattern:    ^/fornecedor
             form_login:
+                provider: provider
                 check_path: /fornecedor/login_check
                 login_path: /fornecedor/login
                 default_target_path: /fornecedor

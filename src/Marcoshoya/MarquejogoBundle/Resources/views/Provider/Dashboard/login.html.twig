@@ -41,15 +41,15 @@
                     </div>
                     <div class="panel-body">
                         
-                        {{ render(controller('MarcoshoyaMarquejogoBundle:Adm/Dashboard:flash')) }}
+                        {{ render(controller('MarcoshoyaMarquejogoBundle:Provider/Dashboard:flash')) }}
                         
                         {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
         
                             {{ form_row (form._token) }}
                             <fieldset>
-                                <div class="form-group {% if not form.username.vars.valid %} has-error {% endif %}">
-                                    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder': 'Usuário'} }) }}
-                                    {{ form_errors(form.username) }}
+                                <div class="form-group {% if not form.email.vars.valid %} has-error {% endif %}">
+                                    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder': 'Usuário'} }) }}
+                                    {{ form_errors(form.email) }}
                                 </div>
                                 <div class="form-group {% if not form.password.vars.valid %} has-error {% endif %}">
                                     {{ form_widget(form.password, { 'attr': {'class': 'form-control', 'placeholder': 'Senha'} }) }}
