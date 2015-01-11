@@ -27,6 +27,8 @@ security:
             entity: { class: MarcoshoyaMarquejogoBundle:AdmUser, property: username }
         provider:
             entity: { class: MarcoshoyaMarquejogoBundle:Provider, property: email }
+        customer:
+            entity: { class: MarcoshoyaMarquejogoBundle:Customer, property: email }
 
     firewalls:
         admin:
@@ -37,15 +39,16 @@ security:
                 check_path: /adm/login_check
                 login_path: /adm/login
                 default_target_path: /adm
-                
+
         customer:
             anonymous: ~
             pattern:    ^/cliente
             form_login:
+                provider: customer
                 check_path: /cliente/login_check
                 login_path: /cliente/login
                 default_target_path: /cliente
-                
+
         provider:
             anonymous: ~
             pattern:    ^/fornecedor
@@ -62,4 +65,3 @@ security:
         - { path: ^/cliente, roles: [ROLE_ADMIN, ROLE_CUSTOMER] }
         - { path: ^/fornecedor/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/fornecedor, roles: [ROLE_ADMIN, ROLE_PROVIDER] }
-        

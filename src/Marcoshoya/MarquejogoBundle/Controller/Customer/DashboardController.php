@@ -8,16 +8,23 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Marcoshoya\MarquejogoBundle\Entity\AdmUser;
-use Marcoshoya\MarquejogoBundle\Form\AdmUserType;
+use Marcoshoya\MarquejogoBundle\Entity\Customer;
+use Marcoshoya\MarquejogoBundle\Form\CustomerType;
 
-class DashboardController extends Controller {
+/**
+ * Provides all functions for dashboard controller
+ * 
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
+ */
+class DashboardController extends Controller
+{
 
     /**
      * @Route("/", name="customer_dash")
      * @Template()
      */
-    public function dashboardAction() {
+    public function dashboardAction()
+    {
         return array();
     }
 
@@ -25,8 +32,9 @@ class DashboardController extends Controller {
      * @Route("/login", name="customer_login")
      * @Template()
      */
-    public function loginAction(Request $request) {
-        $entity = new AdmUser();
+    public function loginAction(Request $request)
+    {
+        $entity = new Customer();
         $form = $this->createLoginForm($entity);
 
         if ($request->getMethod() === 'POST') {
@@ -53,33 +61,48 @@ class DashboardController extends Controller {
      * @Route("/logout", name="customer_logout")
      * @Template()
      */
-    public function logoutAction() {
+    public function logoutAction()
+    {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
 
-        return $this->redirect($this->generateUrl('customer_dash'));
+        return $this->redirect($this->generateUrl('marquejogo_homepage'));
     }
 
     /**
      * Create a login form
      *
-     * @param AdmUser $entity
-     * @return AdmUserType
+     * @param Customer $entity
+     * @return CustomerType
      */
-    private function createLoginForm(AdmUser $entity) {
-        $form = $this->createForm(new AdmUserType(), $entity, array(
+    private function createLoginForm(Customer $entity)
+    {
+        $form = $this->createForm(new CustomerType(), $entity, array(
             'action' => $this->generateUrl('customer_login'),
             'method' => 'POST',
         ));
 
         $form
-            ->add('username', 'text', array(
+            ->add('email', 'text', array(
                 'required' => true,
                 'trim' => true
             ))
-            ->remove('email')
-            ->remove('salt')
-            ->remove('isActive')
+            ->add('password', 'password', array(
+                'required' => true,
+                'trim' => true
+            ))
+            ->remove('name')
+            ->remove('cpf')
+            ->remove('gender')
+            ->remove('position')
+            ->remove('birthday')
+            ->remove('phone')
+            ->remove('address')
+            ->remove('number')
+            ->remove('complement')
+            ->remove('neighborhood')
+            ->remove('city')
+            ->remove('state')
         ;
 
         return $form;
@@ -88,21 +111,21 @@ class DashboardController extends Controller {
     /**
      * Do the auth
      * 
-     * @param AdmUser $entity
+     * @param Customer $entity
      * @return boolean
      * @throws AccessDeniedHttpException
      */
-    private function doAuth(AdmUser $entity) 
+    private function doAuth(Customer $entity)
     {
         $entity->getPassword();
 
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:AdmUser')->findOneBy(array(
-            'username' => $entity->getUserName(),
+        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->findOneBy(array(
+            'email' => $entity->getEmail(),
             'password' => $entity->getPassword(),
         ));
 
-        if ($user instanceof AdmUser) {
+        if ($user instanceof Customer) {
             try {
                 $providerKey = 'customer';
                 $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());

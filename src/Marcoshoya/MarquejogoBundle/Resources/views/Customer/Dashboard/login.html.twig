@@ -1,25 +1,30 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:booking.html.twig' %}
 
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Customer/Form:fields_login.html.twig' %}
+
 {% block container %}
 
     <h1>Acesse sua conta</h1>
     <div class="container-identify">
         <div class="container-login">
             <h3>Já sou cadastrado</h3>
-            <form>
-                <fieldset> 
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+
+                {{ form_row (form._token) }}
+
+                <fieldset>
                     <div class="form-login-group">
                         <label class="col-md-2">E-mail</label>
                         <div class="col-md-1">
-                            <input type="text" class="form-login-control" />
-                            <span class="form-login-error">Email obrigatório</span>
+                            {{ form_widget(form.email, { 'attr': {'class': 'form-login-control'} }) }}
+                            {{ form_errors(form.email) }}
                         </div>
                     </div>
                     <div class="form-login-group">
                         <label class="col-md-2">Senha</label>
                         <div class="col-md-1">
-                            <input type="text" class="form-login-control" />
-                            <span class="form-login-error">Email obrigatório</span>
+                            {{ form_widget(form.password, { 'attr': {'class': 'form-login-control'} }) }}
+                            {{ form_errors(form.password) }}
                         </div>
                     </div>
                     <div class="form-login-group">
@@ -27,13 +32,13 @@
                             <input type="submit" class="btn" value="Continuar" />
                         </div>
                     </div>
-                </fieldset> 
-            </form>
+                </fieldset>
+            {{ form_end(form) }}
         </div>
         <div class="container-register">
             <h3>Novo cadastro</h3>
             <form>
-                <fieldset> 
+                <fieldset>
                     <div class="form-login-group">
                         <label class="col-md-2">E-mail</label>
                         <div class="col-md-1">
@@ -46,7 +51,7 @@
                             <input type="submit" class="btn" value="Continuar" />
                         </div>
                     </div>
-                </fieldset> 
+                </fieldset>
             </form>
         </div>
     </div>

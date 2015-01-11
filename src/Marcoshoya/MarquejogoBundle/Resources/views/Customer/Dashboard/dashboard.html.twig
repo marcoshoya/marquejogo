@@ -1,7 +1,7 @@
-{% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
+{% extends 'MarcoshoyaMarquejogoBundle:Site:booking.html.twig' %}
 
 {% block container %}
     
-    CUSTOMER DASHBOARD
+    <h3>Bem vindo {{ app.security.getToken().getUser().getName() }}</h3>
     
 {% endblock %}

@@ -36,7 +36,7 @@ class Customer
     private $password;
     
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=false)
      */
     private $name;
     
@@ -94,7 +94,24 @@ class Customer
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     private $state;
-
+    
+    /**
+     * To string class
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return array('ROLE_CUSTOMER');
+    }
 
     /**
      * Get id
