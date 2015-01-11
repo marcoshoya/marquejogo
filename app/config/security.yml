@@ -31,9 +31,14 @@ security:
             entity: { class: MarcoshoyaMarquejogoBundle:Customer, property: email }
 
     firewalls:
+        site:
+            context: website
+            pattern: ^/(?!(fornecedor|cliente|adm)).*$
+            anonymous: true
+            
         admin:
             anonymous: ~
-            pattern:    ^/adm
+            pattern:    ^/adm/.*
             form_login:
                 provider: admin
                 check_path: /adm/login_check
@@ -42,16 +47,17 @@ security:
 
         customer:
             anonymous: ~
-            pattern:    ^/cliente
+            context: website
+            pattern:    ^/cliente/.*
             form_login:
                 provider: customer
                 check_path: /cliente/login_check
                 login_path: /cliente/login
                 default_target_path: /cliente
-
+                
         provider:
             anonymous: ~
-            pattern:    ^/fornecedor
+            pattern:    ^/fornecedor/.*
             form_login:
                 provider: provider
                 check_path: /fornecedor/login_check
