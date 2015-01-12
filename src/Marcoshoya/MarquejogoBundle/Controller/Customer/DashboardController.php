@@ -36,6 +36,7 @@ class DashboardController extends Controller
     {
         $entity = new Customer();
         $form = $this->createLoginForm($entity);
+        $formRegister = $this->createRegisterForm($entity);
 
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -54,6 +55,7 @@ class DashboardController extends Controller
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
+            'formRegister' => $formRegister->createView(),
         );
     }
 
@@ -80,6 +82,7 @@ class DashboardController extends Controller
         $form = $this->createForm(new CustomerType(), $entity, array(
             'action' => $this->generateUrl('customer_login'),
             'method' => 'POST',
+            'validation_groups' => array('login'),
         ));
 
         $form
@@ -152,6 +155,68 @@ class DashboardController extends Controller
 
             return false;
         }
+    }
+    
+    /**
+     * @Route("/doRegister", name="customer_doregister")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Dashboard:login.html.twig")
+     */
+    public function registerAction(Request $request)
+    {
+        $entity = new Customer();
+        $form = $this->createLoginForm($entity);
+        $formRegister = $this->createRegisterForm($entity);
+
+        if ($request->getMethod() === 'POST') {
+            $formRegister->handleRequest($request);
+            if ($formRegister->isValid()) {
+                
+                return $this->redirect($this->generateUrl('customer_new'));
+            }
+        }
+        
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'formRegister' => $formRegister->createView(),
+        );
+    }
+    
+    /**
+     * Create a login form
+     *
+     * @param Customer $entity
+     * @return CustomerType
+     */
+    private function createRegisterForm(Customer $entity)
+    {
+        $form = $this->createForm(new CustomerType(), $entity, array(
+            'action' => $this->generateUrl('customer_doregister'),
+            'method' => 'POST',
+            'validation_groups' => array('unique'),
+        ));
+
+        $form
+            ->add('email', 'text', array(
+                'required' => true,
+                'trim' => true
+            ))
+            ->remove('password')
+            ->remove('name')
+            ->remove('cpf')
+            ->remove('gender')
+            ->remove('position')
+            ->remove('birthday')
+            ->remove('phone')
+            ->remove('address')
+            ->remove('number')
+            ->remove('complement')
+            ->remove('neighborhood')
+            ->remove('city')
+            ->remove('state')
+        ;
+
+        return $form;
     }
 
 }

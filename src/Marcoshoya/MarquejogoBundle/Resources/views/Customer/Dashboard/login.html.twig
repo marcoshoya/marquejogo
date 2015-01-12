@@ -37,13 +37,15 @@
         </div>
         <div class="container-register">
             <h3>Novo cadastro</h3>
-            <form>
+            {{ form_start(formRegister, {'attr': {'novalidate': 'novalidate'}} ) }}
+
+                {{ form_row (formRegister._token) }}
                 <fieldset>
                     <div class="form-login-group">
                         <label class="col-md-2">E-mail</label>
                         <div class="col-md-1">
-                            <input type="text" class="form-login-control" />
-                            <span class="form-login-error">Email obrigatório</span>
+                            {{ form_widget(formRegister.email, { 'attr': {'class': 'form-login-control'} }) }}
+                            {{ form_errors(formRegister.email) }}
                         </div>
                     </div>
                     <div class="form-login-group" style="margin: 140px 20px 5px !important">
@@ -52,7 +54,7 @@
                         </div>
                     </div>
                 </fieldset>
-            </form>
+            {{ form_end(formRegister) }}
         </div>
     </div>
 

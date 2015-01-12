@@ -11,30 +11,28 @@ use Marcoshoya\MarquejogoBundle\Entity\Customer;
 use Marcoshoya\MarquejogoBundle\Form\CustomerType;
 
 /**
- * Customer controller.
- *
- * @Route("/dados")
+ * Customer controller
  */
 class CustomerController extends Controller
 {
-
     /**
-     * Lists all Customer entities.
+     * Displays a form to create a new Customer entity.
      *
-     * @Route("/", name="dados")
+     * @Route("/cadastrar", name="customer_new")
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function newAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->findAll();
+        $entity = new Customer();
+        $form   = $this->createCreateForm($entity);
 
         return array(
-            'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
+    
     /**
      * Creates a new Customer entity.
      *
@@ -81,48 +79,7 @@ class CustomerController extends Controller
         return $form;
     }
 
-    /**
-     * Displays a form to create a new Customer entity.
-     *
-     * @Route("/new", name="dados_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new Customer();
-        $form   = $this->createCreateForm($entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Finds and displays a Customer entity.
-     *
-     * @Route("/{id}", name="dados_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
+    
 
     /**
      * Displays a form to edit an existing Customer entity.

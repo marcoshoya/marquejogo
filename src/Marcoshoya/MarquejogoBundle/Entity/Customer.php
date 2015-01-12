@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Customer entity class
@@ -12,6 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * 
  * @ORM\Table(name="customer")
  * @ORM\Entity
+ * @UniqueEntity(
+ *      fields="email", 
+ *      groups="unique",
+ *      message="Email já cadastrado"
+ * )
  */
 class Customer
 {
@@ -25,13 +31,14 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=150, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login"})
+     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"login"})
      */
     private $password;
     
