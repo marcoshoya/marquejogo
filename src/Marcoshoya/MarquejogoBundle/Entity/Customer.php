@@ -15,7 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @UniqueEntity(
  *      fields="email", 
- *      groups="unique",
+ *      groups={"unique", "register"},
  *      message="Email já cadastrado"
  * )
  */
@@ -31,24 +31,26 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=150, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login"})
-     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register"})
+     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"login"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register"})
      */
     private $password;
     
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
      */
     private $name;
     
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
      */
     private $cpf;
 
@@ -69,6 +71,7 @@ class Customer
     
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
      */
     private $phone;
     

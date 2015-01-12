@@ -1,8 +1,65 @@
-{% extends '::base.html.twig' %}
+{% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
 
-{% block body -%}
-    <h1>Customer creation</h1>
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Customer/Form:fields_register.html.twig' %}
 
-    {{ form(form) }}
+{% block container %}
+
+    <h1>Novo cadastro</h1>
+
+    <div class="container-data">
+        <div class="container-register-left">
+            <img src="/bundles/marcoshoyamarquejogo/images/site/player-register.png" />
+        </div>
+        <div class="container-register-right">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+            {{ form_row (form._token) }}
+            <div class="register-data-container">
+                <div class="register-data-title">Seus dados</div>
+                <div class="register-data-user">
+                    <fieldset>
+                        <div class="register-data-user-group-col-md-1">
+                            <label class="col-md-2">Nome</label>
+                            <div class="col-md-1">
+                                {{ form_widget(form.name, { 'attr': {'class': 'register-data-user-control'} }) }}
+                                {{ form_errors(form.name) }}
+                            </div>
+                        </div>
+                        <div class="register-data-user-group-col-md-1">
+                            <label class="col-md-2">CPF</label>
+                            <div class="col-md-1">
+                                {{ form_widget(form.cpf, { 'attr': {'class': 'register-data-user-control'} }) }}
+                                {{ form_errors(form.cpf) }}
+                            </div>
+                        </div>
+                        <div class="register-data-user-group-col-md-1">
+                            <label class="col-md-2">Telefone</label>
+                            <div class="col-md-1">
+                                {{ form_widget(form.phone, { 'attr': {'class': 'register-data-user-control'} }) }}
+                                {{ form_errors(form.phone) }}
+                            </div>
+                        </div>
+                        <div class="register-data-user-group-col-md-1">
+                            <label class="col-md-2">Email</label>
+                            <div class="col-md-1">
+                                {{ form_widget(form.email, { 'attr': {'class': 'register-data-user-control'} }) }}
+                                {{ form_errors(form.email) }}
+                            </div>
+                        </div>
+                        <div class="register-data-user-group-col-md-1">
+                            <label class="col-md-2">Password</label>
+                            <div class="col-md-1">
+                                {{ form_widget(form.password, { 'attr': {'class': 'register-data-user-control'} }) }}
+                                {{ form_errors(form.password) }}
+                            </div>
+                        </div>
+                        <div class="register-data-user-submit">
+                            <input type="submit" class="btn" value="Cadastrar" />
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
 
 {% endblock %}

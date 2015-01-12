@@ -36,9 +36,9 @@ class CustomerController extends Controller
     /**
      * Creates a new Customer entity.
      *
-     * @Route("/", name="dados_create")
+     * @Route("/cadastrar/", name="customer_create")
      * @Method("POST")
-     * @Template("MarcoshoyaMarquejogoBundle:Customer:new.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Customer:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -47,6 +47,8 @@ class CustomerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            
+            die('valid');
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -70,11 +72,22 @@ class CustomerController extends Controller
     private function createCreateForm(Customer $entity)
     {
         $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('dados_create'),
+            'action' => $this->generateUrl('customer_create'),
             'method' => 'POST',
+            'validation_groups' => array('register'),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form
+            ->remove('gender')
+            ->remove('position')
+            ->remove('birthday')
+            ->remove('address')
+            ->remove('number')
+            ->remove('complement')
+            ->remove('neighborhood')
+            ->remove('city')
+            ->remove('state')
+        ;
 
         return $form;
     }
