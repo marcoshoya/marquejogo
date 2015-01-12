@@ -171,6 +171,9 @@ class DashboardController extends Controller
             $formRegister->handleRequest($request);
             if ($formRegister->isValid()) {
                 
+                $data = $formRegister->getData();
+                $this->get('session')->set('register_email', $data->getEmail());
+                
                 return $this->redirect($this->generateUrl('customer_new'));
             }
         }

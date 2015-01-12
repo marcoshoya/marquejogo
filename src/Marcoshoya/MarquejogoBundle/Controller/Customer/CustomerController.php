@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Controller\Customer;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -12,9 +13,12 @@ use Marcoshoya\MarquejogoBundle\Form\CustomerType;
 
 /**
  * Customer controller
+ * 
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
 class CustomerController extends Controller
 {
+
     /**
      * Displays a form to create a new Customer entity.
      *
@@ -25,14 +29,14 @@ class CustomerController extends Controller
     public function newAction()
     {
         $entity = new Customer();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Creates a new Customer entity.
      *
@@ -47,18 +51,27 @@ class CustomerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            
-            die('valid');
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            
+            $this->get('session')->clear();
 
-            return $this->redirect($this->generateUrl('dados_show', array('id' => $entity->getId())));
+            // do the auth
+            $providerKey = 'customer';
+            $token = new UsernamePasswordToken($entity, null, $providerKey, $entity->getRoles());
+
+            $this->get('security.context')->setToken($token);
+            $session = $this->getRequest()->getSession();
+            $session->set('_security_main', serialize($token));
+
+            return $this->redirect($this->generateUrl('customer_dash'));
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -71,6 +84,11 @@ class CustomerController extends Controller
      */
     private function createCreateForm(Customer $entity)
     {
+        if ($this->get('session')->has('register_email')) {
+            $email = $this->get('session')->get('register_email');
+            $entity->setEmail($email);
+        }
+
         $form = $this->createForm(new CustomerType(), $entity, array(
             'action' => $this->generateUrl('customer_create'),
             'method' => 'POST',
@@ -91,8 +109,6 @@ class CustomerController extends Controller
 
         return $form;
     }
-
-    
 
     /**
      * Displays a form to edit an existing Customer entity.
@@ -115,19 +131,19 @@ class CustomerController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Customer entity.
-    *
-    * @param Customer $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Customer entity.
+     *
+     * @param Customer $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Customer $entity)
     {
         $form = $this->createForm(new CustomerType(), $entity, array(
@@ -139,6 +155,7 @@ class CustomerController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Customer entity.
      *
@@ -167,11 +184,12 @@ class CustomerController extends Controller
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a Customer entity.
      *
@@ -208,10 +226,11 @@ class CustomerController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('dados_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                ->setAction($this->generateUrl('dados_delete', array('id' => $id)))
+                ->setMethod('DELETE')
+                ->add('submit', 'submit', array('label' => 'Delete'))
+                ->getForm()
         ;
     }
+
 }
