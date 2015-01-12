@@ -756,6 +756,27 @@ table.booking-detail, table.booking-data {
 } 
 
 /***********************************
+ * CONTAINER CUSTOMER
+ **********************************/
+.container-customer {
+    clear: both;
+    position: relative;
+    margin: 0 auto;
+    width: 960px;
+    background-color: #FFFFFF;
+    padding:0 10px;
+    min-height: 350px;
+}
+
+.container-customer h1{
+    border-bottom: 1px solid #dcdcdc;
+    padding-bottom: 15px;
+    margin-top: 10px;
+    font-size: 24px;
+    color: #204401;
+}
+
+/***********************************
  * USER IDENTIFY
  **********************************/
 
