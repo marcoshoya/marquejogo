@@ -3,7 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class AdmUser implements UserInterface, \Serializable {
+class AdmUser implements UserInterface {
     
     /**
      * @ORM\Id
@@ -29,12 +29,7 @@ class AdmUser implements UserInterface, \Serializable {
      * @Assert\NotBlank(message = "Campo obrigatório")
      */
     private $username;
-    
-    /**
-     * @ORM\Column(type="string", length=32, nullable=true)
-     */
-    private $salt;
-    
+   
     /**
      * @ORM\Column(type="string", length=40)
      * @Assert\NotBlank(message = "Campo obrigatório")
@@ -45,11 +40,6 @@ class AdmUser implements UserInterface, \Serializable {
      * @ORM\Column(type="string", length=60, unique=true)
      */
     private $email;
-
-    /** 
-     * @ORM\Column(name="user_type",type="string", columnDefinition="ENUM('adm', 'provider', 'customer')") 
-     */
-    private $userType;
     
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
@@ -62,7 +52,6 @@ class AdmUser implements UserInterface, \Serializable {
     public function __construct()
     {
         $this->isActive = true;
-        $this->salt = md5(uniqid(null, true));
     }
     
     /**
@@ -84,14 +73,6 @@ class AdmUser implements UserInterface, \Serializable {
     /**
      * @inheritDoc
      */
-    public function getSalt()
-    {
-        return $this->salt;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getPassword()
     {
         return $this->password;
@@ -102,46 +83,9 @@ class AdmUser implements UserInterface, \Serializable {
      */
     public function getRoles()
     {
-        if ($this->getUserType() === 'adm') {
-            
-            return array('ROLE_ADMIN');
-        } if ($this->getUserType() === 'provider') {
-            
-            return array('ROLE_PROVIDER');
-        } else {
-            
-            return array('ROLE_CUSTOMER');
-        }
+        return array('ROLE_ADMIN');
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function eraseCredentials()
-    {
-    }
-
-    /**
-     * @see \Serializable::serialize()
-     */
-    public function serialize()
-    {
-        return serialize(array(
-            $this->id,
-        ));
-    }
-
-    /**
-     * @see \Serializable::unserialize()
-     */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->id,
-        ) = unserialize($serialized);
-    }
-
-
+    
     /**
      * Get id
      *
@@ -161,19 +105,6 @@ class AdmUser implements UserInterface, \Serializable {
     public function setUsername($username)
     {
         $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     * @return AdmUser
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
 
         return $this;
     }
@@ -235,28 +166,5 @@ class AdmUser implements UserInterface, \Serializable {
     public function getIsActive()
     {
         return $this->isActive;
-    }
-
-    /**
-     * Set userType
-     *
-     * @param string $userType
-     * @return AdmUser
-     */
-    public function setUserType($userType)
-    {
-        $this->userType = $userType;
-
-        return $this;
-    }
-
-    /**
-     * Get userType
-     *
-     * @return string 
-     */
-    public function getUserType()
-    {
-        return $this->userType;
     }
 }
