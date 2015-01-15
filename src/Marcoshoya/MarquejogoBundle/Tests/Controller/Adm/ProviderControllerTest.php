@@ -38,7 +38,7 @@ class ProviderControllerTest extends DashboardTest
             'marcoshoya_marquejogobundle_provider[neighborhood]'  => 'Downtown',
             'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
             'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
-            'marcoshoya_marquejogobundle_provider[email]'  => 'provider@email.com',
+            'marcoshoya_marquejogobundle_provider[username]'  => 'provider@email.com',
             'marcoshoya_marquejogobundle_provider[password]'  => 'password',
         ));
 
@@ -63,7 +63,7 @@ class ProviderControllerTest extends DashboardTest
             'marcoshoya_marquejogobundle_provider[neighborhood]'  => 'Downtown',
             'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
             'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
-            'marcoshoya_marquejogobundle_provider[email]'  => 'provider@email.com',
+            'marcoshoya_marquejogobundle_provider[username]'  => 'provider@email.com',
             'marcoshoya_marquejogobundle_provider[password]'  => 'password',
         ));
 

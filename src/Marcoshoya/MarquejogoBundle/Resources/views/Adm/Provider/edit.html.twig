@@ -120,11 +120,11 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Acesso</div>
                         <div class="panel-body">
-                            <div class="form-group {% if not form.email.vars.valid %} has-error {% endif %}">
-                                <label class="col-md-2">{{ form_label(form.email, 'Email') }}</label>
+                            <div class="form-group {% if not form.username.vars.valid %} has-error {% endif %}">
+                                <label class="col-md-2">{{ form_label(form.username, 'Email') }}</label>
                                 <div class="col-md-8">
-                                    {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
-                                    {{ form_errors(form.email) }}
+                                    {{ form_widget(form.username, { 'attr': {'class': 'form-control'} }) }}
+                                    {{ form_errors(form.username) }}
                                 </div>
                                 <div class="clearfix"></div>
                             </div>

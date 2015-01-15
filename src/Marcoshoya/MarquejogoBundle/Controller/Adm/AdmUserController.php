@@ -84,7 +84,6 @@ class AdmUserController extends Controller
                     new NotBlank(array('message' => "Campo obrigatório")),
                 ),
             ))
-            ->remove('salt')
         ;
 
         return $form;
@@ -153,7 +152,6 @@ class AdmUserController extends Controller
                     new NotBlank(array('message' => "Campo obrigatório")),
                 ),
             ))
-            ->remove('salt')
         ;
 
         return $form;

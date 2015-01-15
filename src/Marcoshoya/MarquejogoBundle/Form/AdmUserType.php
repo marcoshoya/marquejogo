@@ -16,7 +16,6 @@ class AdmUserType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('salt')
             ->add('password')
             ->add('email')
             ->add('isActive')
