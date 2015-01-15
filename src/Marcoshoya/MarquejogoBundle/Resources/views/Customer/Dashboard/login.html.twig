@@ -3,57 +3,60 @@
 {% form_theme form 'MarcoshoyaMarquejogoBundle:Customer/Form:fields_login.html.twig' %}
 
 {% block container %}
-
+    
     <h1>Acesse sua conta</h1>
+    
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Provider/Dashboard:flash')) }}
+    
     <div class="container-identify">
         <div class="container-login">
-            <h3>Já sou cadastrado</h3>
+            <h3>Já sou cadastrado</h3>        
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
 
-                {{ form_row (form._token) }}
+            {{ form_row (form._token) }}
 
-                <fieldset>
-                    <div class="form-login-group">
-                        <label class="col-md-2">E-mail</label>
-                        <div class="col-md-1">
-                            {{ form_widget(form.email, { 'attr': {'class': 'form-login-control'} }) }}
-                            {{ form_errors(form.email) }}
-                        </div>
+            <fieldset>
+                <div class="form-login-group">
+                    <label class="col-md-2">E-mail</label>
+                    <div class="col-md-1">
+                        {{ form_widget(form.username, { 'attr': {'class': 'form-login-control'} }) }}
+                        {{ form_errors(form.username) }}
                     </div>
-                    <div class="form-login-group">
-                        <label class="col-md-2">Senha</label>
-                        <div class="col-md-1">
-                            {{ form_widget(form.password, { 'attr': {'class': 'form-login-control'} }) }}
-                            {{ form_errors(form.password) }}
-                        </div>
+                </div>
+                <div class="form-login-group">
+                    <label class="col-md-2">Senha</label>
+                    <div class="col-md-1">
+                        {{ form_widget(form.password, { 'attr': {'class': 'form-login-control'} }) }}
+                        {{ form_errors(form.password) }}
                     </div>
-                    <div class="form-login-group">
-                        <div class="login-submit">
-                            <input type="submit" class="btn" value="Continuar" />
-                        </div>
+                </div>
+                <div class="form-login-group">
+                    <div class="login-submit">
+                        <input type="submit" class="btn" value="Continuar" />
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
             {{ form_end(form) }}
         </div>
         <div class="container-register">
             <h3>Novo cadastro</h3>
             {{ form_start(formRegister, {'attr': {'novalidate': 'novalidate'}} ) }}
 
-                {{ form_row (formRegister._token) }}
-                <fieldset>
-                    <div class="form-login-group">
-                        <label class="col-md-2">E-mail</label>
-                        <div class="col-md-1">
-                            {{ form_widget(formRegister.email, { 'attr': {'class': 'form-login-control'} }) }}
-                            {{ form_errors(formRegister.email) }}
-                        </div>
+            {{ form_row (formRegister._token) }}
+            <fieldset>
+                <div class="form-login-group">
+                    <label class="col-md-2">E-mail</label>
+                    <div class="col-md-1">
+                        {{ form_widget(formRegister.username, { 'attr': {'class': 'form-login-control'} }) }}
+                        {{ form_errors(formRegister.username) }}
                     </div>
-                    <div class="form-login-group" style="margin: 140px 20px 5px !important">
-                        <div class="login-submit">
-                            <input type="submit" class="btn" value="Continuar" />
-                        </div>
+                </div>
+                <div class="form-login-group" style="margin: 140px 20px 5px !important">
+                    <div class="login-submit">
+                        <input type="submit" class="btn" value="Continuar" />
                     </div>
-                </fieldset>
+                </div>
+            </fieldset>
             {{ form_end(formRegister) }}
         </div>
     </div>

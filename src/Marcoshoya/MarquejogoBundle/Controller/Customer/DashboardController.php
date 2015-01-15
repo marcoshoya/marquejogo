@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Marcoshoya\MarquejogoBundle\Entity\Customer;
 use Marcoshoya\MarquejogoBundle\Form\CustomerType;
 
@@ -38,18 +39,40 @@ class DashboardController extends Controller
         $form = $this->createLoginForm($entity);
         $formRegister = $this->createRegisterForm($entity);
 
-        if ($request->getMethod() === 'POST') {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $data = $form->getData();
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'formRegister' => $formRegister->createView(),
+        );
+    }
 
-                $auth = $this->doAuth($data);
+    /**
+     * Do login
+     * 
+     * @Route("/doLogin", name="customer_dologin")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Dashboard:login.html.twig")
+     * @Method({"POST"})
+     */
+    public function dologinAction(Request $request)
+    {
+        $entity = new Customer();
+        $form = $this->createLoginForm($entity);
+        $formRegister = $this->createRegisterForm($entity);
 
-                if ($auth) {
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
 
-                    return $this->redirect($this->generateUrl('customer_dash'));
-                }
+            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $user = $service->getUser($data);
+
+            if (null !== $user) {
+                $this->doAuth($user);
+                
+                return $this->redirect($this->generateUrl('customer_dash'));
             }
+            
+            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
         }
 
         return array(
@@ -80,13 +103,13 @@ class DashboardController extends Controller
     private function createLoginForm(Customer $entity)
     {
         $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_login'),
+            'action' => $this->generateUrl('customer_dologin'),
             'method' => 'POST',
             'validation_groups' => array('login'),
         ));
 
         $form
-            ->add('email', 'text', array(
+            ->add('username', 'text', array(
                 'required' => true,
                 'trim' => true
             ))
@@ -120,43 +143,26 @@ class DashboardController extends Controller
      */
     private function doAuth(Customer $entity)
     {
-        $entity->getPassword();
+        try {
+            $providerKey = 'customer';
+            $token = new UsernamePasswordToken($entity, null, $providerKey, $entity->getRoles());
 
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->findOneBy(array(
-            'email' => $entity->getEmail(),
-            'password' => $entity->getPassword(),
-        ));
+            $this->get('security.context')->setToken($token);
 
-        if ($user instanceof Customer) {
-            try {
-                $providerKey = 'customer';
-                $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+            $session = $this->getRequest()->getSession();
+            $session->set('_security_main', serialize($token));
 
-                $this->get('security.context')->setToken($token);
-
-                $session = $this->getRequest()->getSession();
-                $session->set('_security_main', serialize($token));
-
-                if (!$this->get('security.context')->isGranted('ROLE_CUSTOMER')) {
-                    throw new AccessDeniedHttpException();
-                }
-
-                return true;
-            } catch (AccessDeniedHttpException $ex) {
-                $this->get('security.context')->setToken(null);
-                $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
-                $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
-
-                return false;
+            if (!$this->get('security.context')->isGranted('ROLE_CUSTOMER')) {
+                throw new AccessDeniedHttpException();
             }
-        } else {
-            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
 
-            return false;
+        } catch (AccessDeniedHttpException $ex) {
+            $this->get('security.context')->setToken(null);
+            $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
         }
     }
-    
+
     /**
      * @Route("/doRegister", name="customer_doregister")
      * @Template("MarcoshoyaMarquejogoBundle:Customer/Dashboard:login.html.twig")
@@ -170,21 +176,21 @@ class DashboardController extends Controller
         if ($request->getMethod() === 'POST') {
             $formRegister->handleRequest($request);
             if ($formRegister->isValid()) {
-                
+
                 $data = $formRegister->getData();
                 $this->get('session')->set('register_email', $data->getEmail());
-                
+
                 return $this->redirect($this->generateUrl('customer_new'));
             }
         }
-        
+
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
             'formRegister' => $formRegister->createView(),
         );
     }
-    
+
     /**
      * Create a login form
      *
@@ -200,7 +206,7 @@ class DashboardController extends Controller
         ));
 
         $form
-            ->add('email', 'text', array(
+            ->add('username', 'text', array(
                 'required' => true,
                 'trim' => true
             ))
