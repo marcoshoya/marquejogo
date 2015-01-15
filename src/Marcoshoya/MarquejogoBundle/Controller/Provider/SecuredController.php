@@ -16,10 +16,11 @@ use Marcoshoya\MarquejogoBundle\Form\ProviderType;
  * SecuredController
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
- * 
+ *
  */
 class SecuredController extends Controller
 {
+
     /**
      * @Route("/login", name="provider_login")
      * @Template()
@@ -28,12 +29,12 @@ class SecuredController extends Controller
     {
         $entity = new Provider();
         $form = $this->createLoginForm($entity);
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/doLogin", name="provider_dologin")
      * @Method("POST")
@@ -44,23 +45,26 @@ class SecuredController extends Controller
         $entity = new Provider();
         $form = $this->createLoginForm($entity);
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
             $data = $form->getData();
 
-            $auth = $this->doAuth($data);
+            // gets service container
+            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $user = $service->getUser($data);
 
-            if ($auth) {
+            if (null !== $user) {
+                $this->doAuth($user);
 
                 return $this->redirect($this->generateUrl('provider_dash'));
             }
         }
-        
+
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Create a login form
      *
@@ -75,7 +79,7 @@ class SecuredController extends Controller
         ));
 
         $form
-            ->add('email', 'text', array(
+            ->add('username', 'text', array(
                 'required' => true,
                 'trim' => true
             ))
@@ -100,49 +104,31 @@ class SecuredController extends Controller
     }
 
     /**
-     * 
+     *
      * @param AdmUser $entity
      * @return boolean
      * @throws AccessDeniedHttpException
      */
     private function doAuth(Provider $entity)
     {
+        try {
+            $providerKey = 'provider';
+            $token = new UsernamePasswordToken($entity, null, $providerKey, $entity->getRoles());
 
-        $entity->getPassword();
+            $this->get('security.context')->setToken($token);
 
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->findOneBy(array(
-            'email' => $entity->getEmail(),
-            'password' => $entity->getPassword(),
-        ));
+            $session = $this->getRequest()->getSession();
+            $session->set('_security_main', serialize($token));
 
-        if ($user instanceof Provider) {
-            try {
-                $providerKey = 'provider';
-                $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
-
-                $this->get('security.context')->setToken($token);
-
-                $session = $this->getRequest()->getSession();
-                $session->set('_security_main', serialize($token));
-
-                if (!$this->get('security.context')->isGranted(array('ROLE_ADMIN', 'ROLE_PROVIDER'))) {
-                    throw new AccessDeniedHttpException();
-                }
-
-                return true;
-            } catch (AccessDeniedHttpException $ex) {
-                $this->get('security.context')->setToken(null);
-                $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
-                $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
-
-                return false;
+            if (!$this->get('security.context')->isGranted(array('ROLE_PROVIDER'))) {
+                throw new AccessDeniedHttpException();
             }
-        } else {
-            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
 
-            return false;
+        } catch (AccessDeniedHttpException $ex) {
+            $this->get('security.context')->setToken(null);
+            $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
         }
     }
-    
+
 }

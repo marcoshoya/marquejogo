@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Component\Person;
 use Doctrine\ORM\EntityManager;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\CustomerDelegate;
+use Marcoshoya\MarquejogoBundle\Component\Person\ProviderDelegate;
 
 /**
  * PersonService delegates who is called to get user
@@ -44,6 +45,13 @@ class PersonService
             return $customer->getUser();
         }
         
-        // @TODO use Marcoshoya\MarquejogoBundle\Component\Person\ProviderDelegate;
+        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Provider) {
+            $provider = new ProviderDelegate($this->em);
+            $provider->setUser($user);
+            
+            return $provider->getUser();
+        }
+        
+        return null;
     }
 }
