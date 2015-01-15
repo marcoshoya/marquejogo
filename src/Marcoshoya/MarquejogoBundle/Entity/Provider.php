@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 
 /**
  * Provider entity class
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="provider")
  * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\ProviderRepository")
  */
-class Provider 
+class Provider implements UserInterface
 {    
     /**
      * @ORM\Id
@@ -24,10 +25,11 @@ class Provider
     private $id;
     
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(name="email", type="string", length=60)
      * @Assert\NotBlank(message="Campo obrigatório")
+     * @Assert\Email(message="Formato do email inválido")
      */
-    private $email;
+    private $username;
     
     /**
      * @ORM\Column(type="string", length=40)
@@ -150,9 +152,9 @@ class Provider
      * @param string $email
      * @return Provider
      */
-    public function setEmail($email)
+    public function setUsername($email)
     {
-        $this->email = $email;
+        $this->username = $email;
 
         return $this;
     }
@@ -162,9 +164,9 @@ class Provider
      *
      * @return string 
      */
-    public function getEmail()
+    public function getUsername()
     {
-        return $this->email;
+        return $this->username;
     }
 
     /**

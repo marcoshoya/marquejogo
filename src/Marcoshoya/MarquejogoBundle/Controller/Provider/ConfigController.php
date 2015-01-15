@@ -105,7 +105,7 @@ class ConfigController extends Controller
                 ),
             ))
             ->add('isActive', 'hidden')
-            ->add('email', 'hidden')
+            ->add('username', 'hidden')
             ->add('password', 'hidden')
         ;
 
