@@ -4,3 +4,7 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: entity_hidden }
+
+    marcoshoya_marquejogo.service.personservice:
+        class: Marcoshoya\MarquejogoBundle\Component\Person\PersonService
+        arguments: ["@doctrine.orm.entity_manager"]

@@ -8,28 +8,28 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * AdmUser entity class
- * 
+ *
  * @author  Marcos Joia <marcoshoya at gmail dot com>
  * @package Marcoshoya\MarquejogoBundle\Entity
- * 
+ *
  * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class AdmUser implements UserInterface {
-    
+class AdmUser implements UserInterface
+{
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      * @Assert\NotBlank(message = "Campo obrigatório")
      */
     private $username;
-   
+
     /**
      * @ORM\Column(type="string", length=40)
      * @Assert\NotBlank(message = "Campo obrigatório")
@@ -40,12 +40,12 @@ class AdmUser implements UserInterface {
      * @ORM\Column(type="string", length=60, unique=true)
      */
     private $email;
-    
+
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
-        
+
     /**
      * @inheritDoc
      */
@@ -53,7 +53,7 @@ class AdmUser implements UserInterface {
     {
         $this->isActive = true;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -85,11 +85,11 @@ class AdmUser implements UserInterface {
     {
         return array('ROLE_ADMIN');
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -138,7 +138,7 @@ class AdmUser implements UserInterface {
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -161,7 +161,7 @@ class AdmUser implements UserInterface {
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {

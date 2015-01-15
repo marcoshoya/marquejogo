@@ -5,23 +5,23 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 
 /**
  * Customer entity class
- * 
+ *
  * @author  Marcos Joia <marcoshoya at gmail dot com>
- * 
+ *
  * @ORM\Table(name="customer")
  * @ORM\Entity
  * @UniqueEntity(
- *      fields="email", 
+ *      fields="email",
  *      groups={"unique", "register"},
  *      message="Email já cadastrado"
  * )
  */
-class Customer
+class Customer implements UserInterface
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -30,24 +30,24 @@ class Customer
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150, nullable=false)
+     * @ORM\Column(name="email", type="string", length=150, nullable=false)
      * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register"})
      * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register"})
      */
-    private $email;
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=false)
      * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register"})
      */
     private $password;
-    
+
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
      * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
      */
     private $name;
-    
+
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
@@ -58,63 +58,63 @@ class Customer
      * @ORM\Column(type="string", nullable=false, columnDefinition="ENUM('male', 'female')")
      */
     private $gender;
-    
+
     /**
      * @ORM\Column(type="string", nullable=false, columnDefinition="ENUM('goalkeeper', 'defender', 'middle', 'attacker')")
      */
     private $position;
-    
+
     /**
      * @ORM\Column(type="date", nullable=true)
      */
     private $birthday;
-    
+
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
      * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
      */
     private $phone;
-    
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $address;
-    
+
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
      */
     private $number;
-    
+
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $complement;
-    
+
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
      */
     private $neighborhood;
-    
+
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $city;
-    
+
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     private $state;
-    
+
     /**
      * To string class
-     * 
+     *
      * @return string
      */
     public function __toString()
     {
         return $this->name;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -126,7 +126,7 @@ class Customer
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -139,9 +139,9 @@ class Customer
      * @param string $email
      * @return Customer
      */
-    public function setEmail($email)
+    public function setUsername($email)
     {
-        $this->email = $email;
+        $this->username = $email;
 
         return $this;
     }
@@ -149,11 +149,11 @@ class Customer
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
-    public function getEmail()
+    public function getUsername()
     {
-        return $this->email;
+        return $this->username;
     }
 
     /**
@@ -172,7 +172,7 @@ class Customer
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -195,7 +195,7 @@ class Customer
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -218,7 +218,7 @@ class Customer
     /**
      * Get cpf
      *
-     * @return string 
+     * @return string
      */
     public function getCpf()
     {
@@ -241,7 +241,7 @@ class Customer
     /**
      * Get gender
      *
-     * @return string 
+     * @return string
      */
     public function getGender()
     {
@@ -264,7 +264,7 @@ class Customer
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {
@@ -287,7 +287,7 @@ class Customer
     /**
      * Get birthday
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBirthday()
     {
@@ -310,7 +310,7 @@ class Customer
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -333,7 +333,7 @@ class Customer
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -356,7 +356,7 @@ class Customer
     /**
      * Get number
      *
-     * @return string 
+     * @return string
      */
     public function getNumber()
     {
@@ -379,7 +379,7 @@ class Customer
     /**
      * Get complement
      *
-     * @return string 
+     * @return string
      */
     public function getComplement()
     {
@@ -402,7 +402,7 @@ class Customer
     /**
      * Get neighborhood
      *
-     * @return string 
+     * @return string
      */
     public function getNeighborhood()
     {
@@ -425,7 +425,7 @@ class Customer
     /**
      * Get city
      *
-     * @return string 
+     * @return string
      */
     public function getCity()
     {
@@ -448,7 +448,7 @@ class Customer
     /**
      * Get state
      *
-     * @return string 
+     * @return string
      */
     public function getState()
     {
