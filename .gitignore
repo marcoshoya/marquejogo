@@ -36,4 +36,4 @@
 
 #Others
 /nbproject/private/
-.php~
+*.php~
