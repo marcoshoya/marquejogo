@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\CustomerDelegate;
 use Marcoshoya\MarquejogoBundle\Component\Person\ProviderDelegate;
+use Marcoshoya\MarquejogoBundle\Component\Person\AdmUserDelegate;
 
 /**
  * PersonService delegates who is called to get user
@@ -50,6 +51,13 @@ class PersonService
             $provider->setUser($user);
             
             return $provider->getUser();
+        }
+        
+        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {
+            $admuser = new AdmUserDelegate($this->em);
+            $admuser->setUser($user);
+            
+            return $admuser->getUser();
         }
         
         return null;

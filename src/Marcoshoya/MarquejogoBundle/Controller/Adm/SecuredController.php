@@ -19,6 +19,7 @@ use Marcoshoya\MarquejogoBundle\Form\AdmUserType;
  */
 class SecuredController extends Controller
 {
+
     /**
      * @Route("/login", name="adm_login")
      * @Template()
@@ -32,7 +33,7 @@ class SecuredController extends Controller
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * @Route("/doLogin", name="adm_dologin")
      * @Method("POST")
@@ -54,7 +55,9 @@ class SecuredController extends Controller
             if (null !== $user) {
                 $this->doAuth($user);
 
-                //return $this->redirect($this->generateUrl('provider_dash'));
+                return $this->redirect($this->generateUrl('_adm_dash'));
+            } else {
+                $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
             }
         }
 
@@ -63,14 +66,14 @@ class SecuredController extends Controller
         );
     }
 
-    
     /**
      * Create a login form
      *
      * @param AdmUser $entity
      * @return AdmUserType
      */
-    private function createLoginForm(AdmUser $entity) {
+    private function createLoginForm(AdmUser $entity)
+    {
         $form = $this->createForm(new AdmUserType(), $entity, array(
             'action' => $this->generateUrl('adm_dologin'),
             'method' => 'POST',
@@ -81,51 +84,40 @@ class SecuredController extends Controller
                 'required' => true,
                 'trim' => true
             ))
+            ->add('password', 'password')
             ->remove('email')
-            ->remove('salt')
             ->remove('isActive')
         ;
 
         return $form;
     }
 
-    private function doAuth(AdmUser $entity) {
-        
-        $entity->getPassword();
+    /**
+     * Do authentication
+     *
+     * @param AdmUser $user
+     * @throws AccessDeniedHttpException
+     */
+    private function doAuth(AdmUser $user)
+    {
+        try {
+            $providerKey = 'admin';
+            $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
 
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('MarcoshoyaMarquejogoBundle:AdmUser')->findOneBy(array(
-            'username' => $entity->getUserName(),
-            'password' => $entity->getPassword(),
-        ));
+            $this->get('security.context')->setToken($token);
 
-        if ($user instanceof AdmUser) {
-            try {
-                $providerKey = 'admin';
-                $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+            $session = $this->getRequest()->getSession();
+            $session->set('_security_main', serialize($token));
 
-                $this->get('security.context')->setToken($token);
-
-                $session = $this->getRequest()->getSession();
-                $session->set('_security_main', serialize($token));
-                
-                if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-                    throw new AccessDeniedHttpException();
-                }
-
-                return true;
-                
-            } catch (AccessDeniedHttpException $ex) {
-                $this->get('security.context')->setToken(null);
-                $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
-                $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
-                
-                return false;
+            if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                throw new AccessDeniedHttpException();
             }
-        } else {
-            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
-            
-            return false;
+
+        } catch (AccessDeniedHttpException $ex) {
+            $this->get('security.context')->setToken(null);
+            $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
         }
     }
+
 }
