@@ -33,4 +33,7 @@
 
 # Composer PHAR
 /composer.phar
+
+#Others
 /nbproject/private/
+.php~
