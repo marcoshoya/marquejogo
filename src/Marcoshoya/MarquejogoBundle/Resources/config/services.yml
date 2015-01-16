@@ -6,5 +6,5 @@ services:
             - { name: form.type, alias: entity_hidden }
 
     marcoshoya_marquejogo.service.personservice:
-        class: Marcoshoya\MarquejogoBundle\Component\Person\PersonService
+        class: Marcoshoya\MarquejogoBundle\Service\PersonService
         arguments: ["@doctrine.orm.entity_manager"]

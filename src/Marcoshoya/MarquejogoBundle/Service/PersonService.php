@@ -1,6 +1,6 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Component\Person;
+namespace Marcoshoya\MarquejogoBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
