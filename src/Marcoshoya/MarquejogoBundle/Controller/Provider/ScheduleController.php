@@ -115,6 +115,28 @@ class ScheduleController extends Controller
             'now' => $now,
         );
     }
+    
+    /**
+     * Displays a day from Schedule
+     *
+     * @Route("/{year}/{month}/dia/{day}", name="schedule_show", requirements={
+     *      "year": "\d+",
+     *      "month": "\d+",
+     *      "day": "\d+",
+     * })
+     * @Method("GET")
+     * @Template()
+     */
+    public function showAction($year, $month, $day)
+    {
+        
+        
+        return array(
+            'year' => $year, 
+            'month' => $month, 
+            'day' => $day
+        );
+    }
 
     /**
      * Creates a new Schedule entity.
@@ -178,31 +200,6 @@ class ScheduleController extends Controller
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
-        );
-    }
-
-    /**
-     * Finds and displays a Schedule entity.
-     *
-     * @Route("/{id}", name="schedule_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Schedule entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity' => $entity,
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
