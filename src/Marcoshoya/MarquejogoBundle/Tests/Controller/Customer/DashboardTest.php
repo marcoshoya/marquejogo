@@ -45,8 +45,14 @@ class DashboardTest extends WebTestCase
     {
         $session = $this->client->getContainer()->get('session');
 
-        $firewall = 'customer';
-        $token = new UsernamePasswordToken('customer', null, $firewall, array('ROLE_CUSTOMER'));
+        $firewall = 'website';
+        
+        $customer = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find(1);
+        if (!$customer) {
+            $this->fail("Customer not found");
+        }
+        
+        $token = new UsernamePasswordToken($customer, null, $firewall, $customer->getRoles());
         $this->client->getContainer()->get('security.context')->setToken($token);
         
         $session->set('_security_'.$firewall, serialize($token));
@@ -64,16 +70,8 @@ class DashboardTest extends WebTestCase
         $this->logIn();
         $crawler = $this->client->request('GET', '/cliente/');
         
-        var_dump(get_class($this->client->getContainer()->get('security.context')));
-        
-        
-        var_dump($this->client->getContainer()->get('security.context')->getToken());
-        
-        /**
-        $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('ROLE_ADMIN'));
+        $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('ROLE_CUSTOMER'));
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("MarqueJogo.com - Administrador")')->count());
-         * 
-         */
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Sair")')->count());
     }
 }

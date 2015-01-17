@@ -2,9 +2,9 @@
 
 namespace Marcoshoya\MarquejogoBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Marcoshoya\MarquejogoBundle\Tests\Controller\Customer\DashboardTest;
 
-class CustomerControllerTest extends WebTestCase
+class CustomerControllerTest extends DashboardTest
 {
     /*
     public function testCompleteScenario()
