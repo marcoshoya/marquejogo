@@ -5,7 +5,7 @@
         </a>
     </li>
     <li {{ view == 'schedule' ? 'class="active"' : '' }}>
-        <a href="{{ path('schedule') }}">
+        <a href="{{ path('schedule', {"year": "now"|date('Y'), "month": "now"|date('m')}) }}">
             <i class="fa fa-calendar fa-fw"></i> Agenda
         </a>
     </li>

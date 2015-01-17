@@ -11,18 +11,20 @@
 
         <div class="pull-right form-inline">
             <div class="btn-group">
-                <button class="btn btn-primary" data-calendar-nav="prev"><< Prev</button>
-                <button class="btn" data-calendar-nav="today">Today</button>
-                <button class="btn btn-primary" data-calendar-nav="next">Next >></button>
+                <a href="{{ path('schedule', {"year": navbar.prev.year, "month": navbar.prev.month }) }}" class="btn btn-primary" data-calendar-nav="prev"><< Anterior</a>
+                <a href="{{ path('schedule', {"year": "now"|date('Y'), "month": "now"|date('m')}) }}" class="btn btn-default" data-calendar-nav="today">Hoje</a>
+                <a href="{{ path('schedule', {"year": navbar.next.year, "month": navbar.next.month }) }}" class="btn btn-primary" data-calendar-nav="next">Próximo >></a>
             </div>
+            <!-- 
             <div class="btn-group">
                 <button class="btn btn-warning" data-calendar-view="year">Year</button>
                 <button class="btn btn-warning active" data-calendar-view="month">Month</button>
                 <button class="btn btn-warning" data-calendar-view="week">Week</button>
                 <button class="btn btn-warning" data-calendar-view="day">Day</button>
             </div>
+            -->
         </div>
-        <h1>Agenda</h1>
+        <h3>Agenda: {{ navbar.curr.title }}</h3>
 
     </div>
 
@@ -43,7 +45,7 @@
                         <div class="cal-row-fluid cal-before-eventlist">
                             {% for day in week %}
                                 <div class="cal-cell1 cal-cell">
-                                    <div class="cal-month-day {{ (day.format('Y-m') < "now"|date('Y-m')) or (day.format('Y-m') > "now"|date('Y-m')) ? 'cal-day-outmonth' : 'cal-day-inmonth' }}">
+                                    <div class="cal-month-day {{ (day.format('Y-m') < navbar.curr.date.format('Y-m')) or (day.format('Y-m') > navbar.curr.date.format('Y-m')) ? 'cal-day-outmonth' : 'cal-day-inmonth' }}">
                                         <span title="" class="pull-right" data-cal-date="{{ day.format('Y-m-d') }}">
                                             {{ day.format('j') }}
                                         </span>

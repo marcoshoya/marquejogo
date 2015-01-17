@@ -15,7 +15,7 @@ use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
  * ScheduleController controller.
  *
  * @author  Marcos Lazarin <marcoshoya at gmail dot com>
- * 
+ *
  * @Route("/agenda")
  */
 class ScheduleController extends Controller
@@ -24,55 +24,96 @@ class ScheduleController extends Controller
     /**
      * It configures full schedule
      *
-     * @Route("/", name="schedule")
+     * @Route("/{year}/{month}", name="schedule", requirements={
+     *      "year": "\d+",
+     *      "month": "\d+",
+     * })
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction($year, $month)
     {
         // initial vars
-        $now = $schedule = $days = array();
-        $current = new \DateTime();
+        $now = $schedule = $days = $navbar = array();
 
         // now data
+        $current = new \DateTime();
         $now['day'] = $current->format('j');
         $now['month'] = BundleHelper::monthTranslate($current->format('F'));
         $now['year'] = $current->format('Y');
 
-        $first = new \DateTime(date('Y-m-01'));
-        $last = new \DateTime(date('Y-m-t'));
+        // Calendar start
+        $firstDay = new \DateTime(date(sprintf('%d-%d-01', $year, $month)));
+        $lastDay = clone $firstDay;
+        $lastDay->modify('+1 month');
+        $lastDay->modify('-1 day'); // bug with february
+        
+        // nav bar above calendar
+        $currMonth = clone $firstDay;
+        $prevMonth = clone $firstDay;
+        $prevMonth->modify('-1 month');
+        $nextMonth = clone $firstDay;
+        $nextMonth->modify('+1 month');
+        
+        $navbar['curr']['title'] = sprintf(
+            '%s de %d', 
+            BundleHelper::monthTranslate($currMonth->format('F')), 
+            $currMonth->format('Y')
+        );
+        $navbar['curr']['date'] = $currMonth;
+        $navbar['curr']['month'] = $currMonth->format('m');
+        $navbar['curr']['year'] = $currMonth->format('Y');
+        $navbar['prev']['month'] = $prevMonth->format('m');
+        $navbar['prev']['year'] = $prevMonth->format('Y');
+        $navbar['next']['month'] = $nextMonth->format('m');
+        $navbar['next']['year'] = $nextMonth->format('Y');
 
-        // start calendar
-        if ($first->format('w') != 0) {
-            $first->modify('last Sunday');
+        // check if fist day is not sunday
+        if ($firstDay->format('w') != 0) {
+            $firstDay->modify('last Sunday');
         }
 
-        $d1 = clone $first;
+        // get next 6 weeks
+        $d1 = clone $firstDay;
         $d2 = clone $d1;
         $d2->modify('+6 weeks');
 
         $week = $day = 1;
+
+        // get day by week
         for ($aux = $d1->getTimestamp(); $aux < $d2->getTimestamp(); $aux = strtotime('+1 day', $aux)) {
             $datetime = new \DateTime(date('Y-m-d', $aux));
             $schedule[$week][$day] = $datetime;
 
-            if ($datetime->format('Y-m-d') === $last->format('Y-m-d') && $day === 7) {
+            // check if date from loop is the last day of the month and if it is not saturday 
+            if ($datetime->format('Y-m-d') === $lastDay->format('Y-m-d') && $day === 7) {
+                break;
+            }
+            
+            // adjusts to print 5 weeks
+            if ($datetime->format('Y-m-d') > $lastDay->format('Y-m-d') && $day === 1) {
+                unset($schedule[$week]);
                 break;
             }
 
+            // controls push on array of week, to organize it
             $day++;
             if ($day > 7) {
                 $day = 1;
                 $week++;
             }
         }
-        /**
+        /***
+    
           echo '<pre>';
           print_r($schedule);
           echo '</pre>';
-         * 
-         */
-        return array('schedule' => $schedule);
+           */   
+        return array(
+            'schedule' => $schedule,
+            'navbar' => $navbar,
+            'now' => $now,
+        );
     }
 
     /**
@@ -81,26 +122,27 @@ class ScheduleController extends Controller
      * @Route("/", name="schedule_create")
      * @Method("POST")
      * @Template("MarcoshoyaMarquejogoBundle:Schedule:new.html.twig")
+
+      public function createAction(Request $request)
+      {
+      $entity = new Schedule();
+      $form = $this->createCreateForm($entity);
+      $form->handleRequest($request);
+
+      if ($form->isValid()) {
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->redirect($this->generateUrl('schedule_show', array('id' => $entity->getId())));
+      }
+
+      return array(
+      'entity' => $entity,
+      'form' => $form->createView(),
+      );
+      }
      */
-    public function createAction(Request $request)
-    {
-        $entity = new Schedule();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('schedule_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        );
-    }
 
     /**
      * Creates a form to create a Schedule entity.
