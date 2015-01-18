@@ -47,18 +47,15 @@ class ScheduleController extends Controller
         $lastDay = clone $firstDay;
         $lastDay->modify('+1 month');
         $lastDay->modify('-1 day'); // bug with february
-        
         // nav bar above calendar
         $currMonth = clone $firstDay;
         $prevMonth = clone $firstDay;
         $prevMonth->modify('-1 month');
         $nextMonth = clone $firstDay;
         $nextMonth->modify('+1 month');
-        
+
         $navbar['curr']['title'] = sprintf(
-            '%s de %d', 
-            BundleHelper::monthTranslate($currMonth->format('F')), 
-            $currMonth->format('Y')
+            '%s de %d', BundleHelper::monthTranslate($currMonth->format('F')), $currMonth->format('Y')
         );
         $navbar['curr']['date'] = $currMonth;
         $navbar['curr']['month'] = $currMonth->format('m');
@@ -85,11 +82,11 @@ class ScheduleController extends Controller
             $datetime = new \DateTime(date('Y-m-d', $aux));
             $schedule[$week][$day] = $datetime;
 
-            // check if date from loop is the last day of the month and if it is not saturday 
+            // check if date from loop is the last day of the month and if it is not saturday
             if ($datetime->format('Y-m-d') === $lastDay->format('Y-m-d') && $day === 7) {
                 break;
             }
-            
+
             // adjusts to print 5 weeks
             if ($datetime->format('Y-m-d') > $lastDay->format('Y-m-d') && $day === 1) {
                 unset($schedule[$week]);
@@ -103,19 +100,19 @@ class ScheduleController extends Controller
                 $week++;
             }
         }
-        /***
-    
+        /*         * *
+
           echo '<pre>';
           print_r($schedule);
           echo '</pre>';
-           */   
+         */
         return array(
             'schedule' => $schedule,
             'navbar' => $navbar,
             'now' => $now,
         );
     }
-    
+
     /**
      * Displays a day from Schedule
      *
@@ -129,12 +126,31 @@ class ScheduleController extends Controller
      */
     public function showAction($year, $month, $day)
     {
-        
-        
+        $events = array();
+
+        $dateInitial = new \DateTime(sprintf('%d-%d-%d', $year, $month, $day));
+        $dateFinal = clone $dateInitial;
+
+        $dateInitial->modify('+6 hours');
+        $dateFinal->modify('+1 day');
+
+
+        for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
+            $events[] = new \DateTime(date('Y-m-d H:i:s', $hour));
+        }
+
+        $dateTitle = sprintf(
+            '%s, %d de %s de %d', // title format
+            BundleHelper::weekdayTranslate($dateInitial->format('w')), // day of week
+            $dateInitial->format('d'), // day number 
+            BundleHelper::monthTranslate($dateInitial->format('F')), // name of month
+            $dateInitial->format('Y')
+        );
+
         return array(
-            'year' => $year, 
-            'month' => $month, 
-            'day' => $day
+            'dateTitle' => $dateTitle,
+            'dateCalendar' => $dateInitial,
+            'events' => $events,
         );
     }
 

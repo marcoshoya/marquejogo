@@ -41,6 +41,12 @@ class BundleHelper
         }
     }
 
+    /**
+     * Returns the month name in portuguese
+     *
+     * @param string $month
+     * @return string
+     */
     public static function monthTranslate($month)
     {
         switch ($month) {
@@ -56,6 +62,26 @@ class BundleHelper
             case "October": return "Outubro";
             case "November": return "Novembro";
             case "December": return "Dezembro";
+            default: return "Unknown";
+        }
+    }
+
+    /**
+     * Returns the weekday name in portuguese
+     *
+     * @param integer $weekday
+     * @return string
+     */
+    public static function weekdayTranslate($weekday)
+    {
+        switch ($weekday) {
+            case '0' : return "Domingo";
+            case '1' : return "Segunda-feira";
+            case '2' : return "Terça-feira";
+            case '3' : return "Quarta-feira";
+            case '4' : return "Quinta-feira";
+            case '5' : return "Sexta-feira";
+            case '6' : return "Sábado";
             default: return "Unknown";
         }
     }

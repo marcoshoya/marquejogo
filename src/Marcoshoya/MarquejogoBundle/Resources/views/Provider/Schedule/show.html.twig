@@ -9,251 +9,60 @@
     <div class="page-header">
         <div class="pull-right form-inline">
             <div class="btn-group">
+                <a href="#" class="btn btn-warning active" data-calendar-view="month">Ver mês</a>
+            </div>
+            <div class="btn-group">
                 <a href="#" class="btn btn-primary" data-calendar-nav="prev"><< Anterior</a>
                 <a href="#" class="btn btn-default" data-calendar-nav="today">Hoje</a>
                 <a href="#" class="btn btn-primary" data-calendar-nav="next">Próximo >></a>
             </div>
-            <!-- 
-            <div class="btn-group">
-                <button class="btn btn-warning" data-calendar-view="year">Year</button>
-                <button class="btn btn-warning active" data-calendar-view="month">Month</button>
-                <button class="btn btn-warning" data-calendar-view="week">Week</button>
-                <button class="btn btn-warning" data-calendar-view="day">Day</button>
-            </div>
-            -->
         </div>
-        <h3>Agenda: </h3>
+        <h3>{{ dateTitle }} </h3>
     </div>
 
     <div class="row">
         <div class="col-lg-12">
-
             <div id="calendar" style="width: 100%;" class="cal-context">
                 <div id="cal-day-box">
                     <div class="row-fluid clearfix cal-row-head">
-                        <div class="span1 col-xs-1 cal-cell">Time</div>
-                        <div class="span11 col-xs-11 cal-cell">Events</div>
+                        <div class="span1 col-xs-1 cal-cell">Hora</div>
+                        <div class="span8 col-xs-8 cal-cell">Evento</div>
+                        <div class="span3 col-xs-3 cal-cell">Ação</div>
                     </div>
                     <div class="clearfix" id="cal-day-panel" style="height: 960px;">
                         <div id="cal-day-panel-hour">
-                            
-                            <div class="cal-day-hour">
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>06:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
+                            {% for hour in events %}
+                                <div class="cal-day-hour">
+                                    <div class="row-fluid cal-day-hour-part">
+                                        <div class="span1 col-xs-1"><b>{{ hour.format('H:i') }}</b></div>
+                                        <div class="span8 col-xs-8">
+                                            Quadra coberta 1 
+                                        </div>
+                                        <div class="span3 col-xs-3">
+                                            <a href="#">Configurar</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="row-fluid cal-day-hour-part">
+                                        <div class="span1 col-xs-1"></div>
+                                        <div class="span8 col-xs-8">
+                                            <div class="day-highlight dh-event-warning">
+                                                <span class="cal-hours">Quadra coberta 2</span>
+                                            </div>
+                                        </div>
+                                        <div class="span3 col-xs-3">
+                                            <a class="event-item" href="#">Ver reserva</a>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-
-                            <div class="cal-day-hour">
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>07:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>08:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>08:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>09:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>09:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>10:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>10:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>11:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>11:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>12:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>12:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>13:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>13:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>14:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>14:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>15:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>15:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>16:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>16:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>17:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>17:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>18:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>18:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>19:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>19:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>20:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>20:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                            </div>
-
-                            <div class="cal-day-hour">
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>21:00</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-
-                                <div class="row-fluid cal-day-hour-part">
-                                    <div class="span1 col-xs-1"><b>21:30</b></div>
-                                    <div class="span11 col-xs-11"></div>
-                                </div>
-                                
-                            </div>
+                                        <div style="clear: both"></div>
+                            {% endfor %}
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
-
+            <!-- /calendar -->
         </div>
     </div>
 
