@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 
 class ScheduleType extends AbstractType
 {
@@ -15,10 +16,13 @@ class ScheduleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
+            ->add(
+                $builder->create('date', 'hidden')
+                    ->addViewTransformer(new DateTimeToStringTransformer())
+            )
             ->add('price')
-            ->add('available')
-            ->add('alocated')
+            ->add('available', 'checkbox')
+            ->add('alocated', 'hidden')
             ->add('providerProduct')
         ;
     }

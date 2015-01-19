@@ -42,14 +42,12 @@ class Schedule
     private $price;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank(message="Campo obrigatório")
+     * @ORM\Column(type="boolean")
      */
     private $available;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $alocated;
 

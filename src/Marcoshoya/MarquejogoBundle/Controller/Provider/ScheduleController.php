@@ -16,7 +16,10 @@ use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
  *
  * @author  Marcos Lazarin <marcoshoya at gmail dot com>
  *
- * @Route("/agenda")
+ * @Route("/agenda/{year}/{month}", requirements={
+ *      "year": "\d+",
+ *      "month": "\d+",
+ * })
  */
 class ScheduleController extends Controller
 {
@@ -24,10 +27,7 @@ class ScheduleController extends Controller
     /**
      * It configures full schedule
      *
-     * @Route("/{year}/{month}", name="schedule", requirements={
-     *      "year": "\d+",
-     *      "month": "\d+",
-     * })
+     * @Route("/", name="schedule")
      * @Method("GET")
      * @Template()
      */
@@ -116,9 +116,7 @@ class ScheduleController extends Controller
     /**
      * Displays a day from Schedule
      *
-     * @Route("/{year}/{month}/dia/{day}", name="schedule_show", requirements={
-     *      "year": "\d+",
-     *      "month": "\d+",
+     * @Route("/dia/{day}", name="schedule_show", requirements={
      *      "day": "\d+",
      * })
      * @Method("GET")
@@ -142,7 +140,7 @@ class ScheduleController extends Controller
         $dateTitle = sprintf(
             '%s, %d de %s de %d', // title format
             BundleHelper::weekdayTranslate($dateInitial->format('w')), // day of week
-            $dateInitial->format('d'), // day number 
+            $dateInitial->format('d'), // day number
             BundleHelper::monthTranslate($dateInitial->format('F')), // name of month
             $dateInitial->format('Y')
         );
@@ -155,95 +153,98 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Creates a new Schedule entity.
+     * It configures full schedule
      *
-     * @Route("/", name="schedule_create")
-     * @Method("POST")
-     * @Template("MarcoshoyaMarquejogoBundle:Schedule:new.html.twig")
-
-      public function createAction(Request $request)
-      {
-      $entity = new Schedule();
-      $form = $this->createCreateForm($entity);
-      $form->handleRequest($request);
-
-      if ($form->isValid()) {
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($entity);
-      $em->flush();
-
-      return $this->redirect($this->generateUrl('schedule_show', array('id' => $entity->getId())));
-      }
-
-      return array(
-      'entity' => $entity,
-      'form' => $form->createView(),
-      );
-      }
-     */
-
-    /**
-     * Creates a form to create a Schedule entity.
-     *
-     * @param Schedule $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Schedule $entity)
-    {
-        $form = $this->createForm(new ScheduleType(), $entity, array(
-            'action' => $this->generateUrl('schedule_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new Schedule entity.
-     *
-     * @Route("/new", name="schedule_new")
+     * @Route("/dia/{day}/quadra/{product}/hora/{hour}", name="schedule_edit", requirements={
+     *      "day": "\d+",
+     *      "product": "\d+",
+     *      "hour": "\d+",
+     * })
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function editAction(Request $request)
     {
-        $entity = new Schedule();
-        $form = $this->createCreateForm($entity);
+        $entity = $this->createEntity($request);
+        $form = $this->createEditForm($entity);
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+    
+    /**
+     * Edits an existing Schedule entity.
+     *
+     * @Route("/dia/{day}/quadra/{product}/hora/{hour}", name="schedule_update", requirements={
+     *      "day": "\d+",
+     *      "product": "\d+",
+     *      "hour": "\d+",
+     * })
+     * @Method("PUT")
+     * @Template("MarcoshoyaMarquejogoBundle:Provider/Schedule:edit.html.twig")
+     */
+    public function updateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $this->createEntity($request);
+
+        $form = $this->createEditForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('schedule_show', array(
+                'year' => $entity->getDate()->format('Y'),
+                'month' => $entity->getDate()->format('m'),
+                'day' => $entity->getDate()->format('d'),
+            )));
+        }
 
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
         );
     }
-
-    /**
-     * Displays a form to edit an existing Schedule entity.
-     *
-     * @Route("/{id}/edit", name="schedule_edit")
-     * @Method("GET")
-     * @Template()
-     */
-    public function editAction($id)
+    
+    private function createEntity(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->find($id);
+        // request data
+        $year = $request->get('year');
+        $month = $request->get('month');
+        $day = $request->get('day');
+        $hour = $request->get('hour');
+        $prod = (int) $request->get('product');
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Schedule entity.');
+        $date = new \DateTime(sprintf('%d-%d-%d %d:00:00', $year, $month, $day, $hour));
+
+        $product = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->find($prod);
+        if (!$product instanceof \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct) {
+            throw $this->createNotFoundException('Unable to find ProviderProduct entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+        // check if there is the entity
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(
+            array(
+                'date' => $date,
+                'providerProduct' => $product
+            )
         );
+        
+        if (!$entity instanceof Schedule) {
+            $entity = new Schedule();
+            $entity->setDate($date);
+            $entity->setProviderProduct($product);
+            $entity->setAlocated(0);
+        }
+        
+        return $entity;
     }
 
     /**
@@ -256,90 +257,25 @@ class ScheduleController extends Controller
     private function createEditForm(Schedule $entity)
     {
         $form = $this->createForm(new ScheduleType(), $entity, array(
-            'action' => $this->generateUrl('schedule_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('schedule_update', array(
+                'year' => $entity->getDate()->format('Y'),
+                'month' => $entity->getDate()->format('m'),
+                'day' => $entity->getDate()->format('d'),
+                'hour' => $entity->getDate()->format('H'),
+                'product' => $entity->getProviderProduct()->getId(),
+            )),
             'method' => 'PUT',
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
-
-    /**
-     * Edits an existing Schedule entity.
-     *
-     * @Route("/{id}", name="schedule_update")
-     * @Method("PUT")
-     * @Template("MarcoshoyaMarquejogoBundle:Schedule:edit.html.twig")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Schedule entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('schedule_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Deletes a Schedule entity.
-     *
-     * @Route("/{id}", name="schedule_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Schedule entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('schedule'));
-    }
-
-    /**
-     * Creates a form to delete a Schedule entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-                ->setAction($this->generateUrl('schedule_delete', array('id' => $id)))
-                ->setMethod('DELETE')
-                ->add('submit', 'submit', array('label' => 'Delete'))
-                ->getForm()
+        
+        $form
+            ->add('providerProduct', 'entity_hidden', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\ProviderProduct',
+                'data' => $entity->getProviderProduct(),
+                'data_class' => null,
+            ))
         ;
+        
+        return $form;
     }
 
 }
