@@ -125,6 +125,15 @@ class ScheduleController extends Controller
     public function showAction($year, $month, $day)
     {
         $events = array();
+        $em = $this->getDoctrine()->getManager();
+        $provider = $this->get('security.context')->getToken()->getUser();
+        
+        $productList = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
+            array(
+                'provider' => $provider,
+                'isActive' => true
+            )
+        );
 
         $dateInitial = new \DateTime(sprintf('%d-%d-%d', $year, $month, $day));
         $dateFinal = clone $dateInitial;
@@ -132,9 +141,15 @@ class ScheduleController extends Controller
         $dateInitial->modify('+6 hours');
         $dateFinal->modify('+1 day');
 
+        
 
         for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
-            $events[] = new \DateTime(date('Y-m-d H:i:s', $hour));
+            $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
+            $key = $dateTime->format('H:i');
+            $events[$key]['date'] = $dateTime;
+            foreach ($productList as $product) {
+                $events[$key]['list'][] = $product;
+            }
         }
 
         $dateTitle = sprintf(

@@ -26,23 +26,34 @@
                 <div id="cal-day-box">
                     <div class="row-fluid clearfix cal-row-head">
                         <div class="span1 col-xs-1 cal-cell">Hora</div>
-                        <div class="span8 col-xs-8 cal-cell">Evento</div>
+                        <div class="span8 col-xs-8 cal-cell">Quadra(s)</div>
                         <div class="span3 col-xs-3 cal-cell">Ação</div>
                     </div>
                     <div class="clearfix" id="cal-day-panel" style="height: 960px;">
                         <div id="cal-day-panel-hour">
-                            {% for hour in events %}
+                            {% for hour, productList in events %}
                                 <div class="cal-day-hour">
-                                    <div class="row-fluid cal-day-hour-part">
-                                        <div class="span1 col-xs-1"><b>{{ hour.format('H:i') }}</b></div>
-                                        <div class="span8 col-xs-8">
-                                            Quadra coberta 1 
+                                    {% for key, product in productList.list %}
+                                        <div class="row-fluid cal-day-hour-part">
+                                            <div class="span1 col-xs-1"><b>{{ key == 0 ? hour : '' }}</b></div>
+                                            <div class="span8 col-xs-8">
+                                                {{ product.name }}
+                                            </div>
+                                            <div class="span3 col-xs-3">
+                                                <a href="{{ path('schedule_edit',
+                                                    {
+                                                        'year': productList.date.format('Y'),
+                                                        'month': productList.date.format('m'),
+                                                        'day': productList.date.format('d'),
+                                                        'product': product.id,
+                                                        'hour': productList.date.format('H'),
+                                                    }
+                                                ) }}">Configurar</a>
+                                            </div>
                                         </div>
-                                        <div class="span3 col-xs-3">
-                                            <a href="#">Configurar</a>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
 
+                                    <!--
                                     <div class="row-fluid cal-day-hour-part">
                                         <div class="span1 col-xs-1"></div>
                                         <div class="span8 col-xs-8">
@@ -54,9 +65,9 @@
                                             <a class="event-item" href="#">Ver reserva</a>
                                         </div>
                                     </div>
-
+                                    -->
                                 </div>
-                                        <div style="clear: both"></div>
+                                <div style="clear: both"></div>
                             {% endfor %}
                         </div>
                     </div>
