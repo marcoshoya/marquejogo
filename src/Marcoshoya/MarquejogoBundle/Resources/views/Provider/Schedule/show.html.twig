@@ -31,41 +31,27 @@
                     </div>
                     <div class="clearfix" id="cal-day-panel" style="height: 960px;">
                         <div id="cal-day-panel-hour">
-                            {% for hour, productList in events %}
+                            {% for item in schedule.all %}
                                 <div class="cal-day-hour">
-                                    {% for key, product in productList.list %}
+                                    {% for key, product in item.allproduct %}
                                         <div class="row-fluid cal-day-hour-part">
-                                            <div class="span1 col-xs-1"><b>{{ key == 0 ? hour : '' }}</b></div>
+                                            <div class="span1 col-xs-1"><b>{{ key == 0 ? item.show : '' }}</b></div>
                                             <div class="span8 col-xs-8">
                                                 {{ product.name }}
                                             </div>
                                             <div class="span3 col-xs-3">
                                                 <a href="{{ path('schedule_edit',
                                                     {
-                                                        'year': productList.date.format('Y'),
-                                                        'month': productList.date.format('m'),
-                                                        'day': productList.date.format('d'),
+                                                        'year': item.date.format('Y'),
+                                                        'month': item.date.format('m'),
+                                                        'day': item.date.format('d'),
                                                         'product': product.id,
-                                                        'hour': productList.date.format('H'),
+                                                        'hour': item.date.format('H'),
                                                     }
                                                 ) }}">Configurar</a>
                                             </div>
                                         </div>
                                     {% endfor %}
-
-                                    <!--
-                                    <div class="row-fluid cal-day-hour-part">
-                                        <div class="span1 col-xs-1"></div>
-                                        <div class="span8 col-xs-8">
-                                            <div class="day-highlight dh-event-warning">
-                                                <span class="cal-hours">Quadra coberta 2</span>
-                                            </div>
-                                        </div>
-                                        <div class="span3 col-xs-3">
-                                            <a class="event-item" href="#">Ver reserva</a>
-                                        </div>
-                                    </div>
-                                    -->
                                 </div>
                                 <div style="clear: both"></div>
                             {% endfor %}
