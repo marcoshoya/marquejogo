@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
+use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleItem;
+use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleComposite;
 
 /**
  * ScheduleController controller.
@@ -124,10 +126,13 @@ class ScheduleController extends Controller
      */
     public function showAction($year, $month, $day)
     {
-        $events = array();
+        // starts doctrine manager
         $em = $this->getDoctrine()->getManager();
+
+        // gets user on session
         $provider = $this->get('security.context')->getToken()->getUser();
-        
+
+        // gets all active products
         $productList = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
             array(
                 'provider' => $provider,
@@ -135,23 +140,11 @@ class ScheduleController extends Controller
             )
         );
 
+        // dates for reference
         $dateInitial = new \DateTime(sprintf('%d-%d-%d', $year, $month, $day));
         $dateFinal = clone $dateInitial;
 
-        $dateInitial->modify('+6 hours');
-        $dateFinal->modify('+1 day');
-
-        
-
-        for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
-            $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
-            $key = $dateTime->format('H:i');
-            $events[$key]['date'] = $dateTime;
-            foreach ($productList as $product) {
-                $events[$key]['list'][] = $product;
-            }
-        }
-
+        // page title
         $dateTitle = sprintf(
             '%s, %d de %s de %d', // title format
             BundleHelper::weekdayTranslate($dateInitial->format('w')), // day of week
@@ -160,10 +153,27 @@ class ScheduleController extends Controller
             $dateInitial->format('Y')
         );
 
+        // start composite
+        $dateInitial->modify('+6 hours');
+        $dateFinal->modify('+1 day');
+        $schedule = new ScheduleComposite();
+
+        for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
+
+            $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
+            $item = new ScheduleItem();
+            $item->setDate($dateTime);
+
+            foreach ($productList as $k => $product) {
+                $item->addProduct($product, $k);
+            }
+
+            $schedule->add($item, $hour);
+        }
+
         return array(
             'dateTitle' => $dateTitle,
-            'dateCalendar' => $dateInitial,
-            'events' => $events,
+            'schedule' => $schedule,
         );
     }
 
@@ -187,7 +197,7 @@ class ScheduleController extends Controller
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Edits an existing Schedule entity.
      *
@@ -209,7 +219,7 @@ class ScheduleController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            
+
             $em->persist($entity);
             $em->flush();
 
@@ -225,7 +235,7 @@ class ScheduleController extends Controller
             'form' => $form->createView(),
         );
     }
-    
+
     private function createEntity(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -251,14 +261,14 @@ class ScheduleController extends Controller
                 'providerProduct' => $product
             )
         );
-        
+
         if (!$entity instanceof Schedule) {
             $entity = new Schedule();
             $entity->setDate($date);
             $entity->setProviderProduct($product);
             $entity->setAlocated(0);
         }
-        
+
         return $entity;
     }
 
@@ -281,7 +291,7 @@ class ScheduleController extends Controller
             )),
             'method' => 'PUT',
         ));
-        
+
         $form
             ->add('providerProduct', 'entity_hidden', array(
                 'class' => 'Marcoshoya\MarquejogoBundle\Entity\ProviderProduct',
@@ -289,7 +299,7 @@ class ScheduleController extends Controller
                 'data_class' => null,
             ))
         ;
-        
+
         return $form;
     }
 

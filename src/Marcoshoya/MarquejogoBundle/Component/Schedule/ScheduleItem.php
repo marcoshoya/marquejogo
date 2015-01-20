@@ -5,9 +5,9 @@ namespace Marcoshoya\MarquejogoBundle\Component\Schedule;
 use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleComponent;
 
 /**
- * Description of HourLeaf
+ * ScheduleItem
  *
- * @author marcos
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
 class ScheduleItem extends ScheduleComponent
 {
@@ -15,40 +15,60 @@ class ScheduleItem extends ScheduleComponent
      * @var \DateTime
      */
     private $date;
-    
+
     /**
-     * @var decimal
+     * @var array
      */
-    private $price;
-    
+    private $productList = array();
+
+    /**
+     * @inheritDoc
+     */
+    public function show()
+    {
+        return $this->date->format('H:i');
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     */
     public function setDate(\DateTime $date)
     {
         $this->date = $date;
     }
-    
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
     public function getDate()
     {
         return $this->date;
     }
-    
-    public function setPrice($price = 0.00)
+
+    /**
+     * Add a product on item
+     *
+     * @param Entity $product
+     * @param integer|string $idx
+     */
+    public function addProduct($product, $idx)
     {
-        $this->price = $price;
-    }
-    
-    public function getPrice()
-    {
-        return $this->price;
-    }
-    
-    public function isAvailable()
-    {
-        
+        unset($this->productList[$idx]);
+
+        $this->productList[$idx] = $product;
     }
 
-    public function show()
+    /**
+     * Get a all products from item
+     *
+     * @return array
+     */
+    public function allProduct()
     {
-        
+        return $this->productList;
     }
-
 }
