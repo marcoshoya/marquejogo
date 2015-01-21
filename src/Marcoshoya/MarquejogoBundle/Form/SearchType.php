@@ -13,21 +13,29 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class SearchType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    {   
         $builder
-            ->add('city')
-            ->add('date')
+            ->add('city', 'genemu_jqueryautocomplete_entity', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\LocationCity',
+                'property' => 'name',
+            ))
+            ->add('date', 'genemu_jquerydate', array(
+                'widget' => 'single_text',
+                'format' => 'dd-MM-yyyy',
+                'years' => array(date('Y')),
+            ))
             ->add('hour', 'choice', array(
                 'choices' => $this->getHourOptions()
             ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -45,7 +53,7 @@ class SearchType extends AbstractType
     {
         return 'marcoshoya_marquejogobundle_search';
     }
-    
+
     /**
      * Get choices
      * 
@@ -57,13 +65,14 @@ class SearchType extends AbstractType
         $final = clone $initial;
         $final->modify('+1 day');
         $initial->modify('+6 hours');
-        
+
         $options = array();
         for ($time = $initial->getTimestamp(); $time < $final->getTimestamp(); $time = strtotime('+1 hour', $time)) {
             $date = new \DateTime(date('Y-m-d H:i:s', $time));
             $options[$date->format('H')] = $date->format('H:i');
         }
-        
+
         return $options;
     }
+
 }

@@ -15,7 +15,7 @@ class MainController extends Controller
     {
         $form = $this->createForm(new SearchType(), null, array(
             'action' => $this->generateUrl('do_search'),
-            'method' => 'PUT',
+            'method' => 'POST',
         ));
         
         return array(

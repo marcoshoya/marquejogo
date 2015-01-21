@@ -2,10 +2,13 @@
 
 namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Marcoshoya\MarquejogoBundle\Form\SearchType;
+use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
  * Search controller.
@@ -29,20 +32,37 @@ class SearchController extends Controller
      *
      * @Route("/doSearch", name="do_search")
      * @Method("POST")
+     * @Template("MarcoshoyaMarquejogoBundle:Site/Main:main.html.twig")
      */
-    public function dosearhAction()
+    public function dosearhAction(Request $request)
     {
-        return $this->redirect($this->generateUrl('search_result'));
+        $form = $this->createForm(new SearchType(), null, array(
+            'action' => $this->generateUrl('do_search'),
+            'method' => 'POST',
+        ));
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            
+            $data = $form->getData();
+            
+            $city = BundleHelper::sluggable($data['city']);
+
+            return $this->redirect($this->generateUrl('search_result', array('city' => $city)));
+        }
+        
+        return array();
     }
 
     /**
      * List all results from search
      *
-     * @Route("/", name="search_result")
+     * @Route("/{city}", name="search_result")
      * @Template()
      */
-    public function resultAction()
+    public function resultAction($city)
     {
-        return array();
+        return array('city' => $city);
     }
 }

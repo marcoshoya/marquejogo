@@ -63,7 +63,7 @@ class LocationCity
      */
     public function getName()
     {
-        return $this->name;
+        return ucwords($this->name);
     }
 
     /**
