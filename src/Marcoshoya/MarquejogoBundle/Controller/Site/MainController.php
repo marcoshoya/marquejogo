@@ -3,12 +3,24 @@
 namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Marcoshoya\MarquejogoBundle\Form\SearchType;
 
 class MainController extends Controller
 {
+    /**
+     * @Template("MarcoshoyaMarquejogoBundle:Site/Main:main.html.twig")
+     */
     public function indexAction()
     {
-        return $this->render('MarcoshoyaMarquejogoBundle:Site/Main:main.html.twig');
+        $form = $this->createForm(new SearchType(), null, array(
+            'action' => $this->generateUrl('do_search'),
+            'method' => 'PUT',
+        ));
+        
+        return array(
+            'form' => $form->createView(),
+        );
     }
     
     /**

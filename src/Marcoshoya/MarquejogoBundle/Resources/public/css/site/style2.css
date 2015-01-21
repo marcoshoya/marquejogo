@@ -215,6 +215,11 @@ a img{
     float: right;
 }
 
+.form-hour {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .btn-search {
     font-size: 23px;
     font-weight: bold;
