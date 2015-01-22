@@ -78,14 +78,10 @@ class Provider implements UserInterface, \SplSubject
     private $neighborhood;
     
     /**
-     * @ORM\Column(type="string", length=100)
-     */
+     * @ORM\ManyToOne(targetEntity="LocationCity")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     **/
     private $city;
-    
-    /**
-     * @ORM\Column(type="string", length=2)
-     */
-    private $state;
     
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
@@ -357,14 +353,14 @@ class Provider implements UserInterface, \SplSubject
     {
         return $this->neighborhood;
     }
-
+    
     /**
      * Set city
      *
-     * @param string $city
+     * @param \Marcoshoya\MarquejogoBundle\Entity\LocationCity $city
      * @return Provider
      */
-    public function setCity($city)
+    public function setCity(\Marcoshoya\MarquejogoBundle\Entity\LocationCity $city = null)
     {
         $this->city = $city;
 
@@ -374,34 +370,11 @@ class Provider implements UserInterface, \SplSubject
     /**
      * Get city
      *
-     * @return string 
+     * @return \Marcoshoya\MarquejogoBundle\Entity\LocationCity 
      */
     public function getCity()
     {
         return $this->city;
-    }
-
-    /**
-     * Set state
-     *
-     * @param string $state
-     * @return Provider
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string 
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 
     /**

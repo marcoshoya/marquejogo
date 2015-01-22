@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="location_city")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\LocationCityRepository")
  */
 class LocationCity
 {
@@ -32,7 +32,14 @@ class LocationCity
      * @ORM\Column(type="string", length=150, nullable=false)
      */
     private $name;
-
+    
+    /**
+     * @inheritDoc
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
     /**
      * Get id
      *
