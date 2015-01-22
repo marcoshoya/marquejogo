@@ -2,7 +2,6 @@
 
 namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -29,28 +28,10 @@ class SearchController extends Controller
     
     /**
      * Do the search
-     *
-     * @Route("/doSearch", name="do_search")
-     * @Method("POST")
-     * @Template("MarcoshoyaMarquejogoBundle:Site/Main:main.html.twig")
      */
-    public function dosearhAction(Request $request)
+    public function dosearhAction()
     {
-        $form = $this->createForm(new SearchType(), null, array(
-            'action' => $this->generateUrl('do_search'),
-            'method' => 'POST',
-        ));
-        
-        $form->handleRequest($request);
-        
-        if ($form->isValid()) {
-            
-            $data = $form->getData();
-            
-            $city = BundleHelper::sluggable($data['city']);
-
-            return $this->redirect($this->generateUrl('search_result', array('city' => $city)));
-        }
+       
         
         return array();
     }

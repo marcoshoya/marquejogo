@@ -51,10 +51,10 @@ class ProviderController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
+            
+            $service = $this->get('marcoshoya_marquejogo.service.provider');
+            $service->update($entity);
+            
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor inserido com sucesso.');
 
             return $this->redirect($this->generateUrl('provider'));
@@ -260,7 +260,9 @@ class ProviderController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
+            
+            $service = $this->get('marcoshoya_marquejogo.service.provider');
+            $service->update($entity);
 
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor atualizado com sucesso.');
 

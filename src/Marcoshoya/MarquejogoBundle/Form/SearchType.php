@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * SearchType provides the search form
@@ -22,8 +23,11 @@ class SearchType extends AbstractType
     {   
         $builder
             ->add('city', 'genemu_jqueryautocomplete_entity', array(
-                'class' => 'Marcoshoya\MarquejogoBundle\Entity\LocationCity',
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Autocomplete',
                 'property' => 'name',
+                'constraints' => array(
+                    new NotBlank(array('message' => "Campo obrigatório")),
+                ),
             ))
             ->add('date', 'genemu_jquerydate', array(
                 'widget' => 'single_text',

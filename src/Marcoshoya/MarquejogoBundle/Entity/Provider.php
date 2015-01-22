@@ -15,7 +15,7 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
  * @ORM\Table(name="provider")
  * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\ProviderRepository")
  */
-class Provider implements UserInterface
+class Provider implements UserInterface, \SplSubject
 {    
     /**
      * @ORM\Id
@@ -96,6 +96,11 @@ class Provider implements UserInterface
      * @ORM\OneToMany(targetEntity="ProviderProduct", mappedBy="provider") 
      **/
     private $providerProduct;
+    
+    /**
+     * @var array
+     */
+    private $observers = array();
     
     /**
      * Constructor
@@ -476,5 +481,40 @@ class Provider implements UserInterface
     public function getProviderProduct()
     {
         return $this->providerProduct;
+    }
+    
+    /**
+     * Observer attach
+     * 
+     * @param \SplObserver $observer
+     */
+    public function attach(\SplObserver $observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    /**
+     * Observer detach
+     * 
+     * @param \SplObserver $observer
+     */
+    public function detach(\SplObserver $observer)
+    {
+        $key = array_search($observer, $this->observers, true);
+        if ($key) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    /**
+     * Notify observers
+     * 
+     * @return void
+     */
+    public function notify()
+    {
+        foreach ($this->observers as $value) {
+            $value->update($this);
+        }
     }
 }
