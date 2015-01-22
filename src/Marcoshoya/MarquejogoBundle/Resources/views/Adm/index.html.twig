@@ -1,108 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+    <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>MarqueJogo.com - Administrador</title>
-    
-    {% block stylesheets %}
+        <title>MarqueJogo.com - Administrador</title>
 
-        <!-- Bootstrap Core CSS -->
-        <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-        
-        <!-- MetisMenu CSS -->
-        <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/plugins/metisMenu/metisMenu.min.css') }}" rel="stylesheet" type="text/css" />
-        
-        <!-- Custom Fonts -->
-        <link href="{{ asset('/bundles/marcoshoyamarquejogo/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+        {% block stylesheets %}
 
-        <!-- Custom CSS -->
-        <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/sb-admin-2.css') }}" rel="stylesheet" type="text/css" />
+            <!-- Bootstrap Core CSS -->
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
 
-    {% endblock %}
-    
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    
-    {% block javascripts %}
-    
-        <!-- jQuery -->
-        <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.js') }}"></script>
-        
-        <!-- Bootstrap Core JavaScript -->
-        <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/bootstrap.min.js') }}"></script>
+            <!-- MetisMenu CSS -->
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/plugins/metisMenu/metisMenu.min.css') }}" rel="stylesheet" type="text/css" />
 
-        <!-- Metis Menu Plugin JavaScript -->
-        <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/plugins/metisMenu/metisMenu.min.js') }}"></script>
+            <!-- Custom Fonts -->
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
 
-        <!-- Custom Theme JavaScript -->
-        <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/sb-admin-2.js') }}"></script>
+            <!-- Custom CSS -->
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/sb-admin-2.css') }}" rel="stylesheet" type="text/css" />
 
-    {% endblock %} 
+        {% endblock %}
 
-</head>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
 
-<body>
+        {% block javascripts %}
 
-    <div id="wrapper">
+            <!-- jQuery -->
+            <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.js') }}"></script>
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{ path('_adm_dash') }}">MarqueJogo.com - Administrador</a>
-            </div>
-            <!-- /.navbar-header -->
+            <!-- Bootstrap Core JavaScript -->
+            <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/bootstrap.min.js') }}"></script>
 
-            <ul class="nav navbar-top-links navbar-right">
-                
-                <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configurações</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="{{ path('_marquejogo_adm_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
-                <!-- /.dropdown -->
-            </ul>
-            <!-- /.navbar-top-links -->
+            <!-- Metis Menu Plugin JavaScript -->
+            <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/plugins/metisMenu/metisMenu.min.js') }}"></script>
 
-            {% block sidebar %}
+            <!-- Custom Theme JavaScript -->
+            <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/sb-admin-2.js') }}"></script>
+
+            <script>
+
+                library = {
+                    stateChange: function (element) {
+                        var city = jQuery(":input:eq(" + ($(":input").index(element) + 1) + ")");
+                        city.html("carregando");
+                        jQuery.ajax({
+                            type: "POST",
+                            data: "data=" + element.value,
+                            url: "{{ path('location_type') }}",
+                            success: function (result) {
+                                if (result != '') {
+                                    city.html(result);
+                                } else {
+                                    city.html('Nenhum resultado');
+                                }
+                            }
+                        });
+                    }
+                }
+
+            </script>
+
+        {% endblock %} 
+
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('_adm_dash') }}">MarqueJogo.com - Administrador</a>
+                </div>
+                <!-- /.navbar-header -->
+
+                <ul class="nav navbar-top-links navbar-right">
+
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configurações</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="{{ path('_marquejogo_adm_logout') }}"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+                <!-- /.navbar-top-links -->
+
+                {% block sidebar %}
+
+                {% endblock %}
+                <!-- /.navbar-static-side -->
+            </nav>
+
+            <!-- Page Content -->
+            {% block container %}
 
             {% endblock %}
-            <!-- /.navbar-static-side -->
-        </nav>
 
-        <!-- Page Content -->
-        {% block container %}
-            
-        {% endblock %}
-        
-        <!-- /#page-wrapper -->
+            <!-- /#page-wrapper -->
 
-    </div>
-    <!-- /#wrapper -->
+        </div>
+        <!-- /#wrapper -->
 
-</body>
+    </body>
 
 </html>

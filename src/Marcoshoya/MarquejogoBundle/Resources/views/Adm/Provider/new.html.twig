@@ -95,16 +95,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-2">{{ form_label(form.complement, 'Cidade') }}</label>
-                                <div class="col-md-4">
-                                    {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
-                                    {{ form_errors(form.city) }}
-                                </div>
-                                <label class="col-md-2">{{ form_label(form.state, 'Estado') }}</label>
-                                <div class="col-md-2">
-                                    {{ form_widget(form.state, { 'attr': {'class': 'form-control'} }) }}
-                                    {{ form_errors(form.state) }}
-                                </div>
+                                {{ form_widget(form.statecity) }}
                                 <div class="clearfix"></div>
                             </div>
                             <div class="form-group {% if not form.description.vars.valid %} has-error {% endif %}">
