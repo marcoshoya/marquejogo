@@ -23,24 +23,30 @@ class Autocomplete
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\ManyToOne(targetEntity="LocationCity")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     **/
+    private $city;
+    
+    /**
+     * @ORM\Column(name="name_city", type="string", length=150)
      */
-    private $name;
+    private $cityName;
+    
+    /**
+     * @ORM\Column(name="name_state", type="string", length=50)
+     */
+    private $stateName;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(name="name_field", type="string", length=255)
+     */
+    private $nameField;
+    
+    /**
+     * @ORM\Column(name="name_url", type="string", length=255)
      */
     private $nameUrl;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $city;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $state;
 
     /**
      * Get id
@@ -53,26 +59,72 @@ class Autocomplete
     }
 
     /**
-     * Set name
+     * Set cityName
      *
-     * @param string $name
+     * @param string $cityName
      * @return Autocomplete
      */
-    public function setName($name)
+    public function setCityName($cityName)
     {
-        $this->name = $name;
+        $this->cityName = $cityName;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get cityName
      *
-     * @return string
+     * @return string 
      */
-    public function getName()
+    public function getCityName()
     {
-        return $this->name;
+        return $this->cityName;
+    }
+
+    /**
+     * Set stateName
+     *
+     * @param string $stateName
+     * @return Autocomplete
+     */
+    public function setStateName($stateName)
+    {
+        $this->stateName = $stateName;
+
+        return $this;
+    }
+
+    /**
+     * Get stateName
+     *
+     * @return string 
+     */
+    public function getStateName()
+    {
+        return $this->stateName;
+    }
+
+    /**
+     * Set nameField
+     *
+     * @param string $nameField
+     * @return Autocomplete
+     */
+    public function setNameField($nameField)
+    {
+        $this->nameField = $nameField;
+
+        return $this;
+    }
+
+    /**
+     * Get nameField
+     *
+     * @return string 
+     */
+    public function getNameField()
+    {
+        return $this->nameField;
     }
 
     /**
@@ -91,7 +143,7 @@ class Autocomplete
     /**
      * Get nameUrl
      *
-     * @return string
+     * @return string 
      */
     public function getNameUrl()
     {
@@ -101,10 +153,10 @@ class Autocomplete
     /**
      * Set city
      *
-     * @param string $city
+     * @param \Marcoshoya\MarquejogoBundle\Entity\LocationCity $city
      * @return Autocomplete
      */
-    public function setCity($city)
+    public function setCity(\Marcoshoya\MarquejogoBundle\Entity\LocationCity $city = null)
     {
         $this->city = $city;
 
@@ -114,33 +166,10 @@ class Autocomplete
     /**
      * Get city
      *
-     * @return string
+     * @return \Marcoshoya\MarquejogoBundle\Entity\LocationCity 
      */
     public function getCity()
     {
         return $this->city;
-    }
-
-    /**
-     * Set state
-     *
-     * @param string $state
-     * @return Autocomplete
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 }
