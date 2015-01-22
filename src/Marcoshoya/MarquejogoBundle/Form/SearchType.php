@@ -24,7 +24,7 @@ class SearchType extends AbstractType
         $builder
             ->add('city', 'genemu_jqueryautocomplete_entity', array(
                 'class' => 'Marcoshoya\MarquejogoBundle\Entity\Autocomplete',
-                'property' => 'name',
+                'property' => 'nameField',
                 'constraints' => array(
                     new NotBlank(array('message' => "Campo obrigatório")),
                 ),
