@@ -86,27 +86,17 @@ class BundleHelper
         }
     }
 
-    public static function sluggable($str)
+    public static function sluggable($string)
     {
-        $before = array(
-            'àáâãäåòóôõöøèéêëðçìíîïùúûüñšž',
-            '/[^a-z0-9\s]/',
-            array('/\s/', '/--+/', '/---+/')
-        );
-
-        $after = array(
-            'aaaaaaooooooeeeeeciiiiuuuunsz',
-            '',
-            '-'
-        );
-
-        $str = strtolower($str);
-        $str = strtr($str, $before[0], $after[0]);
-        $str = preg_replace($before[1], $after[1], $str);
-        $str = trim($str);
-        $str = preg_replace($before[2], $after[2], $str);
-
-        return $str;
+        $accents_regex = '~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i';
+        $special_cases = array('&' => 'and');
+        $string = mb_strtolower(trim($string), 'UTF-8');
+        $string = str_replace(array_keys($special_cases), array_values($special_cases), $string);
+        $string = preg_replace($accents_regex, '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'));
+        $string = preg_replace("/[^a-z0-9]/u", "-", $string);
+        $string = preg_replace("/[-]+/u", "-", $string);
+        
+        return $string;
     }
 
 }
