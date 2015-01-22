@@ -8,3 +8,13 @@ services:
     marcoshoya_marquejogo.service.personservice:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService
         arguments: ["@doctrine.orm.entity_manager"]
+        
+    marcoshoya_marquejogo.service.autocomplete:
+        class: Marcoshoya\MarquejogoBundle\Service\AutocompleteService
+        arguments: ["@doctrine.orm.entity_manager", "@logger"]
+        
+    marcoshoya_marquejogo.service.provider:
+        class: Marcoshoya\MarquejogoBundle\Service\ProviderService
+        arguments: ["@doctrine.orm.entity_manager", "@logger"]
+        properties:
+             autocomplete: "@marcoshoya_marquejogo.service.autocomplete"

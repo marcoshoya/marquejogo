@@ -26,7 +26,6 @@ class ProviderType extends AbstractType
             ->add('complement')
             ->add('neighborhood')
             ->add('city')
-            ->add('state')
             ->add('isActive')
         ;
     }

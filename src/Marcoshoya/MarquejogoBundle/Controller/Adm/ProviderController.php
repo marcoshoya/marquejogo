@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Form\ProviderType;
+use Marcoshoya\MarquejogoBundle\Form\Type\LocationType;
 
 /**
  * Provider controller.
@@ -51,9 +52,12 @@ class ProviderController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+
+            $city = $form['statecity']['city']->getData();
+            $entity->setCity($city);
+
+            $service = $this->get('marcoshoya_marquejogo.service.provider');
+            $service->update($entity);
 
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor inserido com sucesso.');
 
@@ -116,16 +120,10 @@ class ProviderController extends Controller
                     new NotBlank(array('message' => "Campo obrigatório")),
                 ),
             ))
-            ->add('city', 'text', array(
-                'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
-                ),
+            ->add('statecity', new LocationType($entity), array(
+                'mapped' => false,
             ))
-            ->add('state', 'text', array(
-                'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
-                ),
-            ))
+            ->remove('city')
         ;
 
         return $form;
@@ -187,7 +185,7 @@ class ProviderController extends Controller
             'action' => $this->generateUrl('provider_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-        
+
         $form
             ->add('name', 'text', array(
                 'constraints' => array(
@@ -224,16 +222,10 @@ class ProviderController extends Controller
                     new NotBlank(array('message' => "Campo obrigatório")),
                 ),
             ))
-            ->add('city', 'text', array(
-                'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
-                ),
+            ->add('statecity', new LocationType($entity), array(
+                'mapped' => false,
             ))
-            ->add('state', 'text', array(
-                'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
-                ),
-            ))
+            ->remove('city')
         ;
 
         return $form;
@@ -260,7 +252,12 @@ class ProviderController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
+
+            $city = $editForm['statecity']['city']->getData();
+            $entity->setCity($city);
+
+            $service = $this->get('marcoshoya_marquejogo.service.provider');
+            $service->update($entity);
 
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor atualizado com sucesso.');
 

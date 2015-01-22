@@ -15,7 +15,7 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
  * @ORM\Table(name="provider")
  * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\ProviderRepository")
  */
-class Provider implements UserInterface
+class Provider implements UserInterface, \SplSubject
 {    
     /**
      * @ORM\Id
@@ -78,14 +78,10 @@ class Provider implements UserInterface
     private $neighborhood;
     
     /**
-     * @ORM\Column(type="string", length=100)
-     */
+     * @ORM\ManyToOne(targetEntity="LocationCity")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     **/
     private $city;
-    
-    /**
-     * @ORM\Column(type="string", length=2)
-     */
-    private $state;
     
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
@@ -96,6 +92,11 @@ class Provider implements UserInterface
      * @ORM\OneToMany(targetEntity="ProviderProduct", mappedBy="provider") 
      **/
     private $providerProduct;
+    
+    /**
+     * @var array
+     */
+    private $observers = array();
     
     /**
      * Constructor
@@ -352,14 +353,14 @@ class Provider implements UserInterface
     {
         return $this->neighborhood;
     }
-
+    
     /**
      * Set city
      *
-     * @param string $city
+     * @param \Marcoshoya\MarquejogoBundle\Entity\LocationCity $city
      * @return Provider
      */
-    public function setCity($city)
+    public function setCity(\Marcoshoya\MarquejogoBundle\Entity\LocationCity $city = null)
     {
         $this->city = $city;
 
@@ -369,34 +370,11 @@ class Provider implements UserInterface
     /**
      * Get city
      *
-     * @return string 
+     * @return \Marcoshoya\MarquejogoBundle\Entity\LocationCity 
      */
     public function getCity()
     {
         return $this->city;
-    }
-
-    /**
-     * Set state
-     *
-     * @param string $state
-     * @return Provider
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return string 
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 
     /**
@@ -476,5 +454,40 @@ class Provider implements UserInterface
     public function getProviderProduct()
     {
         return $this->providerProduct;
+    }
+    
+    /**
+     * Observer attach
+     * 
+     * @param \SplObserver $observer
+     */
+    public function attach(\SplObserver $observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    /**
+     * Observer detach
+     * 
+     * @param \SplObserver $observer
+     */
+    public function detach(\SplObserver $observer)
+    {
+        $key = array_search($observer, $this->observers, true);
+        if ($key) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    /**
+     * Notify observers
+     * 
+     * @return void
+     */
+    public function notify()
+    {
+        foreach ($this->observers as $value) {
+            $value->update($this);
+        }
     }
 }

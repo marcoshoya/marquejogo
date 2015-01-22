@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Marcoshoya\MarquejogoBundle\Form\SearchType;
+use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
  * Search controller.
@@ -26,23 +28,22 @@ class SearchController extends Controller
     
     /**
      * Do the search
-     *
-     * @Route("/doSearch", name="do_search")
-     * @Method("POST")
      */
     public function dosearhAction()
     {
-        return $this->redirect($this->generateUrl('search_result'));
+       
+        
+        return array();
     }
 
     /**
      * List all results from search
      *
-     * @Route("/", name="search_result")
+     * @Route("/{city}", name="search_result")
      * @Template()
      */
-    public function resultAction()
+    public function resultAction($city)
     {
-        return array();
+        return array('city' => $city);
     }
 }

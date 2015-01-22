@@ -11,10 +11,12 @@
 
         {% block stylesheets %}
             <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
         {% endblock %}
 
         {% block javascripts %}
-
+            <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.js') }}"></script>
+            <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
         {% endblock %}
 
     </head>
@@ -28,7 +30,7 @@
         {% endblock %}
 
         {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Main:footer')) }}
-        
+
     </body>
 
 </html>
