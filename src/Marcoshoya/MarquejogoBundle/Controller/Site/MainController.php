@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 use Marcoshoya\MarquejogoBundle\Form\SearchType;
+use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 
 /**
  * MainController
@@ -41,21 +42,33 @@ class MainController extends Controller
     {
         $form = $this->createSearchForm();
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
 
+            // form data
             $data = $form->getData();
+            $slug = BundleHelper::sluggable($data['city']);
+            $dateTime = $data['date'];
+            $hour = $data['hour'];
 
-            $city = BundleHelper::sluggable($data['city']);
+            $dateTime->modify("+{$hour} hour");
+            $autocomplete = $this->get('marcoshoya_marquejogo.service.autocomplete')->getCity($slug);
 
-            return $this->redirect($this->generateUrl('search_result', array('city' => $city)));
+            // dto
+            $search = new SearchDTO();
+            $search->setDate($dateTime);
+            $search->setAutocomplete($autocomplete);
+            
+            $this->get('session')->set(SearchDTO::session, serialize($search));
+
+            return $this->redirect($this->generateUrl('search_result', array('city' => $slug)));
         }
 
         return array(
             'form' => $form->createView(),
         );
     }
-    
+
     /**
      * Creates the search form
      * 
@@ -67,7 +80,7 @@ class MainController extends Controller
             'action' => $this->generateUrl('submit_search'),
             'method' => 'POST',
         ));
-        
+
         return $form;
     }
 

@@ -66,4 +66,28 @@ class AutocompleteService extends BaseService implements \SplObserver
         return $autocomplete;
     }
 
+    /**
+     * Find city by slug
+     * 
+     * @param string $slug
+     * 
+     * @return Marcoshoya\MarquejogoBundle\Entity\Autocomplete
+     */
+    public function getCity($slug)
+    {
+        try {
+
+            $city = $this->getEm()
+                ->getRepository('MarcoshoyaMarquejogoBundle:Autocomplete')
+                ->findOneBy(array(
+                    'nameUrl' => $slug
+                ));
+
+            return $city;
+
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("AutocompleteService error: " . $ex->getMessage());
+        }
+    }
+
 }
