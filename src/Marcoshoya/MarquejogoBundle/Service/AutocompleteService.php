@@ -2,8 +2,6 @@
 
 namespace Marcoshoya\MarquejogoBundle\Service;
 
-use Doctrine\ORM\EntityManager;
-use Symfony\Bridge\Monolog\Logger;
 use Marcoshoya\MarquejogoBundle\Entity\Autocomplete;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
@@ -11,31 +9,10 @@ use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 /**
  * AutocompleteService implements the observer
  *
- * @author marcos
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class AutocompleteService implements \SplObserver
+class AutocompleteService extends BaseService implements \SplObserver
 {
-
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var Symfony\Bridge\Monolog\Logger
-     */
-    protected $logger;
-
-    /**
-     * Constructor
-     *
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em, Logger $logger)
-    {
-        $this->em = $em;
-        $this->logger = $logger;
-    }
 
     /**
      * @inheritDoc
@@ -54,36 +31,39 @@ class AutocompleteService implements \SplObserver
                 $nameUrl = BundleHelper::sluggable(sprintf('%s %s', $cityName, $stateName));
 
                 $autocomplete = $this->getAutocomplete($entity);
-                if (!$autocomplete) {
-                    $autocomplete = new Autocomplete();
-                }
-
                 $autocomplete->setCity($city);
                 $autocomplete->setCityName($cityName);
                 $autocomplete->setStateName($stateName);
                 $autocomplete->setNameField($nameField);
                 $autocomplete->setNameUrl($nameUrl);
 
-                $this->em->persist($autocomplete);
-                $this->em->flush();
+                $this->getEm()->persist($autocomplete);
+                $this->getEm()->flush();
             }
-            
         } catch (\Exception $ex) {
-            $this->logger->error("AutocompleteService error: " . $ex->getMessage());
+            $this->getLogger()->error("AutocompleteService error: " . $ex->getMessage());
         }
     }
 
     /**
      * Get entity if already exists
-     * 
+     *
      * @param Provider $entity
      * @return Autocomplete
      */
     private function getAutocomplete(Provider $entity)
     {
-        return $this->em->getRepository('MarcoshoyaMarquejogoBundle:Autocomplete')->findOneBy(array(
+        $autocomplete = $this->getEm()
+            ->getRepository('MarcoshoyaMarquejogoBundle:Autocomplete')
+            ->findOneBy(array(
                 'city' => $entity->getCity()
-        ));
+            ));
+
+        if (!$autocomplete) {
+            $autocomplete = new Autocomplete();
+        }
+
+        return $autocomplete;
     }
 
 }

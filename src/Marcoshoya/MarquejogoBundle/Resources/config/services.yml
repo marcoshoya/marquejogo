@@ -17,11 +17,11 @@ services:
 
     marcoshoya_marquejogo.service.autocomplete:
         class: Marcoshoya\MarquejogoBundle\Service\AutocompleteService
-        arguments: ["@doctrine.orm.entity_manager", "@logger"]
+        parent: marcoshoya_marquejogo.service.base
 
     marcoshoya_marquejogo.service.provider:
         class: Marcoshoya\MarquejogoBundle\Service\ProviderService
-        arguments: ["@doctrine.orm.entity_manager", "@logger"]
+        parent: marcoshoya_marquejogo.service.base
         properties:
              autocomplete: "@marcoshoya_marquejogo.service.autocomplete"
 
