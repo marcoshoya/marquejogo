@@ -262,6 +262,8 @@ class ProviderController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor atualizado com sucesso.');
 
             return $this->redirect($this->generateUrl('provider'));
+        } else {
+            //print_r($editForm->getErrorsAsString()); exit;
         }
 
         return array(

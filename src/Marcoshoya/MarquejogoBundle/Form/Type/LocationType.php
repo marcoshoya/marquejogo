@@ -97,7 +97,7 @@ class LocationType extends AbstractType
          *  we pass new collection using formModifier function
          */
         $builder->get('state')->addEventListener(
-            FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($formModifier) {
+            FormEvents::POST_SUBMIT, function (FormEvent $event) use ($formModifier) {
             $state = $event->getForm()->getData();
             $formModifier($event->getForm()->getParent(), $state);
         }
