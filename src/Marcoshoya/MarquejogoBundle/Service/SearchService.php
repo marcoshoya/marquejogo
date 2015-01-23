@@ -2,6 +2,7 @@
 
 namespace Marcoshoya\MarquejogoBundle\Service;
 
+use Marcoshoya\MarquejogoBundle\Component\Search\SearchCollection;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\LocationCity;
 
@@ -24,7 +25,17 @@ class SearchService extends BaseService
     {
         $city = $search->getAutocomplete()->getCity();
 
-        return $this->getProviderByCity($city);
+        $results = $this->getProviderByCity($city);
+        
+        $collection = new SearchCollection();
+        if ($results) {
+            foreach ($results as $provider) {
+                $idx = $provider->getId();
+                $collection->add($provider, $idx);
+            }
+        }
+        
+        return $collection;
     }
 
     /**
