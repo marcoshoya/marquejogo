@@ -12,7 +12,7 @@ use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 /**
  * Search controller.
  *
- * @Route("/search")
+ * @Route("/busca")
  */
 class SearchController extends Controller
 {
@@ -25,16 +25,6 @@ class SearchController extends Controller
     {
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Search:sidebar.html.twig');
     }
-    
-    /**
-     * Do the search
-     */
-    public function dosearhAction()
-    {
-       
-        
-        return array();
-    }
 
     /**
      * List all results from search
@@ -44,6 +34,10 @@ class SearchController extends Controller
      */
     public function resultAction($city)
     {
+        $search = $this->get('marcoshoya_marquejogo.service.search');
+        
+        
+        
         return array('city' => $city);
     }
 }

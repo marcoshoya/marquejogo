@@ -5,16 +5,26 @@ services:
         tags:
             - { name: form.type, alias: entity_hidden }
 
+    marcoshoya_marquejogo.service.base:
+        abstract:  true
+        class: Marcoshoya\MarquejogoBundle\Service\BaseService
+        arguments: ["@doctrine.orm.entity_manager", "@logger"]
+
+
     marcoshoya_marquejogo.service.personservice:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService
         arguments: ["@doctrine.orm.entity_manager"]
-        
+
     marcoshoya_marquejogo.service.autocomplete:
         class: Marcoshoya\MarquejogoBundle\Service\AutocompleteService
         arguments: ["@doctrine.orm.entity_manager", "@logger"]
-        
+
     marcoshoya_marquejogo.service.provider:
         class: Marcoshoya\MarquejogoBundle\Service\ProviderService
         arguments: ["@doctrine.orm.entity_manager", "@logger"]
         properties:
              autocomplete: "@marcoshoya_marquejogo.service.autocomplete"
+
+    marcoshoya_marquejogo.service.search:
+        class: Marcoshoya\MarquejogoBundle\Service\SearchService
+        parent: marcoshoya_marquejogo.service.base
