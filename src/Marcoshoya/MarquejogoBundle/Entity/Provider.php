@@ -16,88 +16,89 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
  * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\ProviderRepository")
  */
 class Provider implements UserInterface, \SplSubject
-{    
+{
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(name="email", type="string", length=60)
      * @Assert\NotBlank(message="Campo obrigatório")
      * @Assert\Email(message="Formato do email inválido")
      */
     private $username;
-    
+
     /**
      * @ORM\Column(type="string", length=40)
      * @Assert\NotBlank(message="Campo obrigatório")
      */
     private $password;
-    
+
     /**
      * @ORM\Column(type="string", length=50)
      */
     private $name;
-    
+
     /**
      * @ORM\Column(type="text")
      */
     private $description;
-    
+
     /**
      * @ORM\Column(type="string", length=50)
      */
     private $cnpj;
-    
+
     /**
      * @ORM\Column(type="string", length=50)
      */
     private $phone;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $address;
-    
+
     /**
      * @ORM\Column(type="string", length=25)
      */
     private $number;
-    
+
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $complement;
-    
+
     /**
      * @ORM\Column(type="string", length=150)
      */
     private $neighborhood;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="LocationCity")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
-     **/
+     * */
     private $city;
-    
+
     /**
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
-    
-    /** 
+
+    /**
      * @ORM\OneToMany(targetEntity="ProviderProduct", mappedBy="provider") 
-     **/
+     * */
     private $providerProduct;
-    
+
     /**
      * @var array
      */
     private $observers = array();
-    
+
     /**
      * Constructor
      */
@@ -105,7 +106,7 @@ class Provider implements UserInterface, \SplSubject
     {
         $this->providerProduct = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * To string class
      * 
@@ -115,7 +116,7 @@ class Provider implements UserInterface, \SplSubject
     {
         return $this->name;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -133,10 +134,10 @@ class Provider implements UserInterface, \SplSubject
     public function setId($id)
     {
         $this->id = $id;
-        
+
         return $this;
     }
-    
+
     /**
      * Get id
      *
@@ -353,7 +354,7 @@ class Provider implements UserInterface, \SplSubject
     {
         return $this->neighborhood;
     }
-    
+
     /**
      * Set city
      *
@@ -455,7 +456,7 @@ class Provider implements UserInterface, \SplSubject
     {
         return $this->providerProduct;
     }
-    
+
     /**
      * Observer attach
      * 
@@ -490,4 +491,19 @@ class Provider implements UserInterface, \SplSubject
             $value->update($this);
         }
     }
+
+    /**
+     * Get full locate
+     * 
+     * @return string
+     */
+    public function getFullRegion()
+    {
+        return sprintf('%s, %s, %s', 
+            ucwords($this->neighborhood), // string
+            ucwords($this->city->getName()), // object
+            ucwords($this->city->getState()->getName()) // object
+        );
+    }
+
 }

@@ -122,6 +122,25 @@ a img{
     text-decoration: none;
 }
 
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+.alert-info hr {
+    border-top-color: #a6e1ec;
+}
+.alert-info .alert-link {
+    color: #245269;
+}
+
 /**********************************
  HOME / BACKGROUND
 **********************************/
@@ -320,7 +339,7 @@ a img{
     float:left;
     width: 100%;
     border-top: 1px dashed #2D5908;
-    height: 200px;
+    min-height: 200px;
     padding: 8px 0;
     clear: both;
 }
@@ -372,6 +391,20 @@ a img{
 .list-item-btn a:hover, .list-item-btn input:hover {
     background-color: #204401;
     box-shadow: 0 0 3px #aaa;
+}
+
+.list-empty {
+    margin-top: 50px;
+}
+.list-empty a {
+    text-decoration: none;
+    font-size: 28px;
+    color: #204401;
+    margin-top: 50px;
+
+}
+.list-empty a:hover {
+    text-decoration: underline;
 }
 
 /***********************************
