@@ -5,7 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SearchType provides the search form
@@ -26,16 +26,21 @@ class SearchType extends AbstractType
                 'class' => 'Marcoshoya\MarquejogoBundle\Entity\Autocomplete',
                 'property' => 'nameField',
                 'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
+                    new Assert\NotBlank(array('message' => "Campo obrigatório")),
                 ),
             ))
             ->add('date', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'format' => 'dd-MM-yyyy',
                 'years' => array(date('Y')),
+                'constraints' => array(
+                    new Assert\NotBlank(array('message' => "Campo obrigatório")),
+                    new Assert\Date(array('message' => "valor inválido"))
+                ),
             ))
             ->add('hour', 'choice', array(
-                'choices' => $this->getHourOptions()
+                'choices' => $this->getHourOptions(),
+                'data' => date('H')
             ))
         ;
     }
