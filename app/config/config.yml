@@ -82,6 +82,10 @@ avalanche_imagine:
         adm_list:
             type:    thumbnail
             options: { size: [120, 90], mode: outbound, quality: 100, format: png, cache_type: false}
+        
+        search_list:
+            type:    thumbnail
+            options: { size: [200, 200], mode: outbound, quality: 100, format: png, cache_type: false}
 
 genemu_form:
     autocomplete: ~
