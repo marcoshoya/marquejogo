@@ -4,14 +4,16 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * ProviderPicture Entity
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
- * 
+ *
  * @ORM\Table(name="provider_picutre")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class ProviderPicture
 {
@@ -21,7 +23,7 @@ class ProviderPicture
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Provider", inversedBy="providerPicture")
      * @ORM\JoinColumn(name="provider_id", referencedColumnName="id")
@@ -62,17 +64,17 @@ class ProviderPicture
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
-    
+
     /**
      * @Assert\File(maxSize="6000000")
      */
     private $file;
-    
+
     /**
      * @var string
      */
     private $temp;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -84,7 +86,7 @@ class ProviderPicture
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -107,7 +109,7 @@ class ProviderPicture
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -130,7 +132,7 @@ class ProviderPicture
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -153,7 +155,7 @@ class ProviderPicture
     /**
      * Get adress
      *
-     * @return string 
+     * @return string
      */
     public function getAdress()
     {
@@ -176,7 +178,7 @@ class ProviderPicture
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -199,7 +201,7 @@ class ProviderPicture
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -222,13 +224,13 @@ class ProviderPicture
     /**
      * Get provider
      *
-     * @return \Marcoshoya\MarquejogoBundle\Entity\Provider 
+     * @return \Marcoshoya\MarquejogoBundle\Entity\Provider
      */
     public function getProvider()
     {
         return $this->provider;
     }
-    
+
     /**
      * Sets file.
      *
@@ -256,7 +258,7 @@ class ProviderPicture
     {
         return $this->file;
     }
-    
+
     /**
      * Get absolute path.
      *
@@ -304,7 +306,7 @@ class ProviderPicture
         // when displaying uploaded doc/image in the view.
         return 'uploads/provider';
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
