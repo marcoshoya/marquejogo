@@ -18,6 +18,7 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
+        "avalanche123/imagine-bundle": "v2.1",
         "genemu/form-bundle": "2.2.*"
     },
     "require-dev": {

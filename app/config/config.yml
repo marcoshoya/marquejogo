@@ -74,6 +74,15 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
+avalanche_imagine:
+    source_root:  %kernel.root_dir%/../web
+    web_root:     %kernel.root_dir%/../web
+    driver:       gd
+    filters:
+        adm_list:
+            type:    thumbnail
+            options: { size: [120, 90], mode: outbound, quality: 100, format: png, cache_type: false}
+
 genemu_form:
     autocomplete: ~
     date: ~
