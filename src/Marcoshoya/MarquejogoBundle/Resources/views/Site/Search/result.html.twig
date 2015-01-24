@@ -26,13 +26,16 @@
                 {% for result in searchResult.all %}
                     <div class="list-item">
                         <div class="list-item-image">
-                            <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                            {% if searchResult.getPicture(result.id) %}
+                                <img src="{{ searchResult.getPicture(result.id).getWebPath | apply_filter('search_list') }}" />
+                            {% endif %}
                         </div>
                         <div class="list-item-content">
                             <h3>{{ result.name }}</h3>
                             <div class="list-item-address">
                                 <p>{{ result.fullregion }}</p>
                             </div>
+                            <div class="clear"></div>
                             <div class="list-item-description">
                                 <p>{{ result.description }}</p>
                             </div>

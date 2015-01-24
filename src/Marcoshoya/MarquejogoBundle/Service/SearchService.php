@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchCollection;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\LocationCity;
+use Marcoshoya\MarquejogoBundle\Entity\Provider;
 
 /**
  * SearchService improves all search funtions
@@ -26,15 +27,20 @@ class SearchService extends BaseService
         $city = $search->getAutocomplete()->getCity();
 
         $results = $this->getProviderByCity($city);
-        
+
         $collection = new SearchCollection();
         if ($results) {
             foreach ($results as $provider) {
                 $idx = $provider->getId();
                 $collection->add($provider, $idx);
+                // picture
+                $picture = $this->getPicture($provider);
+                if (null !== $picture) {
+                    $collection->addPicture($picture, $idx);
+                }
             }
         }
-        
+
         return $collection;
     }
 
@@ -53,6 +59,26 @@ class SearchService extends BaseService
                 ->findBy(array('city' => $city));
 
             return $providers;
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("SearchService error: " . $ex->getMessage());
+        }
+    }
+
+    /**
+     * Get picture
+     * @param Provider $provider
+     * 
+     * @return ProviderPicture
+     */
+    private function getPicture(Provider $provider)
+    {
+        try {
+
+            $picture = $this->getEm()
+                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')
+                ->findMainPicture($provider);
+
+            return $picture;
         } catch (\Exception $ex) {
             $this->getLogger()->error("SearchService error: " . $ex->getMessage());
         }

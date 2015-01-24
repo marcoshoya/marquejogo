@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Component\Search;
 
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Entity\ProviderPicture;
 
 /**
  * SearchCollection
@@ -15,6 +16,11 @@ class SearchCollection implements \IteratorAggregate
      * @var Provider[]
      */
     private $itemList = array();
+    
+    /**
+     * @var ProviderPicture[]
+     */
+    private $pictureList = array();
     
     /**
      * It implements \IteratorAggregate.
@@ -80,5 +86,27 @@ class SearchCollection implements \IteratorAggregate
     {
         return count($this->itemList);
     }
+    
+    /**
+     * Add a item
+     * 
+     * @param ProviderPicture $item
+     * @param integer|string $idx
+     */
+    public function addPicture(ProviderPicture $item, $idx)
+    {
+        unset($this->pictureList[$idx]);
 
+        $this->pictureList[$idx] = $item;
+    }
+    
+    /**
+     * Get item by index
+     * 
+     * @param integer|string $idx
+     */
+    public function getPicture($idx)
+    {
+        return isset($this->pictureList[$idx]) ? $this->pictureList[$idx] : null;
+    }
 }

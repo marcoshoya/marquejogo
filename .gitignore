@@ -37,3 +37,6 @@
 #Others
 /nbproject/private/
 *.php~
+
+# thumb
+/web/media/cache/*
