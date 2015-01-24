@@ -93,6 +93,11 @@ class Provider implements UserInterface, \SplSubject
      * @ORM\OneToMany(targetEntity="ProviderProduct", mappedBy="provider") 
      * */
     private $providerProduct;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="ProviderPicture", mappedBy="provider") 
+     * */
+    private $providerPicture;
 
     /**
      * @var array
@@ -455,6 +460,39 @@ class Provider implements UserInterface, \SplSubject
     public function getProviderProduct()
     {
         return $this->providerProduct;
+    }
+    
+    /**
+     * Add providerPicture
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ProviderPicture $providerPicture
+     * @return Provider
+     */
+    public function addProviderPicture(\Marcoshoya\MarquejogoBundle\Entity\ProviderPicture $providerPicture)
+    {
+        $this->providerPicture[] = $providerPicture;
+
+        return $this;
+    }
+
+    /**
+     * Remove providerPicture
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ProviderPicture $providerPicture
+     */
+    public function removeProviderPicture(\Marcoshoya\MarquejogoBundle\Entity\ProviderPicture $providerPicture)
+    {
+        $this->providerPicture->removeElement($providerPicture);
+    }
+
+    /**
+     * Get providerPicture
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProviderPicture()
+    {
+        return $this->providerPicture;
     }
 
     /**
