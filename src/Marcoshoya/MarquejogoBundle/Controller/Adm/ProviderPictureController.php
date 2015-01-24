@@ -21,7 +21,34 @@ class ProviderPictureController extends Controller
     /**
      * Insert a image
      *
-     * @Route("/{id}/picture", name="provider_picture")
+     * @Route("/{id}", name="provider_picture")
+     * @Method("GET")
+     * @Template()
+     */
+    public function indexAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
+        if (!$provider) {
+            throw $this->createNotFoundException('Unable to find Provider entity.');
+        }
+
+        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')->findBy(array(
+            'provider' => $provider
+        ));
+        
+        
+        return array(
+            'provider' => $provider,
+            'entities' => $entities
+        );
+    }
+    
+    /**
+     * Insert a image
+     *
+     * @Route("/{id}/new", name="provider_picture_new")
      * @Template()
      */
     public function pictureAction($id)
@@ -29,7 +56,6 @@ class ProviderPictureController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Provider entity.');
         }
