@@ -20,7 +20,7 @@
                 <p align="right">
                     <a class="btn btn-link" href="{{ path('provider_edit', {'id': provider.id}) }}"> Voltar</a>
                     <a class="btn btn-primary" href="{{ path('provider_picture_new', {'id': provider.id}) }}" alt="Inserir novo" title="Inserir novo">
-                        <i class="fa fa-image"> </i> Inserir nova imagem
+                        Inserir nova imagem
                     </a>
                 </p>
             </div>
@@ -50,8 +50,8 @@
                                     {% for entity in entities %}
                                         <tr class="odd gradeX">
                                             <td>{{ entity.id }}</td>
-                                            <td></td>
-                                            <td></td>
+                                            <td><img src="{{ entity.getWebPath | apply_filter('adm_list') }}" /></td>
+                                            <td>{{ entity.name }}</td>
                                             <td class="center">
                                                 <span class="btn-group">
                                                     <a href="{{ path('picture_delete', { 'id': entity.id }) }}" alt="Excluir" title="Excluir" onclick="return confirm('Deseja excluir definitivamente?')">

@@ -100,9 +100,9 @@ class ProviderPictureController extends Controller
             $em->persist($providerPicture);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Imagem inserido com sucesso.');
+            $this->get('session')->getFlashBag()->add('success', 'Imagem inserida com sucesso.');
 
-            return $this->redirect($this->generateUrl("provider_edit", array("id" => $id)));
+            return $this->redirect($this->generateUrl("provider_picture", array("id" => $id)));
         }
         
         return array(
@@ -145,7 +145,7 @@ class ProviderPictureController extends Controller
         $provider = $entity->getProvider();
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ContentAppendix entity.');
+            throw $this->createNotFoundException('Unable to find ProviderPicture entity.');
         }
 
         try {
@@ -158,7 +158,7 @@ class ProviderPictureController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'Ocorreu um erro ao excluir a imagem.');
         }
 
-        return $this->redirect($this->generateUrl("provider_edit", array("id" => $provider->getId())));
+        return $this->redirect($this->generateUrl("provider_picture", array("id" => $provider->getId())));
     }
 
 }
