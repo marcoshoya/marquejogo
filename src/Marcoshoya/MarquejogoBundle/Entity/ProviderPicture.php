@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  *
  * @ORM\Table(name="provider_picutre")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\ProviderPictureRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class ProviderPicture

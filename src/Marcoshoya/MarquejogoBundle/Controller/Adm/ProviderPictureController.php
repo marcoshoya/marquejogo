@@ -37,14 +37,14 @@ class ProviderPictureController extends Controller
         $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')->findBy(array(
             'provider' => $provider
         ));
-        
-        
+
+
         return array(
             'provider' => $provider,
             'entities' => $entities
         );
     }
-    
+
     /**
      * Insert a image
      *
@@ -74,7 +74,7 @@ class ProviderPictureController extends Controller
 
     /**
      * Save
-     * 
+     *
      * @Route("/{id}", name="picture_save")
      * @Method("POST")
      * @Template("MarcoshoyaMarquejogoBundle:Adm/ProviderPicture:picture.html.twig")
@@ -104,7 +104,7 @@ class ProviderPictureController extends Controller
 
             return $this->redirect($this->generateUrl("provider_picture", array("id" => $id)));
         }
-        
+
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
@@ -113,7 +113,7 @@ class ProviderPictureController extends Controller
 
     /**
      * Creates form
-     * 
+     *
      * @param ProviderPicture $providerPicture
      * @return Form
      */
@@ -159,6 +159,39 @@ class ProviderPictureController extends Controller
         }
 
         return $this->redirect($this->generateUrl("provider_picture", array("id" => $provider->getId())));
+    }
+
+    /**
+     * Set main picture
+     *
+     * @Route("{id}/main/{status}", name="picture_main")
+     * @Template()
+     */
+    public function mainpictureAction($id, $status)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')->find($id);
+        $provider = $entity->getProvider();
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ProviderPicture entity.');
+        }
+
+        try {
+            if ($status) {
+                $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')->mainpicture($entity);
+                $this->get('session')->getFlashBag()->add('success', 'Imagem destacada com sucesso.');
+            } else {
+                $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')->mainpictureOff($provider);
+                $this->get('session')->getFlashBag()->add('success', 'Destaque removido com sucesso.');
+            }
+        } catch (\Exception $e) {
+            $this->get('logger')->err("Error: " . $e->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Ocorreu um erro ao processar a requisição.');
+        }
+
+        return $this->redirect($this->generateUrl('provider_picture', array('id' => $provider->getId())));
     }
 
 }

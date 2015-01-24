@@ -33,7 +33,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Listando Imagens
-                    </div>        
+                    </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -43,6 +43,7 @@
                                         <th>#</th>
                                         <th>Imagem</th>
                                         <th width="50%">Nome</th>
+                                        <th>Capa</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -52,6 +53,15 @@
                                             <td>{{ entity.id }}</td>
                                             <td><img src="{{ entity.getWebPath | apply_filter('adm_list') }}" /></td>
                                             <td>{{ entity.name }}</td>
+                                            <td>
+                                                <span class="btn-group">
+                                                    {% if entity.isActive %}
+                                                        <a title="Remover destaque" class="btn bs-tooltip" href="{{ path('picture_main', { 'id': entity.id, 'status': 0 }) }}" data-original-title="Remover destaque"><i class="fa fa-star"></i></a>
+                                                    {% else %}
+                                                        <a title="Destacar" class="btn bs-tooltip" href="{{ path('picture_main', { 'id': entity.id, 'status': 1 }) }}" data-original-title="Destacar"><i class="fa fa-circle-o"></i></a>
+                                                    {% endif %}
+                                                </span>
+                                            </td>
                                             <td class="center">
                                                 <span class="btn-group">
                                                     <a href="{{ path('picture_delete', { 'id': entity.id }) }}" alt="Excluir" title="Excluir" onclick="return confirm('Deseja excluir definitivamente?')">
