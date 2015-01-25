@@ -33,8 +33,8 @@ class ConfigControllerTest extends DashboardTest
             'marcoshoya_marquejogobundle_provider[number]'  => '0-00',
             'marcoshoya_marquejogobundle_provider[complement]'  => '',
             'marcoshoya_marquejogobundle_provider[neighborhood]'  => 'Downtown',
-            'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
-            'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
+            //'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
+            //'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
         ));
         
         $crawler = $this->client->submit($form);
@@ -50,8 +50,8 @@ class ConfigControllerTest extends DashboardTest
             'marcoshoya_marquejogobundle_provider[number]'  => '0-00',
             'marcoshoya_marquejogobundle_provider[complement]'  => '',
             'marcoshoya_marquejogobundle_provider[neighborhood]'  => 'Downtown',
-            'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
-            'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
+            //'marcoshoya_marquejogobundle_provider[city]'  => 'Curitiba',
+            //'marcoshoya_marquejogobundle_provider[state]'  => 'Parana',
         ));
         
         $this->client->submit($form);

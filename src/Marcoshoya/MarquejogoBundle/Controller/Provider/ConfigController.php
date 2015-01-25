@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Form\ProviderType;
+use Marcoshoya\MarquejogoBundle\Form\Type\LocationType;
 
 /**
  * ConfigController controller.
@@ -94,16 +95,10 @@ class ConfigController extends Controller
                     new NotBlank(array('message' => "Campo obrigatório")),
                 ),
             ))
-            ->add('city', 'text', array(
-                'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
-                ),
+            ->add('statecity', new LocationType($entity), array(
+                'mapped' => false,
             ))
-            ->add('state', 'text', array(
-                'constraints' => array(
-                    new NotBlank(array('message' => "Campo obrigatório")),
-                ),
-            ))
+            ->remove('city')
             ->add('isActive', 'hidden')
             ->add('username', 'hidden')
             ->add('password', 'hidden')
@@ -133,7 +128,12 @@ class ConfigController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
+            
+            $city = $editForm['statecity']['city']->getData();
+            $entity->setCity($city);
+
+            $service = $this->get('marcoshoya_marquejogo.service.provider');
+            $service->update($entity);
             
             $this->get('session')->getFlashBag()->add('success', 'Dados atualizados com sucesso.');
 
