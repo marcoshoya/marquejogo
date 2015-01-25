@@ -93,7 +93,7 @@ class Provider implements UserInterface, \SplSubject
      * @ORM\OneToMany(targetEntity="ProviderProduct", mappedBy="provider") 
      * */
     private $providerProduct;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="ProviderPicture", mappedBy="provider") 
      * */
@@ -461,7 +461,7 @@ class Provider implements UserInterface, \SplSubject
     {
         return $this->providerProduct;
     }
-    
+
     /**
      * Add providerPicture
      *
@@ -537,7 +537,22 @@ class Provider implements UserInterface, \SplSubject
      */
     public function getFullRegion()
     {
-        return sprintf('%s, %s, %s', 
+        return sprintf('%s, %s, %s', ucwords($this->neighborhood), // string
+            ucwords($this->city->getName()), // object
+            ucwords($this->city->getState()->getName()) // object
+        );
+    }
+
+    /**
+     * Get full locate
+     * 
+     * @return string
+     */
+    public function getFullAddress()
+    {
+        return sprintf('%s %s, %s, %s, %s', $this->address, //string
+            (null !== $this->complement ?
+                $this->number . ' - ' . $this->complement : $this->number), // string
             ucwords($this->neighborhood), // string
             ucwords($this->city->getName()), // object
             ucwords($this->city->getState()->getName()) // object

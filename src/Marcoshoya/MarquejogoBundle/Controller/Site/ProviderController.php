@@ -18,7 +18,7 @@ class ProviderController extends Controller
     /**
      * List all results from search
      *
-     * @Route("/local{id}", name="provider_show")
+     * @Route("/quadra{id}", name="provider_show")
      * @ParamConverter("provider", class="MarcoshoyaMarquejogoBundle:Provider")
      */
     public function showAction(Provider $provider)
@@ -27,8 +27,12 @@ class ProviderController extends Controller
         
         // , requirements={"slug" = "[0-9a-zA-Z\/\-]*"}
         
+        $service = $this->get('marcoshoya_marquejogo.service.search');
+        $picture = $service->getPicture($provider);
+        
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:show.html.twig', array(
-            'provider' => $provider
+            'provider' => $provider,
+            'picture' => $picture
         ));  
     }
 }

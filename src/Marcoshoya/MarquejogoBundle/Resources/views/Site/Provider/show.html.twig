@@ -10,13 +10,15 @@
 
         <h1>{{ provider.name }}</h1>
         <div class="provider-address">
-            <p>Avenida Iguaçu, 13, Rebouças, Curitiba, CEP 80230-100</p>
+            <p>{{ provider.fulladdress }}</p>
         </div>
         <div class="provider-images">
-            <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor4.jpg" />
+            {% if picture %}
+                <img src="{{ picture.getWebPath | apply_filter('main_page') }}" />
+            {% endif %}
         </div>
         <div class="provider-description">
-            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consequat aliquet orci, hendrerit consequat arcu semper id. Duis augue turpis, ornare sit amet mollis vel, tristique non risus. Quisque auctor ornare pharetra. In nec congue dui, tempus iaculis purus. Fusce nec dolor eu elit ullamcorper aliquam ut sit amet tellus.</p>
+            <p> {{ provider.description }} </p>
         </div>
         <div class="provider-product">
             <h3>Disponibilidade</h3>

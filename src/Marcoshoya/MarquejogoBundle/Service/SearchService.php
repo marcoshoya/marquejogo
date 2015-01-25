@@ -70,7 +70,7 @@ class SearchService extends BaseService
      * 
      * @return ProviderPicture
      */
-    private function getPicture(Provider $provider)
+    public function getPicture(Provider $provider)
     {
         try {
 
