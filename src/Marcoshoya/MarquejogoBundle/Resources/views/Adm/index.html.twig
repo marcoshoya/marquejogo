@@ -45,29 +45,8 @@
 
             <!-- Custom Theme JavaScript -->
             <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/sb-admin-2.js') }}"></script>
-
-            <script>
-
-                library = {
-                    stateChange: function (element) {
-                        var city = jQuery(":input:eq(" + ($(":input").index(element) + 1) + ")");
-                        city.html("carregando");
-                        jQuery.ajax({
-                            type: "POST",
-                            data: "data=" + element.value,
-                            url: "{{ path('location_type') }}",
-                            success: function (result) {
-                                if (result != '') {
-                                    city.html(result);
-                                } else {
-                                    city.html('Nenhum resultado');
-                                }
-                            }
-                        });
-                    }
-                }
-
-            </script>
+            
+            <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/custom.js') }}"></script>
 
         {% endblock %} 
 

@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -103,5 +104,23 @@ class MainController extends Controller
     {
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Main:footer.html.twig');
     }
-
+    
+    /**
+     * @Route("/location", name="location_type")
+     * @Method({"POST"})
+     */
+    public function locationtypeAction(Request $request)
+    {
+        $state = $request->get('data');
+        
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:LocationCity')->findAllOrderedByName($state);
+    
+        $html = '';
+        foreach ($entities as $locality) {
+            $html = $html . sprintf("<option value=\"%d\">%s</option>", $locality->getId(), ucwords($locality->getName()));
+        }
+    
+        return new Response($html);
+    }
 }
