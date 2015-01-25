@@ -83,5 +83,25 @@ class SearchService extends BaseService
             $this->getLogger()->error("SearchService error: " . $ex->getMessage());
         }
     }
+    
+    /**
+     * Get picture
+     * @param Provider $provider
+     * 
+     * @return ProviderPicture
+     */
+    public function getAllPicture(Provider $provider)
+    {
+        try {
+
+            $picture = $this->getEm()
+                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')
+                ->findAllPicture($provider);
+
+            return $picture;
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("SearchService error: " . $ex->getMessage());
+        }
+    }
 
 }

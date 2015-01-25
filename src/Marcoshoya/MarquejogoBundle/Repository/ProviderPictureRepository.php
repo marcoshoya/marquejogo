@@ -70,4 +70,25 @@ class ProviderPictureRepository extends EntityRepository
         
         return $q->getOneOrNullResult();
     }
+    
+    /**
+     * Gets the main picture
+     * 
+     * @param Provider $entity
+     * 
+     * @return ProviderPicture
+     */
+    public function findAllPicture(Provider $entity)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        
+        $q = $qb->select("pp")
+            ->from("MarcoshoyaMarquejogoBundle:ProviderPicture", "pp")
+            ->where("pp.provider = :provider")
+            ->orderBy("pp.isActive", 'ASC')
+            ->setParameter("provider", $entity->getId())
+            ->getQuery();
+        
+        return $q->getResult();
+    }
 }

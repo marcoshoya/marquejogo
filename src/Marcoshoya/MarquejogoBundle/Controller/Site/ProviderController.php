@@ -28,11 +28,11 @@ class ProviderController extends Controller
         // , requirements={"slug" = "[0-9a-zA-Z\/\-]*"}
         
         $service = $this->get('marcoshoya_marquejogo.service.search');
-        $picture = $service->getPicture($provider);
+        $picture = $service->getAllPicture($provider);
         
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:show.html.twig', array(
             'provider' => $provider,
-            'picture' => $picture
+            'pictures' => $picture
         ));  
     }
 }

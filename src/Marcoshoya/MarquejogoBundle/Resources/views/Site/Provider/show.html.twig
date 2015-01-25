@@ -1,5 +1,18 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.mobile.customized.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.easing.1.3.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/camera.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/custom.js') }}"></script>
+{% endblock %}
+
 {% block container %}
 
     <div class="container-left">
@@ -12,11 +25,17 @@
         <div class="provider-address">
             <p>{{ provider.fulladdress }}</p>
         </div>
+
         <div class="provider-images">
-            {% if picture %}
-                <img src="{{ picture.getWebPath | apply_filter('main_page') }}" />
+            {% if pictures %}
+                <div class="camera_wrap camera_black_skin" id="camera_wrap_2">
+                    {% for picture in pictures %}
+                        <div data-thumb="{{ picture.getWebPath | apply_filter('gallery_thumb') }}" data-src="{{ picture.getWebPath | apply_filter('main_page') }}"></div>
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
+
         <div class="provider-description">
             <p> {{ provider.description }} </p>
         </div>
@@ -92,7 +111,7 @@
                                         <option>03</option>
                                     </select>
                                 </td>
-                                
+
                             </tr>
                         </tbody>
                     </table>
