@@ -35,6 +35,7 @@ class SearchType extends AbstractType
             ->add('date', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'format' => 'dd-MM-yyyy',
+                'culture' => 'pt-BR',
                 'years' => array($min, $max),
                 'constraints' => array(
                     new Assert\NotBlank(array('message' => "Campo obrigatório")),
