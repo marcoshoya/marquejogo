@@ -44,7 +44,6 @@ class SearchType extends AbstractType
             ))
             ->add('hour', 'choice', array(
                 'choices' => $this->getHourOptions(),
-                'data' => date('H')
             ))
         ;
     }

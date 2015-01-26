@@ -25,7 +25,15 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-        $form = $this->createSearchForm();
+        $searchDTO = new SearchDTO();
+        $session = $this->get('session');
+        
+        if ($session->has(SearchDTO::session)) {
+            $object = $session->get(SearchDTO::session);
+            $searchDTO = unserialize($object);
+        }
+        
+        $form = $this->createSearchForm($searchDTO);
 
         return array(
             'form' => $form->createView(),
@@ -41,7 +49,9 @@ class MainController extends Controller
      */
     public function submitAction(Request $request)
     {
-        $form = $this->createSearchForm();
+        $search = new SearchDTO();
+        
+        $form = $this->createSearchForm($search);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -56,7 +66,6 @@ class MainController extends Controller
             $autocomplete = $this->get('marcoshoya_marquejogo.service.autocomplete')->getCity($slug);
 
             // dto
-            $search = new SearchDTO();
             $search->setDate($dateTime);
             $search->setAutocomplete($autocomplete);
             
@@ -75,9 +84,15 @@ class MainController extends Controller
      * 
      * @return SearchType
      */
-    private function createSearchForm()
+    private function createSearchForm(SearchDTO $searchDTO)
     {
-        $form = $this->createForm(new SearchType(), null, array(
+        $data = array(
+            'city' => null !== $searchDTO->getAutocomplete() ? $searchDTO->getAutocomplete()->getNameField() : null,
+            'date' => null !== $searchDTO->getDate() ? $searchDTO->getDate() : null,
+            'hour' => null !== $searchDTO->getDate() ? $searchDTO->getDate()->format('H') : date('H'),
+        );
+
+        $form = $this->createForm(new SearchType(), $data, array(
             'action' => $this->generateUrl('submit_search'),
             'method' => 'POST',
         ));
