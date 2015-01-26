@@ -21,6 +21,9 @@ class SearchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
+        $min = date('Y, m, d');
+        $max = date('Y, m, d', strtotime("+4 months"));
+        
         $builder
             ->add('city', 'genemu_jqueryautocomplete_entity', array(
                 'class' => 'Marcoshoya\MarquejogoBundle\Entity\Autocomplete',
@@ -32,7 +35,7 @@ class SearchType extends AbstractType
             ->add('date', 'genemu_jquerydate', array(
                 'widget' => 'single_text',
                 'format' => 'dd-MM-yyyy',
-                'years' => array(date('Y')),
+                'years' => array($min, $max),
                 'constraints' => array(
                     new Assert\NotBlank(array('message' => "Campo obrigatório")),
                     new Assert\Date(array('message' => "valor inválido"))
