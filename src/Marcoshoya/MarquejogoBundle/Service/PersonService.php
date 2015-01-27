@@ -3,10 +3,8 @@
 namespace Marcoshoya\MarquejogoBundle\Service;
 
 use Doctrine\ORM\EntityManager;
+use Marcoshoya\MarquejogoBundle\Component\Person\PersonDelegate;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
-use Marcoshoya\MarquejogoBundle\Component\Person\CustomerDelegate;
-use Marcoshoya\MarquejogoBundle\Component\Person\ProviderDelegate;
-use Marcoshoya\MarquejogoBundle\Component\Person\AdmUserDelegate;
 
 /**
  * PersonService delegates who is called to get user
@@ -20,6 +18,8 @@ class PersonService
      */
     protected $em;
     
+    private $personDelegate;
+    
     /**
      * Constructor
      * 
@@ -28,6 +28,7 @@ class PersonService
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+        $this->personDelegate = new PersonDelegate($this->em); 
     }
     
     /**
@@ -39,27 +40,8 @@ class PersonService
      */
     public function getUser(UserInterface $user)
     {
-        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Customer) {
-            $customer = new CustomerDelegate($this->em);
-            $customer->setUser($user);
-            
-            return $customer->getUser();
-        }
+        $service = $this->personDelegate->getBusinessService($user);
         
-        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Provider) {
-            $provider = new ProviderDelegate($this->em);
-            $provider->setUser($user);
-            
-            return $provider->getUser();
-        }
-        
-        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {
-            $admuser = new AdmUserDelegate($this->em);
-            $admuser->setUser($user);
-            
-            return $admuser->getUser();
-        }
-        
-        return null;
+        return $service->getUser($user);
     }
 }

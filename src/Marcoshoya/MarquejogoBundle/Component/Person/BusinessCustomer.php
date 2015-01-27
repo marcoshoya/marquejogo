@@ -7,11 +7,11 @@ use Marcoshoya\MarquejogoBundle\Component\Person\PersonInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 
 /**
- * Description of CustomerDelegate
+ * BusinessCustomer
  *
- * @author Marcos
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class CustomerDelegate implements PersonInterface
+class BusinessCustomer implements PersonInterface
 {
 
     /**
@@ -19,11 +19,6 @@ class CustomerDelegate implements PersonInterface
      */
     protected $em;
     
-    /**
-     * @var Doctrine\ORM\EntityManager;
-     */
-    private $user;
-
     /**
      * Constructor
      * 
@@ -35,25 +30,15 @@ class CustomerDelegate implements PersonInterface
     }
 
     /**
-     * Set user
-     * 
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
      * Get user
      * 
      * @return \Marcoshoya\MarquejogoBundle\Entity\Customer
      */
-    public function getUser()
+    public function getUser(UserInterface $user)
     {
         $customer = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->findOneBy(array(
-            'username' => $this->user->getUsername(),
-            'password' => $this->user->getPassword(),
+            'username' => $user->getUsername(),
+            'password' => $user->getPassword(),
         ));
 
         if (!$customer instanceof \Marcoshoya\MarquejogoBundle\Entity\Customer) {

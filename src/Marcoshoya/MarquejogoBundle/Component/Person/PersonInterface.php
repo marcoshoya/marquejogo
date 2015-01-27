@@ -12,16 +12,9 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 interface PersonInterface {
     
     /**
-     * Set user object
-     * 
-     * @return string
-     */
-    public function setUser(UserInterface $user);
-    
-    /**
      * Get user instance
      * 
      * @return string
      */
-    public function getUser();
+    public function getUser(UserInterface $user);
 }

@@ -7,22 +7,17 @@ use Marcoshoya\MarquejogoBundle\Component\Person\PersonInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 
 /**
- * Description of AdmUserDelegate
+ * BusinessAdm
  *
- * @author Marcos
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class AdmUserDelegate implements PersonInterface
+class BusinessAdm implements PersonInterface
 {
 
     /**
      * @var Doctrine\ORM\EntityManager;
      */
     protected $em;
-    
-    /**
-     * @var Doctrine\ORM\EntityManager;
-     */
-    private $user;
 
     /**
      * Constructor
@@ -33,27 +28,17 @@ class AdmUserDelegate implements PersonInterface
     {
         $this->em = $em;
     }
-
-    /**
-     * Set user
-     * 
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user)
-    {
-        $this->user = $user;
-    }
-
+    
     /**
      * Get user
      * 
      * @return \Marcoshoya\MarquejogoBundle\Entity\AdmUser
      */
-    public function getUser()
+    public function getUser(UserInterface $user)
     {
         $admuser = $this->em->getRepository('MarcoshoyaMarquejogoBundle:AdmUser')->findOneBy(array(
-            'username' => $this->user->getUsername(),
-            'password' => $this->user->getPassword(),
+            'username' => $user->getUsername(),
+            'password' => $user->getPassword(),
         ));
 
         if (!$admuser instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {

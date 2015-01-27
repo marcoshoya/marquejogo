@@ -10,7 +10,6 @@ services:
         class: Marcoshoya\MarquejogoBundle\Service\BaseService
         arguments: ["@doctrine.orm.entity_manager", "@logger"]
 
-
     marcoshoya_marquejogo.service.personservice:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService
         arguments: ["@doctrine.orm.entity_manager"]
