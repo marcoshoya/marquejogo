@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Monolog\Logger;
+use Marcoshoya\MarquejogoBundle\Component\Person\PersonDelegate;
 
 /**
  * BaseService implements some base functions
@@ -22,6 +23,11 @@ class BaseService
      * @var Symfony\Bridge\Monolog\Logger
      */
     private $logger;
+    
+    /**
+     * @var PersonDelegate
+     */
+    private $personDelegate;
 
     /**
      * Constructor
@@ -33,6 +39,7 @@ class BaseService
     {
         $this->setEm($em);
         $this->logger = $logger;
+        $this->personDelegate = new PersonDelegate($em, $logger); 
     }
 
     /**
@@ -75,4 +82,9 @@ class BaseService
         return $this->logger;
     }
 
+    
+    public function getPersonDelegate()
+    {
+        return $this->personDelegate;
+    }
 }

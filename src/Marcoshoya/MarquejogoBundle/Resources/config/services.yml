@@ -12,17 +12,13 @@ services:
 
     marcoshoya_marquejogo.service.personservice:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService
-        arguments: ["@doctrine.orm.entity_manager"]
+        parent: marcoshoya_marquejogo.service.base
+        properties:
+             autocomplete: "@marcoshoya_marquejogo.service.autocomplete"
 
     marcoshoya_marquejogo.service.autocomplete:
         class: Marcoshoya\MarquejogoBundle\Service\AutocompleteService
         parent: marcoshoya_marquejogo.service.base
-
-    marcoshoya_marquejogo.service.provider:
-        class: Marcoshoya\MarquejogoBundle\Service\ProviderService
-        parent: marcoshoya_marquejogo.service.base
-        properties:
-             autocomplete: "@marcoshoya_marquejogo.service.autocomplete"
 
     marcoshoya_marquejogo.service.search:
         class: Marcoshoya\MarquejogoBundle\Service\SearchService

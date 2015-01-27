@@ -2,34 +2,23 @@
 
 namespace Marcoshoya\MarquejogoBundle\Service;
 
-use Doctrine\ORM\EntityManager;
-use Marcoshoya\MarquejogoBundle\Component\Person\PersonDelegate;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
+use Marcoshoya\MarquejogoBundle\Service\BaseService;
+use Marcoshoya\MarquejogoBundle\Service\AutocompleteService;
+
 
 /**
  * PersonService delegates who is called to get user
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class PersonService
+class PersonService extends BaseService
 {
-    /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $em;
-    
-    private $personDelegate;
     
     /**
-     * Constructor
-     * 
-     * @param EntityManager $em
+     * @var Marcoshoya\MarquejogoBundle\Service\AutocompleteService
      */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-        $this->personDelegate = new PersonDelegate($this->em); 
-    }
+    public $autocomplete;
     
     /**
      * Get user
@@ -40,8 +29,36 @@ class PersonService
      */
     public function getUser(UserInterface $user)
     {
-        $service = $this->personDelegate->getBusinessService($user);
+        $service = $this->getPersonDelegate()->getBusinessService($user);
         
         return $service->getUser($user);
+    }
+
+    /**
+     * Get autocomplete observer
+     *
+     * @return AutocompleteService
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getAutocomplete()
+    {
+        if ($this->autocomplete instanceof AutocompleteService) {
+            return $this->autocomplete;
+        } else {
+            throw new \InvalidArgumentException("Object have to be instance of AutocompleteService");
+        }
+    }
+    
+    /**
+     * Update entity
+     *
+     * @param Provider $provider
+     */
+    public function update(UserInterface $provider)
+    {
+        $autocomplete = $this->getAutocomplete();
+        $service = $this->getPersonDelegate()->getBusinessService($provider);
+        $service->update($provider, $autocomplete);
     }
 }
