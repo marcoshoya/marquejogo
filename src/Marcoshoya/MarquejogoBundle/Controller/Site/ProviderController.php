@@ -30,9 +30,13 @@ class ProviderController extends Controller
         $service = $this->get('marcoshoya_marquejogo.service.search');
         $picture = $service->getAllPicture($provider);
         
+        $productService = $this->get('marcoshoya_marquejogo.service.product');
+        $products = $productService->getallProduct($provider);
+        
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:show.html.twig', array(
             'provider' => $provider,
-            'pictures' => $picture
+            'pictures' => $picture,
+            'products' => $products
         ));  
     }
 }

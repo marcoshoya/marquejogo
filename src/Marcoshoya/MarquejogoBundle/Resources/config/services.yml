@@ -23,3 +23,7 @@ services:
     marcoshoya_marquejogo.service.search:
         class: Marcoshoya\MarquejogoBundle\Service\SearchService
         parent: marcoshoya_marquejogo.service.base
+
+    marcoshoya_marquejogo.service.product:
+        class: Marcoshoya\MarquejogoBundle\Service\ProductService
+        parent: marcoshoya_marquejogo.service.base
