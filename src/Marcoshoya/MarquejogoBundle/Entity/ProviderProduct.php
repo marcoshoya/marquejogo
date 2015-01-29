@@ -59,6 +59,11 @@ class ProviderProduct
      * @ORM\Column(name="is_active", type="boolean", nullable=true)
      */
     private $isActive;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Schedule", mappedBy="providerProduct") 
+     * */
+    private $schedule;
 
     /**
      * To string class
@@ -237,5 +242,45 @@ class ProviderProduct
     public function getCapacity()
     {
         return $this->capacity;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->schedule = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add schedule
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule
+     * @return ProviderProduct
+     */
+    public function addSchedule(\Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule)
+    {
+        $this->schedule[] = $schedule;
+
+        return $this;
+    }
+
+    /**
+     * Remove schedule
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule
+     */
+    public function removeSchedule(\Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule)
+    {
+        $this->schedule->removeElement($schedule);
+    }
+
+    /**
+     * Get schedule
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSchedule()
+    {
+        return $this->schedule;
     }
 }

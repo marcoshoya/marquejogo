@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Schedule entity
@@ -23,7 +24,7 @@ class Schedule
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ProviderProduct")
+     * @ORM\ManyToOne(targetEntity="ProviderProduct", inversedBy="schedule")
      * @ORM\JoinColumn(name="provider_product_id", referencedColumnName="id")
      * @Assert\NotBlank(message="Campo obrigatório")
      */
@@ -50,6 +51,11 @@ class Schedule
      * @ORM\Column(type="integer")
      */
     private $alocated;
+    
+    public function __construct()
+    {
+        $this->providerProduct = new ArrayCollection();
+    }
 
     /**
      * Get id
