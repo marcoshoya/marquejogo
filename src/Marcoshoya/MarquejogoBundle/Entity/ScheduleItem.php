@@ -25,7 +25,7 @@ class ScheduleItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ProviderProduct", inversedBy="schedule")
+     * @ORM\ManyToOne(targetEntity="ProviderProduct", inversedBy="scheduleItem")
      * @ORM\JoinColumn(name="provider_product_id", referencedColumnName="id")
      * @Assert\NotBlank(message="Campo obrigatório")
      */

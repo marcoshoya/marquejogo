@@ -61,9 +61,9 @@ class ProviderProduct
     private $isActive;
     
     /**
-     * @ORM\OneToMany(targetEntity="Schedule", mappedBy="providerProduct") 
+     * @ORM\OneToMany(targetEntity="ScheduleItem", mappedBy="providerProduct") 
      * */
-    private $schedule;
+    private $scheduleItem;
 
     /**
      * To string class
@@ -243,44 +243,45 @@ class ProviderProduct
     {
         return $this->capacity;
     }
+   
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->schedule = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->scheduleItem = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add schedule
+     * Add scheduleItem
      *
-     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ScheduleItem $scheduleItem
      * @return ProviderProduct
      */
-    public function addSchedule(\Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule)
+    public function addScheduleItem(\Marcoshoya\MarquejogoBundle\Entity\ScheduleItem $scheduleItem)
     {
-        $this->schedule[] = $schedule;
+        $this->scheduleItem[] = $scheduleItem;
 
         return $this;
     }
 
     /**
-     * Remove schedule
+     * Remove scheduleItem
      *
-     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ScheduleItem $scheduleItem
      */
-    public function removeSchedule(\Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule)
+    public function removeScheduleItem(\Marcoshoya\MarquejogoBundle\Entity\ScheduleItem $scheduleItem)
     {
-        $this->schedule->removeElement($schedule);
+        $this->scheduleItem->removeElement($scheduleItem);
     }
 
     /**
-     * Get schedule
+     * Get scheduleItem
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSchedule()
+    public function getScheduleItem()
     {
-        return $this->schedule;
+        return $this->scheduleItem;
     }
 }
