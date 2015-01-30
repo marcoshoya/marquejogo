@@ -8,9 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
-use Marcoshoya\MarquejogoBundle\Entity\Schedule;
-use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
-use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleItem;
+use Marcoshoya\MarquejogoBundle\Form\ScheduleItemType;
+use Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
+use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleItem as ScheduleCompositeItem;
 use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleComposite;
 
 /**
@@ -161,7 +161,7 @@ class ScheduleController extends Controller
         for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
 
             $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
-            $item = new ScheduleItem();
+            $item = new ScheduleCompositeItem();
             $item->setDate($dateTime);
 
             foreach ($productList as $k => $product) {
@@ -253,17 +253,24 @@ class ScheduleController extends Controller
         if (!$product instanceof \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct) {
             throw $this->createNotFoundException('Unable to find ProviderProduct entity.');
         }
+        
+        $provider = $product->getProvider();
+        $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(array(
+            'provider' => $provider
+        ));
 
         // check if there is the entity
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:ScheduleItem')->findOneBy(
             array(
+                'schedule' => $schedule,
                 'date' => $date,
                 'providerProduct' => $product
             )
         );
 
-        if (!$entity instanceof Schedule) {
-            $entity = new Schedule();
+        if (!$entity instanceof ScheduleItem) {
+            $entity = new ScheduleItem();
+            $entity->setSchedule($schedule);
             $entity->setDate($date);
             $entity->setProviderProduct($product);
             $entity->setAlocated(0);
@@ -279,9 +286,9 @@ class ScheduleController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Schedule $entity)
+    private function createEditForm(ScheduleItem $entity)
     {
-        $form = $this->createForm(new ScheduleType(), $entity, array(
+        $form = $this->createForm(new ScheduleItemType(), $entity, array(
             'action' => $this->generateUrl('schedule_update', array(
                 'year' => $entity->getDate()->format('Y'),
                 'month' => $entity->getDate()->format('m'),
@@ -296,6 +303,11 @@ class ScheduleController extends Controller
             ->add('providerProduct', 'entity_hidden', array(
                 'class' => 'Marcoshoya\MarquejogoBundle\Entity\ProviderProduct',
                 'data' => $entity->getProviderProduct(),
+                'data_class' => null,
+            ))
+            ->add('schedule', 'entity_hidden', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Schedule',
+                'data' => $entity->getSchedule(),
                 'data_class' => null,
             ))
         ;
