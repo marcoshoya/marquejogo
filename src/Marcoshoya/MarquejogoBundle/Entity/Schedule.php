@@ -3,7 +3,6 @@
 namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -24,37 +23,22 @@ class Schedule
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ProviderProduct", inversedBy="schedule")
-     * @ORM\JoinColumn(name="provider_product_id", referencedColumnName="id")
-     * @Assert\NotBlank(message="Campo obrigatório")
+     * @ORM\ManyToOne(targetEntity="Provider", inversedBy="schedule")
+     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id")
      */
-    private $providerProduct;
+    private $provider;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Assert\NotBlank(message="Campo obrigatório")
+     * @ORM\OneToMany(targetEntity="Schedule", mappedBy="schedule")
      */
-    private $date;
+    private $scheduleItem;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     * @Assert\NotBlank(message="Campo obrigatório")
+     * Constructor
      */
-    private $price;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $available;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $alocated;
-    
     public function __construct()
     {
-        $this->providerProduct = new ArrayCollection();
+        $this->scheduleItem = new ArrayCollection();
     }
 
     /**
@@ -68,117 +52,58 @@ class Schedule
     }
 
     /**
-     * Set date
+     * Set provider
      *
-     * @param \DateTime $date
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Provider $provider
      * @return Schedule
      */
-    public function setDate($date)
+    public function setProvider(\Marcoshoya\MarquejogoBundle\Entity\Provider $provider = null)
     {
-        $this->date = $date;
+        $this->provider = $provider;
 
         return $this;
     }
 
     /**
-     * Get date
+     * Get provider
      *
-     * @return \DateTime
+     * @return \Marcoshoya\MarquejogoBundle\Entity\Provider
      */
-    public function getDate()
+    public function getProvider()
     {
-        return $this->date;
+        return $this->provider;
     }
 
     /**
-     * Set price
+     * Add scheduleItem
      *
-     * @param string $price
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $scheduleItem
      * @return Schedule
      */
-    public function setPrice($price)
+    public function addScheduleItem(\Marcoshoya\MarquejogoBundle\Entity\Schedule $scheduleItem)
     {
-        $this->price = $price;
+        $this->scheduleItem[] = $scheduleItem;
 
         return $this;
     }
 
     /**
-     * Get price
+     * Remove scheduleItem
      *
-     * @return string
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $scheduleItem
      */
-    public function getPrice()
+    public function removeScheduleItem(\Marcoshoya\MarquejogoBundle\Entity\Schedule $scheduleItem)
     {
-        return $this->price;
+        $this->scheduleItem->removeElement($scheduleItem);
     }
 
     /**
-     * Set available
+     * Get scheduleItem
      *
-     * @param integer $available
-     * @return Schedule
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setAvailable($available)
+    public function getScheduleItem()
     {
-        $this->available = $available;
-
-        return $this;
-    }
-
-    /**
-     * Get available
-     *
-     * @return integer
-     */
-    public function getAvailable()
-    {
-        return $this->available;
-    }
-
-    /**
-     * Set alocated
-     *
-     * @param integer $alocated
-     * @return Schedule
-     */
-    public function setAlocated($alocated)
-    {
-        $this->alocated = $alocated;
-
-        return $this;
-    }
-
-    /**
-     * Get alocated
-     *
-     * @return integer
-     */
-    public function getAlocated()
-    {
-        return $this->alocated;
-    }
-
-    /**
-     * Set providerProduct
-     *
-     * @param \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct $providerProduct
-     * @return Schedule
-     */
-    public function setProviderProduct(\Marcoshoya\MarquejogoBundle\Entity\ProviderProduct $providerProduct = null)
-    {
-        $this->providerProduct = $providerProduct;
-
-        return $this;
-    }
-
-    /**
-     * Get providerProduct
-     *
-     * @return \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct
-     */
-    public function getProviderProduct()
-    {
-        return $this->providerProduct;
+        return $this->scheduleItem;
     }
 }

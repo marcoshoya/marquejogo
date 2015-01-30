@@ -98,6 +98,11 @@ class Provider implements UserInterface, \SplSubject
      * @ORM\OneToMany(targetEntity="ProviderPicture", mappedBy="provider") 
      * */
     private $providerPicture;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Schedule", mappedBy="provider") 
+     */
+    private $schedule;
 
     /**
      * @var array
@@ -105,7 +110,7 @@ class Provider implements UserInterface, \SplSubject
     private $observers = array();
 
     /**
-     * Constructor
+     * @inheritDoc
      */
     public function __construct()
     {
@@ -559,4 +564,37 @@ class Provider implements UserInterface, \SplSubject
         );
     }
 
+
+    /**
+     * Add schedule
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule
+     * @return Provider
+     */
+    public function addSchedule(\Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule)
+    {
+        $this->schedule[] = $schedule;
+
+        return $this;
+    }
+
+    /**
+     * Remove schedule
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule
+     */
+    public function removeSchedule(\Marcoshoya\MarquejogoBundle\Entity\Schedule $schedule)
+    {
+        $this->schedule->removeElement($schedule);
+    }
+
+    /**
+     * Get schedule
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSchedule()
+    {
+        return $this->schedule;
+    }
 }
