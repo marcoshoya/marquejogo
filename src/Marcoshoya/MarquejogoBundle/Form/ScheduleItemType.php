@@ -6,8 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 
 class ScheduleItemType extends AbstractType
 {
@@ -23,38 +21,11 @@ class ScheduleItemType extends AbstractType
                 $builder->create('date', 'hidden')
                 ->addViewTransformer(new DateTimeToStringTransformer())
             )
-            ->add('price', 'hidden')
-            ->add('available', 'hidden')
+            ->add('price', 'text')
+            ->add('available', 'checkbox')
             ->add('alocated', 'hidden')
-            
+            ->add('schedule');
         ;
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $item = $event->getData();
-            $form = $event->getForm();       
-            $product = $item->getProviderProduct();
-            if ($product instanceof \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct) {
-                $form->add('providerProduct', 'entity_hidden', array(
-                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
-                    'data' => $product,
-                    'data_class' => null,
-                ));
-            } else {
-                $form->add('providerProduct');
-            }
-            
-            $schedule = $item->getSchedule();
-            if ($schedule instanceof \Marcoshoya\MarquejogoBundle\Entity\Schedule) {
-                $form->add('schedule', 'entity_hidden', array(
-                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
-                    'data' => $schedule,
-                    'data_class' => null,
-                ));
-            } else {
-                $form->add('schedule');
-            }
-            
-        });
     }
 
     /**

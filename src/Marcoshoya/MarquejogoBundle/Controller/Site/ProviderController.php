@@ -3,16 +3,13 @@
 namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
-use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 use \Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
 use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
-use Marcoshoya\MarquejogoBundle\Form\ScheduleItemType;
-use Marcoshoya\MarquejogoBundle\Form\ProviderProductType;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Marcoshoya\MarquejogoBundle\Form\BookingItemType;
 
 /**
  * ProviderController implements all provider functions on site
@@ -28,11 +25,8 @@ class ProviderController extends Controller
      * @Route("/quadra{id}", name="provider_show")
      * @ParamConverter("provider", class="MarcoshoyaMarquejogoBundle:Provider")
      */
-    public function showAction(Provider $provider)
+    public function showAction(Request $request, Provider $provider)
     {
-        //echo $id;
-        // , requirements={"slug" = "[0-9a-zA-Z\/\-]*"}
-
         $service = $this->get('marcoshoya_marquejogo.service.search');
         $picture = $service->getAllPicture($provider);
 
@@ -40,6 +34,11 @@ class ProviderController extends Controller
         $products = $productService->getallProduct($provider);
 
         $form = $this->createScheduleForm($provider, $products);
+        
+        if ($request->isMethod('POST')) {
+            
+            return $this->redirect($this->generateUrl('booking_information'));
+        }
 
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:show.html.twig', array(
                 'provider' => $provider,
@@ -79,7 +78,7 @@ class ProviderController extends Controller
 
         $form
             ->add('scheduleItem', 'collection', array(
-                'type' => new ScheduleItemType(),
+                'type' => new BookingItemType(),
             ))
         ;
 

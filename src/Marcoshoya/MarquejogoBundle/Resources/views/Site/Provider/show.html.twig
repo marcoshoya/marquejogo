@@ -93,9 +93,12 @@
                             {{ form_widget(schedule.providerProduct) }}
                             {{ form_widget(schedule.schedule) }}
                             <tr>
-                                <td class="product-type">{{ dump(schedule.providerProduct) }}</td>
-                                <td>10</td>
-                                <td>{{ form_widget(schedule.price) }}</td>
+                                {% set data = schedule.providerProduct.vars.label|split('|') %}
+                                <td class="product-type">{{ data[0] }}</td>
+                                <td>{{ data[1] }}</td>
+                                <td>{{ schedule.price.vars.value|number_format(2, '.', ',') }}
+                                    {{ form_widget(schedule.price) }}
+                                </td>
                                 <td>
                                     <select class="form-control form-date">
                                         <option>00</option>
@@ -114,40 +117,6 @@
                             </tr>
                         {% endfor %}
 
-                        <!-- 
-                        <tr>
-                            <td class="product-type">Quadra salão coberta</td>
-                            <td>10</td>
-                            <td>R$ 100,00</td>
-                            <td>
-                                <select class="form-control form-date">
-                                    <option>00</option>
-                                    <option>01</option>
-                                    <option>02</option>
-                                    <option>03</option>
-                                </select>
-                            </td>
-                            <td rowspan="2">
-                                <div class="product-booking">
-                                    <input type="submit" value="Reservar" />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="product-type">Quadra salão coberta</td>
-                            <td>10</td>
-                            <td>R$ 100,00</td>
-                            <td>
-                                <select class="form-control form-date">
-                                    <option>00</option>
-                                    <option>01</option>
-                                    <option>02</option>
-                                    <option>03</option>
-                                </select>
-                            </td>
-
-                        </tr>
-                        -->
                     </tbody>
                 </table>
                 <p class="product-bottom"> </p>
