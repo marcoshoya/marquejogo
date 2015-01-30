@@ -1,5 +1,7 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
 
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Site/Form:fields_schedule.html.twig' %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
@@ -73,7 +75,9 @@
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
 
                 {{ form_row (form._token) }}
-
+                
+                {{form_errors(form)}}
+                
                 <table>
                     <thead>
                         <tr>
@@ -89,7 +93,6 @@
                         {% for k, schedule in form.scheduleItem %}
                             {{ form_widget(schedule.date) }}
                             {{ form_widget(schedule.available) }}
-                            {{ form_widget(schedule.alocated) }}
                             {{ form_widget(schedule.providerProduct) }}
                             {{ form_widget(schedule.schedule) }}
                             <tr>
@@ -100,7 +103,7 @@
                                     {{ form_widget(schedule.price) }}
                                 </td>
                                 <td>
-                                    {{ form_widget(schedule.quantity, { 'attr': {'class': 'form-control form-date'} }) }}
+                                    {{ form_widget(schedule.alocated, { 'attr': {'class': 'form-control form-date'} }) }}
                                 </td>
                                 {% if k == 0 %}
                                     <td rowspan="{{ form.scheduleItem.count }}">

@@ -24,7 +24,7 @@ class BookingItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $choices = array(
-            1 => '01', 2 => '02', 3 => '03', 4 => '04', 5 => '05'
+            1 => '01'
         );
         
         $builder
@@ -34,11 +34,9 @@ class BookingItemType extends AbstractType
             )
             ->add('price', 'hidden')
             ->add('available', 'hidden')
-            ->add('alocated', 'hidden')
-            ->add('quantity', 'choice', array(
+            ->add('alocated', 'choice', array(
                 'placeholder' => '00',
                 'choices' => $choices,
-                'mapped' => false
             ))
         ;
 

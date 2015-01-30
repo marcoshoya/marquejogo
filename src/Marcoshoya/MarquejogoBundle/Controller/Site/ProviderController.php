@@ -27,17 +27,23 @@ class ProviderController extends Controller
      */
     public function showAction(Request $request, Provider $provider)
     {
+        // get pictures
         $service = $this->get('marcoshoya_marquejogo.service.search');
         $picture = $service->getAllPicture($provider);
 
+        // get products available to sell
         $productService = $this->get('marcoshoya_marquejogo.service.product');
         $products = $productService->getallProduct($provider);
 
         $form = $this->createScheduleForm($provider, $products);
-        
         if ($request->isMethod('POST')) {
-            
-            return $this->redirect($this->generateUrl('booking_information'));
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                
+                return $this->redirect($this->generateUrl('booking_information'));
+            } else {
+                
+            }
         }
 
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:show.html.twig', array(

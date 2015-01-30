@@ -8,6 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ScheduleType extends AbstractType
 {
@@ -40,7 +42,8 @@ class ScheduleType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Marcoshoya\MarquejogoBundle\Entity\Schedule'
+            'data_class' => 'Marcoshoya\MarquejogoBundle\Entity\Schedule',
+            'constraints' => array(new Callback(array('methods' => array(array($this, 'checkOptions'))))),
         ));
     }
 
@@ -50,6 +53,22 @@ class ScheduleType extends AbstractType
     public function getName()
     {
         return 'marcoshoya_marquejogobundle_schedule';
+    }
+
+    public function checkOptions($data, ExecutionContextInterface $context)
+    {
+        $scheduleItem = $data->getScheduleItem();
+
+        $valid = false;
+        foreach ($scheduleItem as $item) {
+            if (null !== $item->getAlocated()) {
+                $valid = true;
+            }
+        }
+
+        if (false === $valid) {
+            $context->addViolation("Selecione ao menos uma quadra para reservar");
+        }
     }
 
 }

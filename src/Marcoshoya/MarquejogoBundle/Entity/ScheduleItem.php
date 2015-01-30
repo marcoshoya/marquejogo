@@ -59,7 +59,7 @@ class ScheduleItem
      * @ORM\Column(type="integer")
      */
     private $alocated;
-
+    
     /**
      * @inheritDoc
      */
