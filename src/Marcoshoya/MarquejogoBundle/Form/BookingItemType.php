@@ -48,7 +48,7 @@ class BookingItemType extends AbstractType
             $product = $item->getProviderProduct();
             if ($product instanceof \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct) {
                 $form->add('providerProduct', 'entity_hidden', array(
-                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\ProviderProduct',
                     'data' => $product,
                     'data_class' => null,
                     'label' => sprintf("%s|%s", ucwords($product->getName()), $product->getCapacity()),
@@ -60,7 +60,7 @@ class BookingItemType extends AbstractType
             $schedule = $item->getSchedule();
             if ($schedule instanceof \Marcoshoya\MarquejogoBundle\Entity\Schedule) {
                 $form->add('schedule', 'entity_hidden', array(
-                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Schedule',
                     'data' => $schedule,
                     'data_class' => null,
                 ));
