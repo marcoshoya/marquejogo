@@ -69,60 +69,93 @@
                 </form>
             </div>
             <div class="provider-product-list">
-                <form action="{{ path('do_booking') }}" method="post" >
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tipo de Quadra</th>
-                                <th>Capacidade</th>
-                                <th>Valor</th>
-                                <th>Qtde</th>
-                                <th>Reserva</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="product-type">Quadra salão coberta</td>
-                                <td>10</td>
-                                <td>R$ 100,00</td>
-                                <td>
-                                    <select class="form-control form-date">
-                                        <option>00</option>
-                                        <option>01</option>
-                                        <option>02</option>
-                                        <option>03</option>
-                                    </select>
-                                </td>
-                                <td rowspan="2">
-                                    <div class="product-booking">
-                                        <input type="submit" value="Reservar" />
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="product-type">Quadra salão coberta</td>
-                                <td>10</td>
-                                <td>R$ 100,00</td>
-                                <td>
-                                    <select class="form-control form-date">
-                                        <option>00</option>
-                                        <option>01</option>
-                                        <option>02</option>
-                                        <option>03</option>
-                                    </select>
-                                </td>
 
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+
+                {{ form_row (form._token) }}
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo de Quadra</th>
+                            <th>Capacidade</th>
+                            <th>Valor</th>
+                            <th>Qtde</th>
+                            <th>Reserva</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for k, schedule in form.scheduleItem %}
+                            {{ form_widget(schedule.date) }}
+                            {{ form_widget(schedule.available) }}
+                            {{ form_widget(schedule.alocated) }}
+                            {{ form_widget(schedule.providerProduct) }}
+                            {{ form_widget(schedule.schedule) }}
+                            <tr>
+                                <td class="product-type">{{ dump(schedule.providerProduct) }}</td>
+                                <td>10</td>
+                                <td>{{ form_widget(schedule.price) }}</td>
+                                <td>
+                                    <select class="form-control form-date">
+                                        <option>00</option>
+                                        <option>01</option>
+                                        <option>02</option>
+                                        <option>03</option>
+                                    </select>
+                                </td>
+                                {% if k == 0 %}
+                                    <td rowspan="{{ form.scheduleItem.count }}">
+                                        <div class="product-booking">
+                                            <input type="submit" value="Reservar" />
+                                        </div>
+                                    </td>
+                                {% endif %}
                             </tr>
-                        </tbody>
-                    </table>
-                    <p class="product-bottom"> </p>
-                </form>
+                        {% endfor %}
+
+                        <!-- 
+                        <tr>
+                            <td class="product-type">Quadra salão coberta</td>
+                            <td>10</td>
+                            <td>R$ 100,00</td>
+                            <td>
+                                <select class="form-control form-date">
+                                    <option>00</option>
+                                    <option>01</option>
+                                    <option>02</option>
+                                    <option>03</option>
+                                </select>
+                            </td>
+                            <td rowspan="2">
+                                <div class="product-booking">
+                                    <input type="submit" value="Reservar" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="product-type">Quadra salão coberta</td>
+                            <td>10</td>
+                            <td>R$ 100,00</td>
+                            <td>
+                                <select class="form-control form-date">
+                                    <option>00</option>
+                                    <option>01</option>
+                                    <option>02</option>
+                                    <option>03</option>
+                                </select>
+                            </td>
+
+                        </tr>
+                        -->
+                    </tbody>
+                </table>
+                <p class="product-bottom"> </p>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-    
+
+
 {% endblock %}

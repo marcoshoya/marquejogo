@@ -6,9 +6,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class ScheduleItemType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -18,16 +21,42 @@ class ScheduleItemType extends AbstractType
         $builder
             ->add(
                 $builder->create('date', 'hidden')
-                    ->addViewTransformer(new DateTimeToStringTransformer())
+                ->addViewTransformer(new DateTimeToStringTransformer())
             )
-            ->add('price')
-            ->add('available', 'checkbox')
+            ->add('price', 'hidden')
+            ->add('available', 'hidden')
             ->add('alocated', 'hidden')
-            ->add('providerProduct')
-            ->add('schedule')
+            
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $item = $event->getData();
+            $form = $event->getForm();       
+            $product = $item->getProviderProduct();
+            if ($product instanceof \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct) {
+                $form->add('providerProduct', 'entity_hidden', array(
+                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                    'data' => $product,
+                    'data_class' => null,
+                ));
+            } else {
+                $form->add('providerProduct');
+            }
+            
+            $schedule = $item->getSchedule();
+            if ($schedule instanceof \Marcoshoya\MarquejogoBundle\Entity\Schedule) {
+                $form->add('schedule', 'entity_hidden', array(
+                    'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                    'data' => $schedule,
+                    'data_class' => null,
+                ));
+            } else {
+                $form->add('schedule');
+            }
+            
+        });
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -45,4 +74,5 @@ class ScheduleItemType extends AbstractType
     {
         return 'marcoshoya_marquejogobundle_scheduleitem';
     }
+
 }

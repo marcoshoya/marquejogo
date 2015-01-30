@@ -29,7 +29,7 @@ class Schedule
     private $provider;
 
     /**
-     * @ORM\OneToMany(targetEntity="Schedule", mappedBy="schedule")
+     * @ORM\OneToMany(targetEntity="ScheduleItem", mappedBy="schedule")
      */
     private $scheduleItem;
 
@@ -39,6 +39,11 @@ class Schedule
     public function __construct()
     {
         $this->scheduleItem = new ArrayCollection();
+    }
+    
+    public function __toString()
+    {
+        return (string) $this->id;
     }
 
     /**
