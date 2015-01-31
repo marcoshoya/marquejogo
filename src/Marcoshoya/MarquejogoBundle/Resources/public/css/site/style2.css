@@ -679,6 +679,7 @@ table.booking-detail, table.booking-data {
 }
 .container-overview-stay {
     float: left;
+    width: 60%;
 }
 .container-overview-stay p { 
     font-size: 16px;

@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
  * BookingController implements all booking functions
@@ -45,7 +46,7 @@ class BookController extends Controller
         $book = $service->getBookSession($provider);
 
         if (null !== $book) {
-            \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
+           // \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
             
             //throw new \UnexpectedValueException("Book not found");
         }
@@ -106,8 +107,18 @@ class BookController extends Controller
         $em = $this->getDoctrine()->getManager();
         $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($provider->getId());
         
+        $date = $book->getDate();
+        $dateTitle = sprintf('%s de %s as %dh',
+            $date->format('d'),
+            BundleHelper::monthTranslate($date->format('F')),
+            $date->format('H')
+        );
+        
+        
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Book:overview.html.twig', array(
             'provider' => $provider,
+            'dateTitle' => $dateTitle,
+            'book' => $book,
         ));
     }
 

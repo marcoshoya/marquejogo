@@ -8,13 +8,16 @@
                 <h2>{{ provider.name }}</h2>
                 <p>{{ provider.fulladdress }}</p>
             </div>
+            
             <div class="container-overview-stay">
                 <p><b>Data</b> <br />
-                    01 de março as 19h
+                    {{ dateTitle }}
                 </p>
-                <p><b>Quadra</b> <br />
-                    Society interna 1 - 10 pessoas
-                </p>
+                {% for k, item in book.getAllItem %}
+                    <p><b>Quadra {{ k }}</b> <br />
+                       {{ item.id }}
+                    </p>
+                {% endfor %}
             </div>
         </td>
     </tr>
