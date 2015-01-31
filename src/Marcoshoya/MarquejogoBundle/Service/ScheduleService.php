@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 use Marcoshoya\MarquejogoBundle\Component\Schedule\ISchedule;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 
 /**
  * ProductService
@@ -26,20 +27,23 @@ class ScheduleService extends BaseService implements ISchedule
         }
     }
 
-    public function getallProductBySearch(Provider $provider, SearchDTO $search)
+    public function getallProductBySearch(Schedule $schedule, SearchDTO $search)
     {
         try {
 
             $qb = $this->getEm()->createQueryBuilder()
-                ->from('MarcoshoyaMarquejogoBundle:Schedule', 's')
-                ->innerJoin('s.scheduleItem', 'si')
-                ->where('s.provider = :provider')
-                ->setParameter('provider', $provider);
+                ->select('s')
+                ->from('MarcoshoyaMarquejogoBundle:ScheduleItem', 's')
+                ->where('s.schedule = :schedule')
+                ->andWhere('s.date = :date')
+                ->setParameters(array(
+                    'schedule' => $schedule,
+                    'date' => $search->getDate(),
+                ));
             
             $query = $qb->getQuery();
-            
-            return $query->getResult();
 
+            return $query->execute();
 
         } catch (\Exception $ex) {
             $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());

@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
-use Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
+use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
 use Marcoshoya\MarquejogoBundle\Form\BookingItemType;
 
@@ -32,17 +32,21 @@ class ProviderController extends Controller
         $servicePicture = $this->get('marcoshoya_marquejogo.service.search');
 
         $products = array();
-        
+
         // get pictures
         $picture = $servicePicture->getAllPicture($provider);
 
         // get search
         $searchDTO = $serviceSearch->getSearchSession();
         if (null !== $searchDTO) {
+            $schedule = $this->getDoctrine()->getManager()
+                ->getRepository('MarcoshoyaMarquejogoBundle:Schedule')
+                ->findOneBy(array('provider' => $provider));
             // get products available to sell by date
-            $products = $serviceSchedule->getallProductBySearch($provider, $searchDTO);
+            $products = $serviceSchedule->getallProductBySearch($schedule, $searchDTO);
         }
-
+        
+        // if there is no product, it renders another template
         if (!count($products)) {
             $products = $serviceSchedule->getallProduct($provider);
             return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:noresult.html.twig', array(
@@ -82,20 +86,13 @@ class ProviderController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createScheduleForm(Provider $provider, $products)
+    private function createScheduleForm(Provider $provider, $products = array())
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $schedule = new Schedule();
+        $schedule->setProvider($provider);
+        
         foreach ($products as $product) {
-            /**
-              $item = new ScheduleItem();
-              //$item->setPrice(99);
-              $item->setProviderProduct($product);
-              $item->setSchedule($schedule);
-              //$item->getProviderProduct()->add($product);
-              $schedule->getScheduleItem()->add($item);
-             * 
-             */
+            $schedule->getScheduleItem()->add($product);
         }
 
         $form = $this->createForm(new ScheduleType(), $schedule, array(
