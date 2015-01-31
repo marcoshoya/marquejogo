@@ -100,8 +100,14 @@ class BookController extends Controller
      */
     public function overviewAction($book)
     {
+        $provider = $book->getProvider();
+        
+        // @todo: i don't know why, some data is missing from provider
+        $em = $this->getDoctrine()->getManager();
+        $provider = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($provider->getId());
+        
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Book:overview.html.twig', array(
-            'book' => $book,
+            'provider' => $provider,
         ));
     }
 
