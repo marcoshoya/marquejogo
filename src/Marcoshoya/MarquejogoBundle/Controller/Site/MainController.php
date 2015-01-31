@@ -25,15 +25,7 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-        $searchDTO = new SearchDTO();
-        $session = $this->get('session');
-        
-        if ($session->has(SearchDTO::session)) {
-            $object = $session->get(SearchDTO::session);
-            $searchDTO = unserialize($object);
-        }
-        
-        $form = $this->createSearchForm($searchDTO);
+        $form = $this->createSearchForm();
 
         return array(
             'form' => $form->createView(),
@@ -74,17 +66,10 @@ class MainController extends Controller
      * 
      * @return SearchType
      */
-    private function createSearchForm(SearchDTO $searchDTO = null)
+    private function createSearchForm()
     {
-        if (null === $searchDTO) {
-            $searchDTO = new SearchDTO();
-        }
-        
-        $data = array(
-            'city' => null !== $searchDTO->getAutocomplete() ? $searchDTO->getAutocomplete()->getNameField() : null,
-            'date' => null !== $searchDTO->getDate() ? $searchDTO->getDate() : null,
-            'hour' => null !== $searchDTO->getDate() ? $searchDTO->getDate()->format('H') : date('H'),
-        );
+        $service = $this->get('marcoshoya_marquejogo.service.search');
+        $data = $service->getSearchData();
 
         $form = $this->createForm(new SearchType(), $data, array(
             'action' => $this->generateUrl('submit_search'),

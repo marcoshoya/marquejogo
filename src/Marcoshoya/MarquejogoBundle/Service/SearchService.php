@@ -62,6 +62,31 @@ class SearchService extends BaseService
         $this->getSession()->set(SearchDTO::session, serialize($search));
     }
     
+    public function getSearchSession()
+    {
+        if ($this->getSession()->has(SearchDTO::session)) {
+            $object = $this->getSession()->get(SearchDTO::session);
+            
+            return unserialize($object);
+        }
+        
+        return null;
+    }
+    
+    public function getSearchData()
+    {
+        $searchDTO = $this->getSearchSession();
+        if (null === $searchDTO) {
+            $searchDTO = new SearchDTO();
+        }
+        
+        return array(
+            'city' => null !== $searchDTO->getAutocomplete() ? $searchDTO->getAutocomplete()->getNameField() : null,
+            'date' => null !== $searchDTO->getDate() ? $searchDTO->getDate() : null,
+            'hour' => null !== $searchDTO->getDate() ? $searchDTO->getDate()->format('H') : date('H'),
+        );
+    }
+    
     /**
      * Do the search
      *
