@@ -23,6 +23,8 @@ services:
     marcoshoya_marquejogo.service.search:
         class: Marcoshoya\MarquejogoBundle\Service\SearchService
         parent: marcoshoya_marquejogo.service.base
+        properties:
+             autocomplete: "@marcoshoya_marquejogo.service.autocomplete"
 
     marcoshoya_marquejogo.service.schedule:
         class: Marcoshoya\MarquejogoBundle\Service\ScheduleService

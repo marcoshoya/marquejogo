@@ -6,6 +6,7 @@ use Marcoshoya\MarquejogoBundle\Component\Search\SearchCollection;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\LocationCity;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
  * SearchService improves all search funtions
@@ -14,10 +15,51 @@ use Marcoshoya\MarquejogoBundle\Entity\Provider;
  */
 class SearchService extends BaseService
 {
-
-    public function setSearchSession()
+    /**
+     * @var Marcoshoya\MarquejogoBundle\Service\AutocompleteService
+     */
+    public $autocomplete;
+    
+    /**
+     * Get autocomplete observer
+     *
+     * @return AutocompleteService
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getAutocomplete()
     {
+        if ($this->autocomplete instanceof AutocompleteService) {
+            return $this->autocomplete;
+        } else {
+            throw new \InvalidArgumentException("Object have to be instance of AutocompleteService");
+        }
+    }
+    
+    /**
+     * Set session
+     * 
+     * @param array $data
+     */
+    public function setSearchSession($data = array())
+    {
+        $slug = BundleHelper::sluggable($data['city']);
+        $dateTime = $data['date'];
+        $hour = $data['hour'];
+
+        $dateTime->modify("+{$hour} hour");
+        $autocomplete = $this->getAutocomplete()->getCity($slug);
+
+        // dto
+        $search = new SearchDTO();
+        $search->setDate($dateTime);
+        $search->setAutocomplete($autocomplete);
         
+        if ($this->getSession()->has(SearchDTO::session)) {
+            $this->getSession()->remove(SearchDTO::session);
+        }
+        
+        $this->getSession()->set(SearchDTO::session, serialize($search));
     }
     
     /**

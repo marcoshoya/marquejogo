@@ -49,27 +49,17 @@ class MainController extends Controller
      */
     public function submitAction(Request $request)
     {
-        $search = new SearchDTO();
-        
-        $form = $this->createSearchForm($search);
+        $form = $this->createSearchForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
+            // gets the service
+            $service = $this->get('marcoshoya_marquejogo.service.search');
             // form data
             $data = $form->getData();
+            $service->setSearchSession($data);
+
             $slug = BundleHelper::sluggable($data['city']);
-            $dateTime = $data['date'];
-            $hour = $data['hour'];
-
-            $dateTime->modify("+{$hour} hour");
-            $autocomplete = $this->get('marcoshoya_marquejogo.service.autocomplete')->getCity($slug);
-
-            // dto
-            $search->setDate($dateTime);
-            $search->setAutocomplete($autocomplete);
-            
-            $this->get('session')->set(SearchDTO::session, serialize($search));
 
             return $this->redirect($this->generateUrl('search_result', array('city' => $slug)));
         }
@@ -84,8 +74,12 @@ class MainController extends Controller
      * 
      * @return SearchType
      */
-    private function createSearchForm(SearchDTO $searchDTO)
+    private function createSearchForm(SearchDTO $searchDTO = null)
     {
+        if (null === $searchDTO) {
+            $searchDTO = new SearchDTO();
+        }
+        
         $data = array(
             'city' => null !== $searchDTO->getAutocomplete() ? $searchDTO->getAutocomplete()->getNameField() : null,
             'date' => null !== $searchDTO->getDate() ? $searchDTO->getDate() : null,
