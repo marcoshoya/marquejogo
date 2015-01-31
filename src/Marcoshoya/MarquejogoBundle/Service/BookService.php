@@ -39,6 +39,12 @@ class BookService extends BaseService implements IBook
         $bookDTO = new BookDTO($provider);
         $bookDTO->setDate($date);
         
+        // picture
+        $picture = $this->getPersonDelegate()->getBusinessService($provider)->getPicture();
+        if (null !== $picture) {
+            $bookDTO->setPicture($picture);
+        }
+        
         // session name
         $key = $bookDTO->getSessionKey();
 

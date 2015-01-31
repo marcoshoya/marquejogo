@@ -2,7 +2,7 @@
     <tr>
         <td>
             <div class="container-overview-image">
-                <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                <img src="{{ book.getPicture().getWebPath | apply_filter('search_list') }}" />
             </div>
             <div class="container-overview-description">
                 <h2>{{ provider.name }}</h2>

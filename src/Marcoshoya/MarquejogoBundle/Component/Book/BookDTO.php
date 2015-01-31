@@ -44,6 +44,12 @@ class BookDTO
     private $price = 0.00;
     
     /**
+     *
+     * @var type 
+     */
+    private $picture = null;
+    
+    /**
      * Constructor
      * 
      * @param Provider $provider
@@ -54,11 +60,21 @@ class BookDTO
         $this->setProvider($provider);
     }
     
+    /**
+     * Update book price
+     * 
+     * @param decimal $price
+     */
     public function updatePrice($price)
     {
         $this->price = bcadd($this->price, $price);
     }
     
+    /**
+     * Get book price
+     * 
+     * @return decimal
+     */
     public function getPrice()
     {
         return number_format($this->price, 2, ',', '');
@@ -189,4 +205,23 @@ class BookDTO
         return count($this->itemList);
     }
 
+    /**
+     * Set picture
+     * 
+     * @param \Marcoshoya\MarquejogoBundle\Entity\ProviderPicture $picture
+     */
+    public function setPicture(\Marcoshoya\MarquejogoBundle\Entity\ProviderPicture $picture)
+    {
+        $this->picture = $picture;
+    }
+    
+    /**
+     * Get picture
+     * 
+     * @return type
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
 }
