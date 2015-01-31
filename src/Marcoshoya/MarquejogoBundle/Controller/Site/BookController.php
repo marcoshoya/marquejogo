@@ -5,8 +5,10 @@ namespace Marcoshoya\MarquejogoBundle\Controller\Site;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Marcoshoya\MarquejogoBundle\Entity\Provider;
 
 /**
  * BookingController implements all booking functions
@@ -15,19 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
  * 
  * @Route("/reserva")
  */
-class BookingController extends Controller
-{   
-    /**
-     * Do the booking
-     *
-     * @Route("/doBooking", name="do_booking")
-     * @Method("POST")
-     */
-    public function dobookingAction()
-    {
-        return $this->redirect($this->generateUrl('booking_information'));
-    }
-    
+class BookController extends Controller
+{
+
     /**
      * User identification
      *
@@ -38,26 +30,45 @@ class BookingController extends Controller
     {
         return array();
     }
-    
+
     /**
      * User information
      *
-     * @Route("/informacao", name="booking_information")
+     * @Route("/quadra{id}/informacao", name="booking_information")
+     * @ParamConverter("provider", class="MarcoshoyaMarquejogoBundle:Provider")
      * @Template()
      */
-    public function informationAction(Request $request)
+    public function informationAction(Provider $provider)
     {
-        $session = $this->get('session');
-        
-        if ($request->getMethod() === 'POST') {
+
+        $service = $this->get('marcoshoya_marquejogo.service.book');
+        $book = $service->getBookSession($provider);
+
+        if (null !== $book) {
+            //\Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
             
-            
-            return $this->redirect($this->generateUrl('booking_payment'));
+            //throw new \UnexpectedValueException("Book not found");
         }
         
-        return array();
+        //$book->getProvider();
+
+        return array(
+            'book' => $book,
+        );
     }
-    
+
+    /**
+     * Do the booking
+     *
+     * @Route("/doBooking", name="do_booking")
+     * @Method("POST")
+     * @Template("MarcoshoyaMarquejogoBundle:Site/Book:new.html.twig")
+     */
+    public function dobookingAction(Request $request, Provider $provider)
+    {
+        return $this->redirect($this->generateUrl('booking_information'));
+    }
+
     /**
      * Booking payment
      *
@@ -68,7 +79,7 @@ class BookingController extends Controller
     {
         return array();
     }
-    
+
     /**
      * Progress action
      * 
@@ -77,19 +88,21 @@ class BookingController extends Controller
      */
     public function progressAction($step)
     {
-        return $this->render('MarcoshoyaMarquejogoBundle:Site/Booking:progress.html.twig', array(
-            'step' => $step
+        return $this->render('MarcoshoyaMarquejogoBundle:Site/Book:progress.html.twig', array(
+                'step' => $step
         ));
     }
-    
+
     /**
      * Overview action
      * 
      * @return string
      */
-    public function overviewAction()
+    public function overviewAction($book)
     {
-        return $this->render('MarcoshoyaMarquejogoBundle:Site/Booking:overview.html.twig');
+        return $this->render('MarcoshoyaMarquejogoBundle:Site/Book:overview.html.twig', array(
+            'book' => $book,
+        ));
     }
-    
+
 }

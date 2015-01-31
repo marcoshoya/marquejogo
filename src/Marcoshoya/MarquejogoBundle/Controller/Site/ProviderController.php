@@ -10,7 +10,6 @@ use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
 use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
 use Marcoshoya\MarquejogoBundle\Form\BookingItemType;
-use Marcoshoya\MarquejogoBundle\Component\Book\BookDTO;
 
 /**
  * ProviderController implements all provider functions on site
@@ -43,12 +42,12 @@ class ProviderController extends Controller
 
                 $data = $form->getData();
 
-                $this->persistBook($data);
+                $service = $this->get('marcoshoya_marquejogo.service.book');
+                $service->setBookSession($data);
 
-
-                return $this->redirect($this->generateUrl('booking_information'));
-            } else {
-                
+                return $this->redirect($this->generateUrl('booking_information', array(
+                    'id' => $data->getProvider()->getId()
+                )));
             }
         }
 
@@ -58,25 +57,6 @@ class ProviderController extends Controller
                 'products' => $products,
                 'form' => $form->createView()
         ));
-    }
-
-    private function persistBook(\Marcoshoya\MarquejogoBundle\Entity\Schedule $data)
-    {
-        $session = $this->get('session');
-        
-        $provider = $data->getProvider();
-        $bookDTO = new BookDTO($provider);
-        $key = $bookDTO->getSession();
-        
-        if ($session->has($key)) {
-            $session->remove($key);
-        }
-        
-        foreach ($data->getScheduleItem() as $idx => $item) {
-            $bookDTO->addItem($item, $idx);
-        }
-
-        $session->set($key, serialize($bookDTO));
     }
 
     /**

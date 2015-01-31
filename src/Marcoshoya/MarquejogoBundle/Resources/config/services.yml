@@ -31,3 +31,5 @@ services:
     marcoshoya_marquejogo.service.book:
         class: Marcoshoya\MarquejogoBundle\Service\BookService
         parent: marcoshoya_marquejogo.service.base
+        properties:
+            session: "@session"

@@ -2,10 +2,10 @@
 
 {% block container %}
     
-    {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Booking:progress', {step: 2})) }}
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:progress', {step: 2})) }}
 
     <div class="container-overview">
-        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Booking:overview')) }}
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:overview', {book: book})) }}
     </div>
     <div class="container-data">
         <table class="booking-data">
@@ -17,7 +17,7 @@
                                 Insira seus dados
                             </div>
                             <div class="booking-data-user">
-                                <form action="{{ path('booking_information') }}" method="post" >
+                                <form action="#" method="post" >
                                     <fieldset> 
                                         <div class="booking-data-user-group-col-md-1">
                                             <label class="col-md-2">Nome</label>

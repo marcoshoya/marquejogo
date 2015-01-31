@@ -16,7 +16,7 @@ class BookDTO
     /**
      * @var string
      */
-    private $session;
+    private $sessionKey;
 
     /**
      * @var Provider
@@ -45,7 +45,7 @@ class BookDTO
      */
     public function __construct(Provider $provider)
     {
-        $this->session = md5(sprintf('book#%s', $provider->getId()));
+        $this->sessionKey = md5(sprintf('book#%s', $provider->getId()));
         $this->setProvider($provider);
     }
     
@@ -54,9 +54,9 @@ class BookDTO
      * 
      * @return string
      */
-    public function getSession()
+    public function getSessionKey()
     {
-        return $this->session;
+        return $this->sessionKey;
     }
 
     /**
