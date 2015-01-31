@@ -114,6 +114,8 @@ class BookController extends Controller
             $date->format('H')
         );
         
+        //\Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book->getAllItem());
+        
         
         return $this->render('MarcoshoyaMarquejogoBundle:Site/Book:overview.html.twig', array(
             'provider' => $provider,

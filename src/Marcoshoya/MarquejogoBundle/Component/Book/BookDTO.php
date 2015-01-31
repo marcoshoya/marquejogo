@@ -39,6 +39,11 @@ class BookDTO
     private $itemList = array();
     
     /**
+     * @var decimal
+     */
+    private $price = 0.00;
+    
+    /**
      * Constructor
      * 
      * @param Provider $provider
@@ -49,6 +54,17 @@ class BookDTO
         $this->setProvider($provider);
     }
     
+    public function updatePrice($price)
+    {
+        $this->price = bcadd($this->price, $price);
+    }
+    
+    public function getPrice()
+    {
+        return number_format($this->price, 2, ',', '');
+    }
+
+
     /**
      * Get session id
      * 

@@ -48,7 +48,10 @@ class BookService extends BaseService implements IBook
         }
 
         foreach ($schedule->getScheduleItem() as $idx => $item) {
-            $bookDTO->addItem($item, $idx);
+            if ($item->getAlocated()) {
+                $bookDTO->addItem($item, $idx);
+                $bookDTO->updatePrice($item->getPrice());
+            }
         }
 
         $this->getSession()->set($key, serialize($bookDTO));
