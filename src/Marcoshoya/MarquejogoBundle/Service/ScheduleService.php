@@ -13,36 +13,37 @@ use Marcoshoya\MarquejogoBundle\Entity\Provider;
  */
 class ScheduleService extends BaseService implements ISchedule
 {
+
     public function getallProduct(Provider $provider)
     {
         try {
 
             return $this->getEm()
-                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')
-                ->findBy(array('provider' => $provider));
+                    ->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')
+                    ->findBy(array('provider' => $provider));
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
+        }
+    }
+
+    public function getallProductBySearch(Provider $provider, SearchDTO $search)
+    {
+        try {
+
+            $qb = $this->getEm()->createQueryBuilder()
+                ->from('MarcoshoyaMarquejogoBundle:Schedule', 's')
+                ->innerJoin('s.scheduleItem', 'si')
+                ->where('s.provider = :provider')
+                ->setParameter('provider', $provider);
+            
+            $query = $qb->getQuery();
+            
+            return $query->getResult();
+
 
         } catch (\Exception $ex) {
             $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
         }
-        
-        
     }
-    
-    public function getallProductBySearch(SearchDTO $search)
-    {
-        try {
-            
-            /**
-            return $this->getEm()
-                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')
-                ->findBy(array('provider' => $provider));
-             * 
-             */
-            
-        } catch (\Exception $ex) {
-            $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
-        }
-        
-        
-    }
+
 }

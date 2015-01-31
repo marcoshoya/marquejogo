@@ -62,6 +62,11 @@ class SearchService extends BaseService
         $this->getSession()->set(SearchDTO::session, serialize($search));
     }
     
+    /**
+     * Get search session
+     * 
+     * @return SearchDTO|null
+     */
     public function getSearchSession()
     {
         if ($this->getSession()->has(SearchDTO::session)) {
@@ -73,6 +78,11 @@ class SearchService extends BaseService
         return null;
     }
     
+    /**
+     * Get standard search data in array
+     * 
+     * @return array
+     */
     public function getSearchData()
     {
         $searchDTO = $this->getSearchSession();

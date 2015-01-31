@@ -27,13 +27,29 @@ class ProviderController extends Controller
      */
     public function showAction(Request $request, Provider $provider)
     {
-        // get pictures
-        $service = $this->get('marcoshoya_marquejogo.service.search');
-        $picture = $service->getAllPicture($provider);
+        $serviceSearch = $this->get('marcoshoya_marquejogo.service.search');
+        $serviceSchedule = $this->get('marcoshoya_marquejogo.service.schedule');
+        $servicePicture = $this->get('marcoshoya_marquejogo.service.search');
 
-        // get products available to sell
-        $productService = $this->get('marcoshoya_marquejogo.service.schedule');
-        $products = $productService->getallProduct($provider);
+        $products = array();
+        
+        // get pictures
+        $picture = $servicePicture->getAllPicture($provider);
+
+        // get search
+        $searchDTO = $serviceSearch->getSearchSession();
+        if (null !== $searchDTO) {
+            // get products available to sell by date
+            $products = $serviceSchedule->getallProductBySearch($provider, $searchDTO);
+        }
+
+        if (!count($products)) {
+            $products = $serviceSchedule->getallProduct($provider);
+            return $this->render('MarcoshoyaMarquejogoBundle:Site/Provider:noresult.html.twig', array(
+                    'provider' => $provider,
+                    'pictures' => $picture,
+            ));
+        }
 
         $form = $this->createScheduleForm($provider, $products);
         if ($request->isMethod('POST')) {
@@ -46,7 +62,7 @@ class ProviderController extends Controller
                 $service->setBookSession($data);
 
                 return $this->redirect($this->generateUrl('booking_information', array(
-                    'id' => $data->getProvider()->getId()
+                            'id' => $data->getProvider()->getId()
                 )));
             }
         }
@@ -70,16 +86,16 @@ class ProviderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')
-            ->findOneBy(array('provider' => $provider));
-
         foreach ($products as $product) {
-            $item = new ScheduleItem();
-            //$item->setPrice(99);
-            $item->setProviderProduct($product);
-            $item->setSchedule($schedule);
-            //$item->getProviderProduct()->add($product);
-            $schedule->getScheduleItem()->add($item);
+            /**
+              $item = new ScheduleItem();
+              //$item->setPrice(99);
+              $item->setProviderProduct($product);
+              $item->setSchedule($schedule);
+              //$item->getProviderProduct()->add($product);
+              $schedule->getScheduleItem()->add($item);
+             * 
+             */
         }
 
         $form = $this->createForm(new ScheduleType(), $schedule, array(

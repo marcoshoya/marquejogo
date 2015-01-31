@@ -1,0 +1,79 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.mobile.customized.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.easing.1.3.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/camera.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/custom.js') }}"></script>
+{% endblock %}
+
+{% block container %}
+
+    <div class="container-left">
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar')) }}
+    </div>
+
+    <div class="container-provider">
+
+        <h1>{{ provider.name }}</h1>
+        <div class="provider-address">
+            <p>{{ provider.fulladdress }}</p>
+        </div>
+
+        <div class="provider-images">
+            {% if pictures %}
+                <div class="camera_wrap camera_black_skin" id="camera_wrap_2">
+                    {% for picture in pictures %}
+                        <div data-thumb="{{ picture.getWebPath | apply_filter('gallery_thumb') }}" data-src="{{ picture.getWebPath | apply_filter('main_page') }}"></div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="provider-description">
+            <p> {{ provider.description }} </p>
+        </div>
+        <div class="provider-product">
+            <h3>Disponibilidade</h3>
+            <div class="provider-availability">
+                <form action="#" method="post" >
+                    <fieldset> 
+                        <div class="form-group form-availability-date">
+                            <label class="col-md-2">Data</label>
+                            <div class="col-md-1">
+                                <input type="text" class="form-control form-date" />
+                            </div>
+                        </div>
+
+                        <div class="form-group form-availability-hour">
+                            <label class="col-md-2">Horário</label>
+                            <div class="col-md-1">
+                                <select class="form-control form-date">
+                                    <option>00:00</option>
+                                    <option>01:00</option>
+                                    <option>02:00</option>
+                                    <option>03:00</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-availability-submit">
+                            <input class="btn btn-availability-search" type="submit" value="Pesquisar" />
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="provider-product-list">
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
