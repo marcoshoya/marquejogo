@@ -9,6 +9,17 @@ namespace Marcoshoya\MarquejogoBundle\Helper;
  */
 class BundleHelper
 {
+ 
+    /**
+     * Dump a doctrine object
+     * 
+     * @param Object $obj
+     * @return string
+     */
+    public static function dump($obj)
+    {
+        return \Doctrine\Common\Util\Debug::dump($obj);
+    }
 
     /**
      * Returns product category name

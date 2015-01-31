@@ -7,9 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
-use \Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
+use Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
 use Marcoshoya\MarquejogoBundle\Form\ScheduleType;
 use Marcoshoya\MarquejogoBundle\Form\BookingItemType;
+use Marcoshoya\MarquejogoBundle\Component\Book\BookDTO;
 
 /**
  * ProviderController implements all provider functions on site
@@ -39,7 +40,12 @@ class ProviderController extends Controller
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             if ($form->isValid()) {
-                
+
+                $data = $form->getData();
+
+                $this->persistBook($data);
+
+
                 return $this->redirect($this->generateUrl('booking_information'));
             } else {
                 
@@ -52,6 +58,25 @@ class ProviderController extends Controller
                 'products' => $products,
                 'form' => $form->createView()
         ));
+    }
+
+    private function persistBook(\Marcoshoya\MarquejogoBundle\Entity\Schedule $data)
+    {
+        $session = $this->get('session');
+        
+        $provider = $data->getProvider();
+        $bookDTO = new BookDTO($provider);
+        $key = $bookDTO->getSession();
+        
+        if ($session->has($key)) {
+            $session->remove($key);
+        }
+        
+        foreach ($data->getScheduleItem() as $idx => $item) {
+            $bookDTO->addItem($item, $idx);
+        }
+
+        $session->set($key, serialize($bookDTO));
     }
 
     /**

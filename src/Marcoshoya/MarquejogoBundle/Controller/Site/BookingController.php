@@ -47,6 +47,8 @@ class BookingController extends Controller
      */
     public function informationAction(Request $request)
     {
+        $session = $this->get('session');
+        
         if ($request->getMethod() === 'POST') {
             
             
