@@ -32,7 +32,7 @@ class ProviderController extends Controller
         $picture = $service->getAllPicture($provider);
 
         // get products available to sell
-        $productService = $this->get('marcoshoya_marquejogo.service.product');
+        $productService = $this->get('marcoshoya_marquejogo.service.schedule');
         $products = $productService->getallProduct($provider);
 
         $form = $this->createScheduleForm($provider, $products);
