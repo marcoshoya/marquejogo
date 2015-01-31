@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 use Marcoshoya\MarquejogoBundle\Service\BaseService;
 use Marcoshoya\MarquejogoBundle\Component\Book\IBook;
 use Marcoshoya\MarquejogoBundle\Component\Book\BookDTO;
+use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 
@@ -29,12 +30,15 @@ class BookService extends BaseService implements IBook
      *
      * @param Schedule $schedule
      */
-    public function setBookSession(Schedule $schedule)
+    public function setBookSession(Schedule $schedule, SearchDTO $searchDTO)
     {
         $provider = $schedule->getProvider();
+        $date = $searchDTO->getDate();
 
         // create book object
         $bookDTO = new BookDTO($provider);
+        $bookDTO->setDate($date);
+        
         // session name
         $key = $bookDTO->getSessionKey();
 

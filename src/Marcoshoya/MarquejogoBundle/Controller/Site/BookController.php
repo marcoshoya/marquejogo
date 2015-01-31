@@ -45,7 +45,7 @@ class BookController extends Controller
         $book = $service->getBookSession($provider);
 
         if (null !== $book) {
-            //\Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
+            \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
             
             //throw new \UnexpectedValueException("Book not found");
         }
