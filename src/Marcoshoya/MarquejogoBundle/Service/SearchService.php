@@ -15,6 +15,11 @@ use Marcoshoya\MarquejogoBundle\Entity\Provider;
 class SearchService extends BaseService
 {
 
+    public function setSearchSession()
+    {
+        
+    }
+    
     /**
      * Do the search
      *
@@ -22,7 +27,7 @@ class SearchService extends BaseService
      *
      * @return array an array of Provider
      */
-    public function doSeach(SearchDTO $search)
+    public function doSearch(SearchDTO $search)
     {
         $city = $search->getAutocomplete()->getCity();
 

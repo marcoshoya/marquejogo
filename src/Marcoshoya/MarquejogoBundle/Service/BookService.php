@@ -2,7 +2,6 @@
 
 namespace Marcoshoya\MarquejogoBundle\Service;
 
-use Symfony\Component\HttpFoundation\Session\Session;
 use Marcoshoya\MarquejogoBundle\Service\BaseService;
 use Marcoshoya\MarquejogoBundle\Component\Book\IBook;
 use Marcoshoya\MarquejogoBundle\Component\Book\BookDTO;
@@ -18,31 +17,11 @@ class BookService extends BaseService implements IBook
 {
 
     /**
-     * @var Symfony\Component\HttpFoundation\Session\Session
-     */
-    public $session;
-
-    /**
      * @inheritDoc
      */
     public function doBook(BookDTO $book)
     {
         $book->getProvider();
-    }
-
-    /**
-     * Get session
-     *
-     * @return Symfony\Component\HttpFoundation\Session\Session
-     * @throws \InvalidArgumentException
-     */
-    public function getSession()
-    {
-        if (!$this->session instanceof Session) {
-            throw new \InvalidArgumentException("Object have to be instance of Session");
-        }
-
-        return $this->session;
     }
 
     /**

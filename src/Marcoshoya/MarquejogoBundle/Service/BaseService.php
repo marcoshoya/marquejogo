@@ -4,6 +4,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Marcoshoya\MarquejogoBundle\Component\Person\PersonDelegate;
 
 /**
@@ -25,6 +26,11 @@ class BaseService
     private $logger;
     
     /**
+     * @var Symfony\Component\HttpFoundation\Session\Session
+     */
+    private $session;
+    
+    /**
      * @var PersonDelegate
      */
     private $personDelegate;
@@ -35,21 +41,12 @@ class BaseService
      * @param EntityManager $em
      * @param Logger $logger
      */
-    public function __construct(EntityManager $em, Logger $logger)
-    {
-        $this->setEm($em);
-        $this->logger = $logger;
-        $this->personDelegate = new PersonDelegate($em, $logger); 
-    }
-
-    /**
-     * Set em
-     * 
-     * @param EntityManager $em
-     */
-    public function setEm(EntityManager $em)
+    public function __construct(EntityManager $em, Logger $logger, Session $session)
     {
         $this->em = $em;
+        $this->logger = $logger;
+        $this->session = $session;
+        $this->personDelegate = new PersonDelegate($em, $logger); 
     }
 
     /**
@@ -60,16 +57,6 @@ class BaseService
     public function getEm()
     {
         return $this->em;
-    }
-
-    /**
-     * Set logger
-     * 
-     * @param Logger $logger
-     */
-    public function setLogger(Logger $logger)
-    {
-        $this->logger = $logger;
     }
 
     /**
@@ -86,5 +73,15 @@ class BaseService
     public function getPersonDelegate()
     {
         return $this->personDelegate;
+    }
+    
+    /**
+     * Get session
+     *
+     * @return Symfony\Component\HttpFoundation\Session\Session
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 }

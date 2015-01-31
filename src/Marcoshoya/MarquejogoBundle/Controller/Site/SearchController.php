@@ -47,7 +47,7 @@ class SearchController extends Controller
             $searchDTO->setAutocomplete($autocomplete);
         }
         
-        $searchResult = $searchService->doSeach($searchDTO);
+        $searchResult = $searchService->doSearch($searchDTO);
         
         
         return array(
