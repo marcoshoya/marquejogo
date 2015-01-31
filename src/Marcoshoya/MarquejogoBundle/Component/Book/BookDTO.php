@@ -39,6 +39,11 @@ class BookDTO
     private $itemList = array();
     
     /**
+     * @var string[]
+     */
+    private $itemName = array();
+    
+    /**
      * @var decimal
      */
     private $price = 0.00;
@@ -162,6 +167,9 @@ class BookDTO
         unset($this->itemList[$idx]);
 
         $this->itemList[$idx] = $item;
+        $this->itemName[$idx] = $item->getProviderProduct()->getName();
+        
+        
     }
 
     /**
@@ -183,6 +191,17 @@ class BookDTO
     public function getItem($idx)
     {
         return isset($this->itemList[$idx]) ? $this->itemList[$idx] : null;
+    }
+    
+    /**
+     * Get item name
+     *
+     * @param integer $idx
+     * @return string|null
+     */
+    public function getItemName($idx)
+    {
+        return isset($this->itemName[$idx]) ? $this->itemName[$idx] : null;
     }
 
     /**
