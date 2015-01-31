@@ -10,7 +10,7 @@ services:
         class: Marcoshoya\MarquejogoBundle\Service\BaseService
         arguments: ["@doctrine.orm.entity_manager", "@logger", "@session"]
 
-    marcoshoya_marquejogo.service.personservice:
+    marcoshoya_marquejogo.service.person:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService
         parent: marcoshoya_marquejogo.service.base
         properties:

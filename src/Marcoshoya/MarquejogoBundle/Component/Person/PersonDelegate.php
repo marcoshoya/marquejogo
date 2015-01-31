@@ -41,7 +41,7 @@ class PersonDelegate
         
         if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Provider) {
             
-            return new BusinessProvider($this->em, $this->logger);
+            return new BusinessProvider($this->em, $this->logger, $user);
         }
         
         if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {

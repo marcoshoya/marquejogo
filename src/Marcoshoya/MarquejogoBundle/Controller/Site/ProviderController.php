@@ -29,12 +29,12 @@ class ProviderController extends Controller
     {
         $serviceSearch = $this->get('marcoshoya_marquejogo.service.search');
         $serviceSchedule = $this->get('marcoshoya_marquejogo.service.schedule');
-        $servicePicture = $this->get('marcoshoya_marquejogo.service.search');
+        $servicePerson = $this->get('marcoshoya_marquejogo.service.person');
 
         $products = array();
 
         // get pictures
-        $picture = $servicePicture->getAllPicture($provider);
+        $picture = $servicePerson->getAllPicture($provider);
 
         // get search
         $searchDTO = $serviceSearch->getSearchSession();

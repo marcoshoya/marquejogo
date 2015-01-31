@@ -116,7 +116,7 @@ class SearchService extends BaseService
                 $idx = $provider->getId();
                 $collection->add($provider, $idx);
                 // picture
-                $picture = $this->getPicture($provider);
+                $picture = $this->getPersonDelegate()->getBusinessService($provider)->getPicture();
                 if (null !== $picture) {
                     $collection->addPicture($picture, $idx);
                 }
@@ -141,46 +141,6 @@ class SearchService extends BaseService
                 ->findBy(array('city' => $city));
 
             return $providers;
-        } catch (\Exception $ex) {
-            $this->getLogger()->error("SearchService error: " . $ex->getMessage());
-        }
-    }
-
-    /**
-     * Get picture
-     * @param Provider $provider
-     * 
-     * @return ProviderPicture
-     */
-    public function getPicture(Provider $provider)
-    {
-        try {
-
-            $picture = $this->getEm()
-                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')
-                ->findMainPicture($provider);
-
-            return $picture;
-        } catch (\Exception $ex) {
-            $this->getLogger()->error("SearchService error: " . $ex->getMessage());
-        }
-    }
-    
-    /**
-     * Get picture
-     * @param Provider $provider
-     * 
-     * @return ProviderPicture
-     */
-    public function getAllPicture(Provider $provider)
-    {
-        try {
-
-            $picture = $this->getEm()
-                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')
-                ->findAllPicture($provider);
-
-            return $picture;
         } catch (\Exception $ex) {
             $this->getLogger()->error("SearchService error: " . $ex->getMessage());
         }
