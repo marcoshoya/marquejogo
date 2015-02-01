@@ -66,7 +66,7 @@ class ProviderController extends Controller
                 $data = $form->getData();
 
                 $service = $this->get('marcoshoya_marquejogo.service.book');
-                $service->setBookSession($data, $searchDTO);
+                $service->createBookSession($data, $searchDTO);
 
                 return $this->redirect($this->generateUrl('book_information', array(
                             'id' => $data->getProvider()->getId()

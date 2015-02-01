@@ -22,7 +22,14 @@ class BookService extends BaseService implements IBook
      */
     public function doBook(BookDTO $book)
     {
-        $book->getProvider();
+        try {
+            
+            $book->getProvider();
+            
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("BookService error: " . $ex->getMessage());
+            throw new \RuntimeException("Error to create book");
+        }
     }
 
     /**
@@ -30,7 +37,7 @@ class BookService extends BaseService implements IBook
      *
      * @param Schedule $schedule
      */
-    public function setBookSession(Schedule $schedule, SearchDTO $searchDTO)
+    public function createBookSession(Schedule $schedule, SearchDTO $searchDTO)
     {
         $provider = $schedule->getProvider();
         $date = $searchDTO->getDate();
@@ -45,14 +52,6 @@ class BookService extends BaseService implements IBook
             $bookDTO->setPicture($picture);
         }
         
-        // session name
-        $key = $bookDTO->getSessionKey();
-
-        // if already exists, clear
-        if ($this->getSession()->has($key)) {
-            $this->getSession()->remove($key);
-        }
-
         foreach ($schedule->getScheduleItem() as $idx => $item) {
             if ($item->getAlocated()) {
                 $bookDTO->addItem($item, $idx);
@@ -60,7 +59,32 @@ class BookService extends BaseService implements IBook
             }
         }
 
-        $this->getSession()->set($key, serialize($bookDTO));
+        $this->setBookSession($provider, $bookDTO);
+        
+        return $bookDTO;
+    }
+    
+    /**
+     * Set book on session
+     * 
+     * @param Provider $provider
+     * @param BookDTO $book
+     */
+    public function setBookSession(Provider $provider, BookDTO $book)
+    {
+        $bookDTO = new BookDTO($provider);
+        
+        // session name
+        $key = $bookDTO->getSessionKey();
+        
+        // if already exists, clear
+        if ($this->getSession()->has($key)) {
+            $this->getSession()->remove($key);
+        }
+        
+        $this->getSession()->set($key, serialize($book));
+        
+        return $book;
     }
 
     /**

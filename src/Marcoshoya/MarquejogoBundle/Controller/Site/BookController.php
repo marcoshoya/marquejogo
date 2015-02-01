@@ -67,15 +67,28 @@ class BookController extends Controller
      */
     public function dobookAction(Request $request, Provider $provider)
     {
+        $service = $this->get('marcoshoya_marquejogo.service.book');
         $book = $this->getBook($provider);
-
         $form = $this->createInformationForm($provider, $customer = null);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
+            
+            $data = $form->getData();
+            $book->setCustomer($data);
+            
+            // persist on session
+            $service->setBookSession($provider, $book);
 
-            die('valid');
-            return $this->redirect($this->generateUrl('book_confirmation', array('id' => $provider->getId())));
+            try {
+                
+                $service->doBook($book);
+                
+                return $this->redirect($this->generateUrl('book_confirmation', array('id' => $provider->getId())));
+                
+            } catch (\RuntimeException $ex) {
+                
+            }
         }
 
         return array(
