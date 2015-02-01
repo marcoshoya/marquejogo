@@ -63,7 +63,7 @@ class DashboardController extends Controller
         if ($form->isValid()) {
             $data = $form->getData();
 
-            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $service = $this->get('marcoshoya_marquejogo.service.person');
             $user = $service->getUser($data);
 
             if (null !== $user) {
