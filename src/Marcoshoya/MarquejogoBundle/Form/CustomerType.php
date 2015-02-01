@@ -29,6 +29,7 @@ class CustomerType extends AbstractType
             ->add('neighborhood')
             ->add('city')
             ->add('state')
+            ->add('team')
         ;
     }
     
