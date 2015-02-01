@@ -106,7 +106,7 @@ class Customer implements UserInterface
     private $state;
     
     /**
-     * @ORM\OneToMany(targetEntity="Team", mappedBy="owner") 
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="owner", cascade={"persist"}) 
      * @Assert\NotBlank(message="Campo obrigatório", groups={"book"})
      * */
     private $team;
@@ -122,7 +122,6 @@ class Customer implements UserInterface
     public function __construct()
     {
         $this->team = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->book = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

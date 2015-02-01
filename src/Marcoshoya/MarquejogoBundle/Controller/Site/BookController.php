@@ -191,6 +191,7 @@ class BookController extends Controller
             $customer = new Customer();
             $customer->setPassword('password');
             $team = new Team();
+            $team->setOwner($customer);
             $customer->getTeam()->add($team);
         }
 
