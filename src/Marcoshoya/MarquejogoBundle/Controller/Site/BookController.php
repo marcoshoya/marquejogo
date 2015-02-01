@@ -35,32 +35,6 @@ class BookController extends Controller
     {
         return array();
     }
-    
-    /**
-     * Get book from session
-     * 
-     * @param Provider $provider
-     * 
-     * @return BookDTO
-     * @throws \UnexpectedValueException
-     */
-    private function getBook(Provider $provider)
-    {
-        $service = $this->get('marcoshoya_marquejogo.service.book');
-        try {
-
-            $book = $service->getBookSession($provider);
-            if (null === $book) {
-                throw new \UnexpectedValueException("Book not found");
-            }
-            
-            return $book;
-            
-        } catch (\UnexpectedValueException $ex) {
-            $this->get('logger')->info("BookController error: " . $ex->getMessage());
-            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
-        }
-    }
 
     /**
      * User information
@@ -94,15 +68,14 @@ class BookController extends Controller
     public function dobookAction(Request $request, Provider $provider)
     {
         $book = $this->getBook($provider);
-        
-        $customer = new Customer();
-        $form = $this->createInformationForm($provider, $customer);
+
+        $form = $this->createInformationForm($provider, $customer = null);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
 
-
-            return $this->redirect($this->generateUrl('book_confirmation'));
+            die('valid');
+            return $this->redirect($this->generateUrl('book_confirmation', array('id' => $provider->getId())));
         }
 
         return array(
@@ -163,11 +136,45 @@ class BookController extends Controller
                 'book' => $book,
         ));
     }
+    
+    /**
+     * Get book from session
+     * 
+     * @param Provider $provider
+     * 
+     * @return BookDTO
+     * @throws \UnexpectedValueException
+     */
+    private function getBook(Provider $provider)
+    {
+        $service = $this->get('marcoshoya_marquejogo.service.book');
+        try {
 
+            $book = $service->getBookSession($provider);
+            if (null === $book) {
+                throw new \UnexpectedValueException("Book not found");
+            }
+
+            return $book;
+        } catch (\UnexpectedValueException $ex) {
+            $this->get('logger')->info("BookController error: " . $ex->getMessage());
+            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+        }
+    }
+    
+    /**
+     * Create information form
+     * 
+     * @param Provider $provider
+     * @param Customer $customer
+     * 
+     * @return Form
+     */
     private function createInformationForm(Provider $provider, Customer $customer = null)
     {
         if (null === $customer) {
             $customer = new Customer();
+            $customer->setPassword('password');
             $team = new Team();
             $customer->getTeam()->add($team);
         }
@@ -185,7 +192,6 @@ class BookController extends Controller
             ->add('phone')
             ->add('team', 'collection', array(
                 'type' => new TeamType(),
-                'allow_add' => true,
             ))
             ->remove('cpf')
             ->remove('gender')
