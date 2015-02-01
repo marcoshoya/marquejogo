@@ -107,7 +107,9 @@ class BookController extends Controller
      */
     public function confirmationAction(Provider $provider)
     {
-        return array();
+        $book = $this->getBook($provider);
+        
+        return array('book' => $book);
     }
 
     /**

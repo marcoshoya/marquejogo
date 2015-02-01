@@ -2,36 +2,13 @@
 
 {% block container %}
     
-    {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Booking:progress', {step: 3})) }}
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:progress', {step: 3})) }}
 
     <div class="container-overview">
-        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Booking:overview')) }}
+        Confirmação
     </div>
     <div class="container-data">
-        <table class="booking-data">
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="booking-data-container">
-                            <div class="booking-data-title">
-                                Dados para pagamento
-                            </div>
-                            <div class="booking-data-user">
-                                <form action="{{ path('booking_information') }}" method="post" >
-                                    <fieldset> 
-                                        
-                                        <div class="booking-data-user-submit">
-                                            <input type="submit" class="btn" value="Continuar" />
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div>
-                    </td> 
-                </tr>
-            </tbody>
-        </table>
+       
     </div>
-
 
 {% endblock %}
