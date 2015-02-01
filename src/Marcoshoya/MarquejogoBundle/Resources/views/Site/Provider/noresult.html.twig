@@ -1,7 +1,5 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
 
-{% form_theme form 'MarcoshoyaMarquejogoBundle:Site/Form:fields_schedule.html.twig' %}
-
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
@@ -79,54 +77,9 @@
                 {{ form_end(formAvail) }}
             </div>
             <div class="provider-product-list">
-
-                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
-
-                {{ form_row (form._token) }}
-
-                {{form_errors(form)}}
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tipo de Quadra</th>
-                            <th>Capacidade</th>
-                            <th>Valor</th>
-                            <th>Qtde</th>
-                            <th>Reserva</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        {% for k, schedule in form.scheduleItem %}
-                            {{ form_widget(schedule.date) }}
-                            {{ form_widget(schedule.available) }}
-                            {{ form_widget(schedule.providerProduct) }}
-                            {{ form_widget(schedule.schedule) }}
-                            <tr>
-                                {% set data = schedule.providerProduct.vars.label|split('|') %}
-                                <td class="product-type">{{ data[0] }}</td>
-                                <td>{{ data[1] }}</td>
-                                <td>{{ schedule.price.vars.value|number_format(2, '.', ',') }}
-                                    {{ form_widget(schedule.price) }}
-                                </td>
-                                <td>
-                                    {{ form_widget(schedule.alocated, { 'attr': {'class': 'form-control form-date'} }) }}
-                                </td>
-                                {% if k == 0 %}
-                                    <td rowspan="{{ form.scheduleItem.count }}">
-                                        <div class="product-booking">
-                                            <input type="submit" value="Reservar" />
-                                        </div>
-                                    </td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-
-                    </tbody>
-                </table>
-                <p class="product-bottom"> </p>
-                {{ form_end(form) }}
+                 <div class="alert alert-danger" style="margin-top: 50px">
+                    <strong>Refaça sua busca:</strong> nenhuma quadra encontrada!
+                </div>
             </div>
         </div>
     </div>

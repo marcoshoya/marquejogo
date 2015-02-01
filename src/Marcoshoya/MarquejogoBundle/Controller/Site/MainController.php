@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 use Marcoshoya\MarquejogoBundle\Form\SearchType;
-use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 
 /**
  * MainController
@@ -25,15 +24,7 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-        $searchDTO = new SearchDTO();
-        $session = $this->get('session');
-        
-        if ($session->has(SearchDTO::session)) {
-            $object = $session->get(SearchDTO::session);
-            $searchDTO = unserialize($object);
-        }
-        
-        $form = $this->createSearchForm($searchDTO);
+        $form = $this->createSearchForm();
 
         return array(
             'form' => $form->createView(),
@@ -49,27 +40,17 @@ class MainController extends Controller
      */
     public function submitAction(Request $request)
     {
-        $search = new SearchDTO();
-        
-        $form = $this->createSearchForm($search);
+        $form = $this->createSearchForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
+            // gets the service
+            $service = $this->get('marcoshoya_marquejogo.service.search');
             // form data
             $data = $form->getData();
+            $service->setSearchSession($data);
+
             $slug = BundleHelper::sluggable($data['city']);
-            $dateTime = $data['date'];
-            $hour = $data['hour'];
-
-            $dateTime->modify("+{$hour} hour");
-            $autocomplete = $this->get('marcoshoya_marquejogo.service.autocomplete')->getCity($slug);
-
-            // dto
-            $search->setDate($dateTime);
-            $search->setAutocomplete($autocomplete);
-            
-            $this->get('session')->set(SearchDTO::session, serialize($search));
 
             return $this->redirect($this->generateUrl('search_result', array('city' => $slug)));
         }
@@ -84,13 +65,10 @@ class MainController extends Controller
      * 
      * @return SearchType
      */
-    private function createSearchForm(SearchDTO $searchDTO)
+    private function createSearchForm()
     {
-        $data = array(
-            'city' => null !== $searchDTO->getAutocomplete() ? $searchDTO->getAutocomplete()->getNameField() : null,
-            'date' => null !== $searchDTO->getDate() ? $searchDTO->getDate() : null,
-            'hour' => null !== $searchDTO->getDate() ? $searchDTO->getDate()->format('H') : date('H'),
-        );
+        $service = $this->get('marcoshoya_marquejogo.service.search');
+        $data = $service->getSearchData();
 
         $form = $this->createForm(new SearchType(), $data, array(
             'action' => $this->generateUrl('submit_search'),

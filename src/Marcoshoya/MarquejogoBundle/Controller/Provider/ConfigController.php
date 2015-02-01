@@ -132,7 +132,7 @@ class ConfigController extends Controller
             $city = $editForm['statecity']['city']->getData();
             $entity->setCity($city);
 
-            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $service = $this->get('marcoshoya_marquejogo.service.person');
             $service->update($entity);
             
             $this->get('session')->getFlashBag()->add('success', 'Dados atualizados com sucesso.');

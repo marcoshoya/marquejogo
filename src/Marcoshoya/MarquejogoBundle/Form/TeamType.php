@@ -6,8 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CustomerType extends AbstractType
+class TeamType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -15,31 +16,22 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('password')
             ->add('name')
-            ->add('cpf')
-            ->add('gender')
-            ->add('position')
-            ->add('birthday')
-            ->add('phone')
-            ->add('address')
-            ->add('number')
-            ->add('complement')
-            ->add('neighborhood')
-            ->add('city')
-            ->add('state')
+            ->add('owner', 'entity_hidden', array(
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
+                'data' => null,
+                'data_class' => null,
+            ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Marcoshoya\MarquejogoBundle\Entity\Customer',
-            'cascade_validation' => true
+            'data_class' => 'Marcoshoya\MarquejogoBundle\Entity\Team',
         ));
     }
 
@@ -48,6 +40,7 @@ class CustomerType extends AbstractType
      */
     public function getName()
     {
-        return 'marcoshoya_marquejogobundle_customer';
+        return 'marcoshoya_marquejogobundle_team';
     }
+
 }

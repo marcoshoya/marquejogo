@@ -8,9 +8,9 @@ services:
     marcoshoya_marquejogo.service.base:
         abstract:  true
         class: Marcoshoya\MarquejogoBundle\Service\BaseService
-        arguments: ["@doctrine.orm.entity_manager", "@logger"]
+        arguments: ["@doctrine.orm.entity_manager", "@logger", "@session"]
 
-    marcoshoya_marquejogo.service.personservice:
+    marcoshoya_marquejogo.service.person:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService
         parent: marcoshoya_marquejogo.service.base
         properties:
@@ -23,7 +23,13 @@ services:
     marcoshoya_marquejogo.service.search:
         class: Marcoshoya\MarquejogoBundle\Service\SearchService
         parent: marcoshoya_marquejogo.service.base
+        properties:
+             autocomplete: "@marcoshoya_marquejogo.service.autocomplete"
 
-    marcoshoya_marquejogo.service.product:
-        class: Marcoshoya\MarquejogoBundle\Service\ProductService
+    marcoshoya_marquejogo.service.schedule:
+        class: Marcoshoya\MarquejogoBundle\Service\ScheduleService
+        parent: marcoshoya_marquejogo.service.base
+
+    marcoshoya_marquejogo.service.book:
+        class: Marcoshoya\MarquejogoBundle\Service\BookService
         parent: marcoshoya_marquejogo.service.base

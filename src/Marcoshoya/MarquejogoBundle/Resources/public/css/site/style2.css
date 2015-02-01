@@ -153,6 +153,18 @@ a img{
   color: #843534;
 }
 
+.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+.alert-warning hr {
+  border-top-color: #f7e1b5;
+}
+.alert-warning .alert-link {
+  color: #66512c;
+}
+
 /**********************************
  HOME / BACKGROUND
 **********************************/
@@ -428,6 +440,7 @@ a img{
     margin-top: 10px;
     margin-left: 20px;
     margin-bottom: 50px;
+    min-height: 1000px;
 }
 .container-provider h1 {
     margin-bottom: 5px;
@@ -620,7 +633,7 @@ a img{
     display: block;
     line-height: 2.08em;
     text-align: center;
-    width: 25%;
+    width: 33%;
     color: #1e3d03;
 }
 .container-progress ul li.active {
@@ -679,6 +692,7 @@ table.booking-detail, table.booking-data {
 }
 .container-overview-stay {
     float: left;
+    width: 60%;
 }
 .container-overview-stay p { 
     font-size: 16px;

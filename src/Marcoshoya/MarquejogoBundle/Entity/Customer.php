@@ -15,8 +15,8 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
  * @ORM\Table(name="customer")
  * @ORM\Entity
  * @UniqueEntity(
- *      fields="email",
- *      groups={"unique", "register"},
+ *      fields="username",
+ *      groups={"unique", "register", "book"},
  *      message="Email já cadastrado"
  * )
  */
@@ -31,20 +31,20 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=150, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register"})
-     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register", "book"})
+     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register", "book"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register", "book"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book"})
      */
     private $name;
 
@@ -71,7 +71,7 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book"})
      */
     private $phone;
 
@@ -104,6 +104,25 @@ class Customer implements UserInterface
      * @ORM\Column(type="string", length=2, nullable=true)
      */
     private $state;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="owner", cascade={"persist"}) 
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"book"})
+     * */
+    private $team;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Book", mappedBy="customer") 
+     * */
+    private $book;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->team = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * To string class
@@ -453,5 +472,71 @@ class Customer implements UserInterface
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Add team
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Team $team
+     * @return Customer
+     */
+    public function addTeam(\Marcoshoya\MarquejogoBundle\Entity\Team $team)
+    {
+        $this->team[] = $team;
+
+        return $this;
+    }
+
+    /**
+     * Remove team
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Team $team
+     */
+    public function removeTeam(\Marcoshoya\MarquejogoBundle\Entity\Team $team)
+    {
+        $this->team->removeElement($team);
+    }
+
+    /**
+     * Get team
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Add book
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Book $book
+     * @return Customer
+     */
+    public function addBook(\Marcoshoya\MarquejogoBundle\Entity\Book $book)
+    {
+        $this->book[] = $book;
+
+        return $this;
+    }
+
+    /**
+     * Remove book
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Book $book
+     */
+    public function removeBook(\Marcoshoya\MarquejogoBundle\Entity\Book $book)
+    {
+        $this->book->removeElement($book);
+    }
+
+    /**
+     * Get book
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBook()
+    {
+        return $this->book;
     }
 }

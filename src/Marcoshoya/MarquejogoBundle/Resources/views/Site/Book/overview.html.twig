@@ -2,19 +2,22 @@
     <tr>
         <td>
             <div class="container-overview-image">
-                <img src="/bundles/marcoshoyamarquejogo/images/site/fornecedor1.jpg" />
+                <img src="{{ book.getPicture().getWebPath | apply_filter('search_list') }}" />
             </div>
             <div class="container-overview-description">
-                <h2>Quadra do João</h2>
-                <p>Avenida Iguaçu, 399, Rebouças, Curitiba</p>
+                <h2>{{ provider.name }}</h2>
+                <p>{{ provider.fulladdress }}</p>
             </div>
+            
             <div class="container-overview-stay">
                 <p><b>Data</b> <br />
-                    01 de março as 19h
+                    {{ dateTitle }}
                 </p>
-                <p><b>Quadra</b> <br />
-                    Society interna 1 - 10 pessoas
-                </p>
+                {% for k, item in book.getAllItem %}
+                    <p><b>Quadra </b> <br />
+                       {{ book.getItemName(k) }}
+                    </p>
+                {% endfor %}
             </div>
         </td>
     </tr>
@@ -24,7 +27,7 @@
         <tbody>
             <tr>
                 <td>Preço total</td>
-                <td align="right">R$ 50,00</td>
+                <td align="right">R$ {{ book.price }}</td>
             </tr>
         </tbody>
     </table>

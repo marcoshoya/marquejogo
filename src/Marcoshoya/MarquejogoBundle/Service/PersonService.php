@@ -61,4 +61,15 @@ class PersonService extends BaseService
         $service = $this->getPersonDelegate()->getBusinessService($provider);
         $service->update($provider, $autocomplete);
     }
+    
+    /**
+     * Get all images
+     * 
+     * @param UserInterface $user
+     * @return type
+     */
+    public function getAllPicture(UserInterface $user)
+    {
+        return $this->getPersonDelegate()->getBusinessService($user)->getAllPicture();
+    }
 }

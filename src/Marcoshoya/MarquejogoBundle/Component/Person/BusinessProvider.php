@@ -20,16 +20,19 @@ class BusinessProvider implements PersonInterface
      * @var Doctrine\ORM\EntityManager;
      */
     protected $em;
+    
+    protected $provider;
 
     /**
      * Constructor
      *
      * @param EntityManager $em
      */
-    public function __construct(EntityManager $em, $logger)
+    public function __construct(EntityManager $em, $logger, $provider)
     {
         $this->em = $em;
         $this->logger = $logger;
+        $this->provider = $provider;
     }
 
     /**
@@ -70,6 +73,46 @@ class BusinessProvider implements PersonInterface
             $provider->notify();
         } catch (\Exception $e) {
             $this->logger->error("BusinessProvider error: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Get picture
+     * @param Provider $provider
+     * 
+     * @return ProviderPicture
+     */
+    public function getPicture()
+    {
+        try {
+
+            $picture = $this->em
+                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')
+                ->findMainPicture($this->provider);
+
+            return $picture;
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("BusinessProvider error: " . $ex->getMessage());
+        }
+    }
+    
+    /**
+     * Get picture
+     * @param Provider $provider
+     * 
+     * @return ProviderPicture
+     */
+    public function getAllPicture()
+    {
+        try {
+
+            $picture = $this->em
+                ->getRepository('MarcoshoyaMarquejogoBundle:ProviderPicture')
+                ->findAllPicture($this->provider);
+
+            return $picture;
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("BusinessProvider error: " . $ex->getMessage());
         }
     }
 

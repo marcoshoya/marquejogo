@@ -56,7 +56,7 @@ class ProviderController extends Controller
             $city = $form['statecity']['city']->getData();
             $entity->setCity($city);
 
-            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $service = $this->get('marcoshoya_marquejogo.service.person');
             $service->update($entity);
 
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor inserido com sucesso.');
@@ -256,7 +256,7 @@ class ProviderController extends Controller
             $city = $editForm['statecity']['city']->getData();
             $entity->setCity($city);
 
-            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $service = $this->get('marcoshoya_marquejogo.service.person');
             $service->update($entity);
 
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor atualizado com sucesso.');

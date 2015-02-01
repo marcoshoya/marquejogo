@@ -50,7 +50,7 @@ class SecuredController extends Controller
             $data = $form->getData();
 
             // gets service container
-            $service = $this->get('marcoshoya_marquejogo.service.personservice');
+            $service = $this->get('marcoshoya_marquejogo.service.person');
             $user = $service->getUser($data);
 
             if (null !== $user) {
