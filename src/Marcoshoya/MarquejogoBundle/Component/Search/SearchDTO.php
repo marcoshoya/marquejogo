@@ -29,7 +29,7 @@ class SearchDTO
      *
      * @param Autocomplete $autocomplete
      */
-    public function setAutocomplete(Autocomplete $autocomplete)
+    public function setAutocomplete(Autocomplete $autocomplete = null)
     {
         $this->autocomplete = $autocomplete;
     }
