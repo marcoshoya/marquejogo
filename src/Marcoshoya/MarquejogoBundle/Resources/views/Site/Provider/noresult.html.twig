@@ -3,14 +3,20 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    {{ form_stylesheet(formAvail) }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.min.js') }}"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/datepicker-pt-BR.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.mobile.customized.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.easing.1.3.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/camera.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/custom.js') }}"></script>
+    {{ form_javascript(formAvail) }}
 {% endblock %}
 
 {% block container %}
@@ -42,34 +48,38 @@
         <div class="provider-product">
             <h3>Disponibilidade</h3>
             <div class="provider-availability">
-                <form action="#" method="post" >
-                    <fieldset> 
-                        <div class="form-group form-availability-date">
-                            <label class="col-md-2">Data</label>
-                            <div class="col-md-1">
-                                <input type="text" class="form-control form-date" />
-                            </div>
-                        </div>
+                {{ form_start(formAvail, {'attr': {'novalidate': 'novalidate'}} ) }}
 
-                        <div class="form-group form-availability-hour">
-                            <label class="col-md-2">Horário</label>
-                            <div class="col-md-1">
-                                <select class="form-control form-date">
-                                    <option>00:00</option>
-                                    <option>01:00</option>
-                                    <option>02:00</option>
-                                    <option>03:00</option>
-                                </select>
-                            </div>
+                {{ form_row (formAvail._token) }}
+
+                {{form_errors(formAvail)}}
+
+                <fieldset> 
+                    <div class="form-group form-availability-date">
+                        <label class="col-md-2">{{ form_label(formAvail.date, 'Data') }}</label>
+                        <div class="col-md-1">
+                            {{ form_widget(formAvail.date, { 'attr': {'class': 'form-control form-date'} }) }}
+                            {{ form_errors(formAvail.date) }}
                         </div>
-                        <div class="form-availability-submit">
-                            <input class="btn btn-availability-search" type="submit" value="Pesquisar" />
+                    </div>
+
+                    <div class="form-group form-availability-hour">
+                        <label class="col-md-2">{{ form_label(formAvail.hour, 'Hora') }}</label>
+                        <div class="col-md-1">
+                            {{ form_widget(formAvail.hour, { 'attr': {'class': 'form-control form-date'} }) }}
+                            {{ form_errors(formAvail.hour) }}
                         </div>
-                    </fieldset>
-                </form>
+                    </div>
+                    <div class="form-availability-submit">
+                        <input class="btn btn-availability-search" type="submit" value="Pesquisar" />
+                    </div>
+                </fieldset>
+                {{ form_end(formAvail) }}
             </div>
             <div class="provider-product-list">
-
+                 <div class="alert alert-danger" style="margin-top: 50px">
+                    <strong>Refaça sua busca:</strong> nenhuma quadra encontrada!
+                </div>
             </div>
         </div>
     </div>

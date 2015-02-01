@@ -153,6 +153,18 @@ a img{
   color: #843534;
 }
 
+.alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+}
+.alert-warning hr {
+  border-top-color: #f7e1b5;
+}
+.alert-warning .alert-link {
+  color: #66512c;
+}
+
 /**********************************
  HOME / BACKGROUND
 **********************************/
@@ -428,6 +440,7 @@ a img{
     margin-top: 10px;
     margin-left: 20px;
     margin-bottom: 50px;
+    min-height: 1000px;
 }
 .container-provider h1 {
     margin-bottom: 5px;

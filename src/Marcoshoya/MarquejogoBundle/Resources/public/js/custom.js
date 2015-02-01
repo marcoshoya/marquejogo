@@ -8,7 +8,7 @@ jQuery(function () {
     try {
         library.init();
     } catch (e) {
-        console.log(e);
+        //console.log(e);
     }
 });
 
