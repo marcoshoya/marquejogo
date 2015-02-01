@@ -1,12 +1,15 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:booking.html.twig' %}
 
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Site/Form:fields_book.html.twig' %}
+
 {% block container %}
-    
+
     {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:progress', {step: 2})) }}
 
     <div class="container-overview">
         {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:overview', {book: book})) }}
     </div>
+
     <div class="container-data">
         <table class="booking-data">
             <tbody>
@@ -17,41 +20,46 @@
                                 Insira seus dados
                             </div>
                             <div class="booking-data-user">
-                                <form action="#" method="post" >
-                                    <fieldset> 
-                                        <div class="booking-data-user-group-col-md-1">
-                                            <label class="col-md-2">Nome</label>
+                                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+                                {{ form_row (form._token) }}
+                                <fieldset> 
+                                    <div class="booking-data-user-group-col-md-1">
+                                        <label class="col-md-2">{{ form_label(form.name, 'Nome') }}</label>
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.name, { 'attr': {'class': 'booking-data-user-control'} }) }}
+                                            {{ form_errors(form.name) }}
+
+                                        </div>
+                                    </div>
+                                    <div class="booking-data-user-group-col-md-1">
+                                        <label class="col-md-2">{{ form_label(form.username, 'E-mail') }}</label>
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.username, { 'attr': {'class': 'booking-data-user-control'} }) }}
+                                            {{ form_errors(form.username) }}
+                                        </div>
+                                    </div>
+                                    <div class="booking-data-user-group-col-md-2">
+                                        <label class="col-md-2">{{ form_label(form.phone, 'Telefone') }}</label>
+                                        <div class="col-md-1">
+                                            {{ form_widget(form.phone, { 'attr': {'class': 'booking-data-user-control'} }) }}
+                                            {{ form_errors(form.phone) }}
+                                        </div>
+                                    </div>
+                                    <div class="booking-data-user-group-col-md-2">
+                                        {% for team in form.team %}
+                                            {{ form_widget(team.owner) }}
+                                            <label class="col-md-2">{{ form_label(team.name, 'Nome do time') }}</label>
                                             <div class="col-md-1">
-                                                <input type="text" class="booking-data-user-control" />
-                                                <span class="booking-data-user-error">Email obrigatório</span>
+                                                {{ form_widget(team.name, { 'attr': {'class': 'booking-data-user-control'} }) }}
+                                                {{ form_errors(team.name) }}
                                             </div>
-                                        </div>
-                                        <div class="booking-data-user-group-col-md-1">
-                                            <label class="col-md-2">E-mail</label>
-                                            <div class="col-md-1">
-                                                <input type="text" class="booking-data-user-control" />
-                                                <span class="booking-data-user-error">Email obrigatório</span>
-                                            </div>
-                                        </div>
-                                        <div class="booking-data-user-group-col-md-2">
-                                            <label class="col-md-2">Telefone</label>
-                                            <div class="col-md-1">
-                                                <input type="text" class="booking-data-user-control" />
-                                                <span class="booking-data-user-error">Email obrigatório</span>
-                                            </div>
-                                        </div>
-                                        <div class="booking-data-user-group-col-md-2">
-                                            <label class="col-md-2">Nome do time</label>
-                                            <div class="col-md-1">
-                                                <input type="text" class="booking-data-user-control" />
-                                                <span class="booking-data-user-error">Email obrigatório</span>
-                                            </div>
-                                        </div>
-                                        <div class="booking-data-user-submit">
-                                            <input type="submit" class="btn" value="Continuar" />
-                                        </div>
-                                    </fieldset>
-                                </form>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="booking-data-user-submit">
+                                        <input type="submit" class="btn" value="Continuar" />
+                                    </div>
+                                </fieldset>
+                                {{ form_end(form) }}
                             </div>
                         </div>
                     </td> 

@@ -11,13 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Entity\Customer;
+use Marcoshoya\MarquejogoBundle\Entity\Team;
 use Marcoshoya\MarquejogoBundle\Form\CustomerType;
+use Marcoshoya\MarquejogoBundle\Form\TeamType;
 
 /**
  * BookingController implements all booking functions
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
- * 
+ *
  * @Route("/reserva")
  */
 class BookController extends Controller
@@ -33,6 +35,32 @@ class BookController extends Controller
     {
         return array();
     }
+    
+    /**
+     * Get book from session
+     * 
+     * @param Provider $provider
+     * 
+     * @return BookDTO
+     * @throws \UnexpectedValueException
+     */
+    private function getBook(Provider $provider)
+    {
+        $service = $this->get('marcoshoya_marquejogo.service.book');
+        try {
+
+            $book = $service->getBookSession($provider);
+            if (null === $book) {
+                throw new \UnexpectedValueException("Book not found");
+            }
+            
+            return $book;
+            
+        } catch (\UnexpectedValueException $ex) {
+            $this->get('logger')->info("BookController error: " . $ex->getMessage());
+            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+        }
+    }
 
     /**
      * User information
@@ -43,18 +71,11 @@ class BookController extends Controller
      */
     public function informationAction(Provider $provider)
     {
-
-        $service = $this->get('marcoshoya_marquejogo.service.book');
-        $book = $service->getBookSession($provider);
-
-        if (null === $book) {
-            $this->get('logger')->info("informationAction: sessao expidarada");
-            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
-        }
+        $book = $this->getBook($provider);
 
         // \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
-        $customer = new Customer();
-        $form = $this->createInformationForm($provider, $customer);
+
+        $form = $this->createInformationForm($provider, $customer = null);
 
         return array(
             'form' => $form->createView(),
@@ -72,18 +93,21 @@ class BookController extends Controller
      */
     public function dobookAction(Request $request, Provider $provider)
     {
+        $book = $this->getBook($provider);
+        
         $customer = new Customer();
         $form = $this->createInformationForm($provider, $customer);
-        
+
         $form->handleRequest($request);
         if ($form->isValid()) {
-            
-            
+
+
             return $this->redirect($this->generateUrl('book_confirmation'));
         }
-        
+
         return array(
             'form' => $form->createView(),
+            'book' => $book,
         );
     }
 
@@ -102,7 +126,7 @@ class BookController extends Controller
 
     /**
      * Progress action
-     * 
+     *
      * @param int $step
      * @return string
      */
@@ -115,7 +139,7 @@ class BookController extends Controller
 
     /**
      * Overview action
-     * 
+     *
      * @return string
      */
     public function overviewAction($book)
@@ -140,12 +164,40 @@ class BookController extends Controller
         ));
     }
 
-    private function createInformationForm(Provider $provider, Customer $entity)
+    private function createInformationForm(Provider $provider, Customer $customer = null)
     {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('provider_show', array('id' => $provider->getId())),
+        if (null === $customer) {
+            $customer = new Customer();
+            $team = new Team();
+            $customer->getTeam()->add($team);
+        }
+
+        $form = $this->createForm(new CustomerType(), $customer, array(
+            'action' => $this->generateUrl('book_dobook', array('id' => $provider->getId())),
             'method' => 'POST',
+            'validation_groups' => array('book'),
         ));
+
+        $form
+            ->add('username')
+            ->add('password', 'hidden')
+            ->add('name')
+            ->add('phone')
+            ->add('team', 'collection', array(
+                'type' => new TeamType(),
+                'allow_add' => true,
+            ))
+            ->remove('cpf')
+            ->remove('gender')
+            ->remove('position')
+            ->remove('birthday')
+            ->remove('address')
+            ->remove('number')
+            ->remove('complement')
+            ->remove('neighborhood')
+            ->remove('city')
+            ->remove('state')
+        ;
 
         return $form;
     }

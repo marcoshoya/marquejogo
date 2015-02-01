@@ -15,7 +15,7 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
  * @ORM\Table(name="customer")
  * @ORM\Entity
  * @UniqueEntity(
- *      fields="email",
+ *      fields="username",
  *      groups={"unique", "register", "book"},
  *      message="Email já cadastrado"
  * )
@@ -106,7 +106,7 @@ class Customer implements UserInterface
     private $state;
     
     /**
-     * @ORM\OneToMany(targetEntity="Customer", mappedBy="owner") 
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="owner") 
      * @Assert\NotBlank(message="Campo obrigatório", groups={"book"})
      * */
     private $team;
@@ -472,10 +472,10 @@ class Customer implements UserInterface
     /**
      * Add team
      *
-     * @param \Marcoshoya\MarquejogoBundle\Entity\Customer $team
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Team $team
      * @return Customer
      */
-    public function addTeam(\Marcoshoya\MarquejogoBundle\Entity\Customer $team)
+    public function addTeam(\Marcoshoya\MarquejogoBundle\Entity\Team $team)
     {
         $this->team[] = $team;
 
@@ -485,9 +485,9 @@ class Customer implements UserInterface
     /**
      * Remove team
      *
-     * @param \Marcoshoya\MarquejogoBundle\Entity\Customer $team
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Team $team
      */
-    public function removeTeam(\Marcoshoya\MarquejogoBundle\Entity\Customer $team)
+    public function removeTeam(\Marcoshoya\MarquejogoBundle\Entity\Team $team)
     {
         $this->team->removeElement($team);
     }
