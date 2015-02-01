@@ -16,22 +16,7 @@ use Marcoshoya\MarquejogoBundle\Entity\Provider;
  */
 class BookService extends BaseService implements IBook
 {
-
-    /**
-     * @inheritDoc
-     */
-    public function doBook(BookDTO $book)
-    {
-        try {
-            
-            $book->getProvider();
-            
-        } catch (\Exception $ex) {
-            $this->getLogger()->error("BookService error: " . $ex->getMessage());
-            throw new \RuntimeException("Error to create book");
-        }
-    }
-
+    
     /**
      * Persist the object book on session
      *
@@ -104,6 +89,26 @@ class BookService extends BaseService implements IBook
         }
 
         return null;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function doBook(BookDTO $book)
+    {
+        try {
+            
+            $book->getProvider();
+            
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("BookService error: " . $ex->getMessage());
+            throw new \RuntimeException("Error to create book");
+        }
+    }
+    
+    private function createBook(BookDTO $book)
+    {
+        
     }
 
 }

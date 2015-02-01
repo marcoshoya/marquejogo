@@ -112,11 +112,17 @@ class Customer implements UserInterface
     private $team;
     
     /**
+     * @ORM\OneToMany(targetEntity="Book", mappedBy="customer") 
+     * */
+    private $book;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->team = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->book = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -500,5 +506,38 @@ class Customer implements UserInterface
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Add book
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Book $book
+     * @return Customer
+     */
+    public function addBook(\Marcoshoya\MarquejogoBundle\Entity\Book $book)
+    {
+        $this->book[] = $book;
+
+        return $this;
+    }
+
+    /**
+     * Remove book
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Book $book
+     */
+    public function removeBook(\Marcoshoya\MarquejogoBundle\Entity\Book $book)
+    {
+        $this->book->removeElement($book);
+    }
+
+    /**
+     * Get book
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBook()
+    {
+        return $this->book;
     }
 }
