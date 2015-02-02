@@ -40,15 +40,21 @@
                 <div class="cal-month-box">
                     {% for week in schedule %}
                         <div class="cal-row-fluid cal-before-eventlist">
+                            {% set weekend = [0, 6] %}
                             {% for day in week %}
-                                <div class="cal-cell1 cal-cell">
-                                    <a href="{{ path('schedule_show', {"year": day.format('Y'), "month": day.format('m'), "day": day.format('j') }) }}">
-                                        <div class="cal-month-day {{ (day.format('Y-m') < navbar.curr.date.format('Y-m')) or (day.format('Y-m') > navbar.curr.date.format('Y-m')) ? 'cal-day-outmonth' : 'cal-day-inmonth' }}">
+                                <div class="cal-cell1 cal-cell" onclick="location.href='{{ path('schedule_show', {"year": day.format('Y'), "month": day.format('m'), "day": day.format('j') }) }}';">
+                                    
+                                        <div class="cal-month-day {{ 
+            (day.format('Y-m') < navbar.curr.date.format('Y-m')) or 
+            (day.format('Y-m') > navbar.curr.date.format('Y-m')) ? 'cal-day-outmonth' : 
+                (day.format('Y-m-d') == "now"|date('Y-m-d')) ? 'cal-day-today' :
+                    (day.format('w') in weekend) ? 'cal-day-weekend' : 'cal-day-inmonth' }}">
+                                            
                                             <span class="pull-right" data-cal-date="{{ day.format('Y-m-d') }}">
                                                 {{ day.format('j') }}
                                             </span>
                                         </div>
-                                    </a>
+                                    
                                 </div>
                             {% endfor %}
                         </div>
