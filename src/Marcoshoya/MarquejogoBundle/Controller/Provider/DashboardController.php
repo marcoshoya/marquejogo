@@ -15,7 +15,15 @@ class DashboardController extends Controller
      */
     public function dashboardAction()
     {
-        return array();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:Book')
+            ->findBy(array('provider' => $user), array('id' => 'DESC'));
+        
+        return array(
+            'entities' => $entities
+        );
     }
 
     /**

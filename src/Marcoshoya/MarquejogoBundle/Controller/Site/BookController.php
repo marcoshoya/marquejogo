@@ -84,7 +84,8 @@ class BookController extends Controller
             $service->setBookSession($provider, $book);
 
             try {
-
+                
+                $book->setProvider($provider);
                 $bookObject = $service->doBook($book);
 
                 return $this->redirect($this->generateUrl('book_confirmation', array('id' => $provider->getId())));

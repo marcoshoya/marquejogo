@@ -135,6 +135,7 @@ class BookService extends BaseService implements IBook
         $bookObject = $this->persistBook();
         $customer = $this->persistCustomer($bookDTO);
 
+        $bookObject->setProvider($bookDTO->getProvider());
         $bookObject->setCustomer($customer);
         $bookObject->setDate($bookDTO->getDate());
 
