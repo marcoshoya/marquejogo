@@ -142,27 +142,27 @@ a img{
 }
 
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
 .alert-danger hr {
-  border-top-color: #e4b9c0;
+    border-top-color: #e4b9c0;
 }
 .alert-danger .alert-link {
-  color: #843534;
+    color: #843534;
 }
 
 .alert-warning {
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border-color: #faebcc;
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
 }
 .alert-warning hr {
-  border-top-color: #f7e1b5;
+    border-top-color: #f7e1b5;
 }
 .alert-warning .alert-link {
-  color: #66512c;
+    color: #66512c;
 }
 
 /**********************************
@@ -818,6 +818,111 @@ table.booking-detail, table.booking-data {
 .booking-data-user-submit input[type="submit"]:hover, .booking-data-user-submit button:hover {
     background-color: #204401;
 } 
+
+
+/***********************************
+ * BOOK CONFIRMATION PAGE
+ **********************************/
+.container-data-confirmation {
+    clear: both;
+    float: left;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 75%;
+}
+
+.container-confirmation-column {
+    float: left;
+    margin-top: 30px;
+    width: 25%;
+}
+
+.confirmation-header {
+    float: left;
+    width: 100%;
+    height: 100px;
+}
+.confirmation-header h1 {
+    font-size: 36px;
+}
+
+.confirmation-body {
+    float: left;
+    width: 100%;
+}
+
+.confirmation-body h3 {
+    margin-bottom: 5px;
+    padding: 0 10px;
+    font-size: 24px;
+    color: #204401;
+}
+
+.container-confirmation {
+    width: 97%;
+    float: left;
+    padding: 20px 10px;
+    margin-bottom: 50px;
+    background-color: #eaf7ee;
+    border-bottom: 1px solid #dcdcdc;
+    border-top: 1px solid #dcdcdc;
+}
+
+.container-confirmation table.confirmation-detail {
+    color: #1e3d03;
+    width: 100%;
+    padding: 0;
+    font-size: 16px;
+    font-weight: normal;
+    border-collapse: collapse;
+}
+
+.border-spacing {
+    border-spacing: 7px;
+    border-collapse: separate !important;
+}
+
+.container-confirmation table.confirmation-detail th {
+    text-align: left;
+    font-size: 20px;
+    padding-bottom: 15px;
+}
+.container-confirmation table.confirmation-detail th a {
+    color: #377502;
+}
+
+.container-confirmation table.confirmation-detail tfoot td {
+    border-top: 1px solid #dcdcdc;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    font-size: 24px;
+}
+
+table.confirmation-detail h4 {
+    color: #377502;
+    font-size: 22px;
+}
+
+
+.container-confirmation-column input {
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.5;
+    padding: 5px 10px;
+    color: #FFFFFF;
+    background-color: #489B00;
+    border: 2px solid #fff;
+    border-radius: 0 !important;
+    box-shadow: 0 0 3px #aaa;
+    display: inline-block;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.column-print {
+    padding-top: 100px;
+    padding-left: 80px;
+}
 
 /***********************************
  * CONTAINER CUSTOMER

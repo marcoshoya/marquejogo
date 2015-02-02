@@ -14,7 +14,7 @@
                     {{ dateTitle }}
                 </p>
                 {% for k, item in book.getAllItem %}
-                    <p><b>Quadra </b> <br />
+                    <p><b>Quadra #{{ k }}</b> <br />
                        {{ book.getItemName(k) }}
                     </p>
                 {% endfor %}

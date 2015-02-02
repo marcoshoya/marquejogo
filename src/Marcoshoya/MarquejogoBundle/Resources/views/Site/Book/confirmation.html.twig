@@ -1,14 +1,96 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:booking.html.twig' %}
 
 {% block container %}
-    
-    {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:progress', {step: 3})) }}
 
-    <div class="container-overview">
-        Confirmação
+    <div class="container-data-confirmation">
+        <div class="confirmation-header">
+            <h1>Reserva finalizada!</h1>
+        </div>
+
+        <div class="confirmation-body">
+            <h3>Dados da reserva</h3>
+            <div class="container-confirmation">
+                <table class="confirmation-detail border-spacing">
+                    <theader>
+                        <tr>
+                            <th colspan="2">
+                                <a href="{{ path('provider_show', {"id": provider.id}) }}" target="_blank">
+                                    {{ provider.name }}
+                                </a>
+                            </th>
+                        </tr>
+                    </theader>
+                    <tbody>
+                        <tr>
+                            <td width="35%"><b>Número da reserva</b></td>
+                            <td>#1234</td>
+                        </tr>
+                        <tr>
+                            <td><b>Data</b></td>
+                            <td>{{ dateTitle }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Quadra</b></td>
+                            <td>
+                                <ul>
+                                    {% for k, item in book.getAllItem %}
+                                        <li>{{ book.getItemName(k) }} (1h)</li>
+                                        {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">&nbsp;</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><b>Valor total</b></td>
+                            <td><b>R$ {{ book.price }}</b></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+            </div>
+
+            <h3>Dados do estabelecimento</h3>
+            <div class="container-confirmation">
+                <table class="confirmation-detail">
+                    <tr>
+                        <td rowspan="5"  width="30%">
+                            <img src="{{ book.getPicture().getWebPath | apply_filter('search_list') }}" />
+                        </td>
+                        <td colspan="2"><h4>{{ provider.name }}</h4></td>
+                    </tr>
+                    <tr>
+                        <td><b>Telefone</b></td>
+                        <td>{{ provider.phone }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Endereço</b></td>
+                        <td>{{ provider.address }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Cidade</b></td>
+                        <td>{{ provider.city }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Bairro</b></td>
+                        <td>{{ provider.neighborhood }}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
     </div>
-    <div class="container-data">
-       
+
+    <div class="container-confirmation-column">
+        <div class="column-print">
+            <input class="btn" value="Imprimir" type="submit">
+        </div>
+
     </div>
 
 {% endblock %}

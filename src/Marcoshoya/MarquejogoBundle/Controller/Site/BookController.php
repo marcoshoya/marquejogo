@@ -46,6 +46,9 @@ class BookController extends Controller
     public function informationAction(Provider $provider)
     {
         $book = $this->getBook($provider);
+        if (null === $book) {
+            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+        }
 
         // \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
 
@@ -69,23 +72,26 @@ class BookController extends Controller
     {
         $service = $this->get('marcoshoya_marquejogo.service.book');
         $book = $this->getBook($provider);
+        if (null === $book) {
+            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+        }
+        
         $form = $this->createInformationForm($provider, $customer = null);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            
+
             $data = $form->getData();
             $book->setCustomer($data);
-            
+
             // persist on session
             $service->setBookSession($provider, $book);
 
             try {
-                
+
                 $service->doBook($book);
-                
+
                 return $this->redirect($this->generateUrl('book_confirmation', array('id' => $provider->getId())));
-                
             } catch (\RuntimeException $ex) {
                 
             }
@@ -108,8 +114,19 @@ class BookController extends Controller
     public function confirmationAction(Provider $provider)
     {
         $book = $this->getBook($provider);
-        
-        return array('book' => $book);
+        if (null === $book) {
+            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+        }
+
+        $date = $book->getDate();
+        $dateTitle = sprintf('%s de %s as %dh', $date->format('d'), BundleHelper::monthTranslate($date->format('F')), $date->format('H')
+        );
+
+        return array(
+            'provider' => $provider,
+            'dateTitle' => $dateTitle,
+            'book' => $book,
+        );
     }
 
     /**
@@ -151,7 +168,7 @@ class BookController extends Controller
                 'book' => $book,
         ));
     }
-    
+
     /**
      * Get book from session
      * 
@@ -160,7 +177,7 @@ class BookController extends Controller
      * @return BookDTO
      * @throws \UnexpectedValueException
      */
-    private function getBook(Provider $provider)
+    public function getBook(Provider $provider)
     {
         $service = $this->get('marcoshoya_marquejogo.service.book');
         try {
@@ -173,10 +190,10 @@ class BookController extends Controller
             return $book;
         } catch (\UnexpectedValueException $ex) {
             $this->get('logger')->info("BookController error: " . $ex->getMessage());
-            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+            return null;
         }
     }
-    
+
     /**
      * Create information form
      * 
