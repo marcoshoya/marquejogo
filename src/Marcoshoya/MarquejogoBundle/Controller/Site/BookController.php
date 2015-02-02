@@ -49,9 +49,7 @@ class BookController extends Controller
         if (null === $book) {
             return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
         }
-
-        // \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::dump($book);
-
+        
         $form = $this->createInformationForm($provider, $customer = null);
 
         return array(
@@ -77,10 +75,8 @@ class BookController extends Controller
         }
         
         $form = $this->createInformationForm($provider, $customer = null);
-
         $form->handleRequest($request);
         if ($form->isValid()) {
-
             $data = $form->getData();
             $book->setCustomer($data);
 
@@ -89,7 +85,7 @@ class BookController extends Controller
 
             try {
 
-                $service->doBook($book);
+                $bookObject = $service->doBook($book);
 
                 return $this->redirect($this->generateUrl('book_confirmation', array('id' => $provider->getId())));
             } catch (\RuntimeException $ex) {
@@ -121,11 +117,17 @@ class BookController extends Controller
         $date = $book->getDate();
         $dateTitle = sprintf('%s de %s as %dh', $date->format('d'), BundleHelper::monthTranslate($date->format('F')), $date->format('H')
         );
-
+        
+        $service = $this->get('marcoshoya_marquejogo.service.book');
+        $service->clearBookSession($provider);
+        
+        $em = $this->getDoctrine()->getManager();
+        $bookObject = $em->getRepository("MarcoshoyaMarquejogoBundle:Book")->find($book->getId());
+        
         return array(
             'provider' => $provider,
             'dateTitle' => $dateTitle,
-            'book' => $book,
+            'book' => $bookObject,
         );
     }
 

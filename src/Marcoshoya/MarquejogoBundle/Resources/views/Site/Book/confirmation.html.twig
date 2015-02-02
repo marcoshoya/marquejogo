@@ -23,7 +23,7 @@
                     <tbody>
                         <tr>
                             <td width="35%"><b>Número da reserva</b></td>
-                            <td>#1234</td>
+                            <td>#{{ book.id }}</td>
                         </tr>
                         <tr>
                             <td><b>Data</b></td>
@@ -33,8 +33,8 @@
                             <td><b>Quadra</b></td>
                             <td>
                                 <ul>
-                                    {% for k, item in book.getAllItem %}
-                                        <li>{{ book.getItemName(k) }} (1h)</li>
+                                    {% for item in book.bookItem %}
+                                        <li>{{ item.name }} (1h)</li>
                                         {% endfor %}
                                 </ul>
                             </td>
@@ -46,7 +46,7 @@
                     <tfoot>
                         <tr>
                             <td><b>Valor total</b></td>
-                            <td><b>R$ {{ book.price }}</b></td>
+                            <td><b>R$ {{ book.totalPrice }}</b></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -59,7 +59,7 @@
                 <table class="confirmation-detail">
                     <tr>
                         <td rowspan="5"  width="30%">
-                            <img src="{{ book.getPicture().getWebPath | apply_filter('search_list') }}" />
+
                         </td>
                         <td colspan="2"><h4>{{ provider.name }}</h4></td>
                     </tr>

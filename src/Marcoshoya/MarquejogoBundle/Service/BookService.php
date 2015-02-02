@@ -92,6 +92,14 @@ class BookService extends BaseService implements IBook
         return null;
     }
 
+    public function clearBookSession(Provider $provider)
+    {
+        $bookDTO = new BookDTO($provider);
+        // session name
+        $key = $bookDTO->getSessionKey();
+        $this->getSession()->remove($key);
+    }
+
     /**
      * @inheritDoc
      */
@@ -102,6 +110,8 @@ class BookService extends BaseService implements IBook
             $this->getEm()->getConnection()->beginTransaction();
 
             $book = $this->createBook($bookDTO);
+            $this->getEm()->refresh($book);
+            $this->getSession()->set($bookDTO->getSessionKey(), serialize($book));
 
             $this->getEm()->getConnection()->commit();
 
@@ -165,7 +175,7 @@ class BookService extends BaseService implements IBook
 
         return $bookObject;
     }
-    
+
     /**
      * Persist customer
      * 
@@ -182,7 +192,7 @@ class BookService extends BaseService implements IBook
             $team->setOwner($customer);
             $this->getEm()->persist($team);
         }
-        
+
         $this->getEm()->flush();
 
         return $customer;
