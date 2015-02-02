@@ -47,6 +47,8 @@ class ProviderController extends Controller
      */
     public function createAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        
         $entity = new Provider();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -58,6 +60,13 @@ class ProviderController extends Controller
 
             $service = $this->get('marcoshoya_marquejogo.service.person');
             $service->update($entity);
+            
+            // creates a standard schedule
+            $schedule = new \Marcoshoya\MarquejogoBundle\Entity\Schedule();
+            $schedule->setProvider($entity);
+            
+            $em->persist($schedule);
+            $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', 'Fornecedor inserido com sucesso.');
 
