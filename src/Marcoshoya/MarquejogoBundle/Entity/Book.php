@@ -23,6 +23,12 @@ class Book
     private $id;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Provider", inversedBy="book")
+     * @ORM\JoinColumn(name="provider_id", referencedColumnName="id")
+     */
+    private $provider;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Customer", inversedBy="book")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      */
@@ -190,5 +196,28 @@ class Book
     public function getBookItem()
     {
         return $this->bookItem;
+    }
+
+    /**
+     * Set provider
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Provider $provider
+     * @return Book
+     */
+    public function setProvider(\Marcoshoya\MarquejogoBundle\Entity\Provider $provider = null)
+    {
+        $this->provider = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Get provider
+     *
+     * @return \Marcoshoya\MarquejogoBundle\Entity\Provider 
+     */
+    public function getProvider()
+    {
+        return $this->provider;
     }
 }

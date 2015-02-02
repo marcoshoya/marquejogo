@@ -103,6 +103,11 @@ class Provider implements UserInterface, \SplSubject
      * @ORM\OneToMany(targetEntity="Schedule", mappedBy="provider") 
      */
     private $schedule;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Book", mappedBy="provider") 
+     * */
+    private $book;
 
     /**
      * @var array
@@ -596,5 +601,38 @@ class Provider implements UserInterface, \SplSubject
     public function getSchedule()
     {
         return $this->schedule;
+    }
+
+    /**
+     * Add book
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Book $book
+     * @return Provider
+     */
+    public function addBook(\Marcoshoya\MarquejogoBundle\Entity\Book $book)
+    {
+        $this->book[] = $book;
+
+        return $this;
+    }
+
+    /**
+     * Remove book
+     *
+     * @param \Marcoshoya\MarquejogoBundle\Entity\Book $book
+     */
+    public function removeBook(\Marcoshoya\MarquejogoBundle\Entity\Book $book)
+    {
+        $this->book->removeElement($book);
+    }
+
+    /**
+     * Get book
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBook()
+    {
+        return $this->book;
     }
 }
