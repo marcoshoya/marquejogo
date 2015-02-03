@@ -36,7 +36,7 @@
                                     <td>{{ entity.date.format('d-m-Y') }}</td>
                                     <td>{{ entity.date.format('H:i') }}</td>
                                     <td>{{ entity.totalPrice }}</td>
-                                    <td>Visualizar </td>
+                                    <td><a href="{{ path('book_show', {"id": entity.id}) }}">Visualizar</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
