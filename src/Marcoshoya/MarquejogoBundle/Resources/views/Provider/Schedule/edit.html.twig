@@ -4,11 +4,15 @@
     {{ render(controller('MarcoshoyaMarquejogoBundle:Provider/Dashboard:sidebar', {view : 'schedule', item: 'schedule'})) }}
 {% endblock %}
 
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Provider/Form:fields.html.twig' %}
+
 {% block container %}
 
     <div class="row">
         <div class="col-lg-12">
-            <h1>Configurar agenda: </h1>
+            <h2>{{ navbar.curr.title.show }}</h2>
+            <h3>{{ entity.date.format('H:i') }}</h3>
+            <p>{{ entity.providerProduct.name }}</p>
         </div>
     </div>
 
@@ -19,7 +23,13 @@
     <div class="row">
         <div class="col-lg-12">
             <p align="right">
-                <a href="{{ path('providerproduct') }}" class="btn btn-lg btn-link">Voltar</a>
+                <a href="{{ path('schedule_show', 
+                    {
+                        "year": entity.date.format('Y'),
+                        "month": entity.date.format('m'),
+                        "day": entity.date.format('d'),
+                    }
+                ) }}" class="btn btn-lg btn-link">Voltar</a>
                 <button type="submit" class="submit btn btn-primary" value="Salvar" alt="Salvar" title="Salvar"> 
                     <i class="fa fa-save"></i> Salvar 
                 </button>
@@ -33,7 +43,7 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Configurar horário
+                    Configurar
                 </div>        
                 <!-- /.panel-heading -->
                 <div class="panel-body">

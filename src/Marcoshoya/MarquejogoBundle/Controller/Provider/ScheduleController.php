@@ -49,23 +49,8 @@ class ScheduleController extends Controller
         $lastDay = clone $firstDay;
         $lastDay->modify('+1 month');
         $lastDay->modify('-1 day'); // bug with february
-        // nav bar above calendar
-        $currMonth = clone $firstDay;
-        $prevMonth = clone $firstDay;
-        $prevMonth->modify('-1 month');
-        $nextMonth = clone $firstDay;
-        $nextMonth->modify('+1 month');
 
-        $navbar['curr']['title'] = sprintf(
-            '%s de %d', BundleHelper::monthTranslate($currMonth->format('F')), $currMonth->format('Y')
-        );
-        $navbar['curr']['date'] = $currMonth;
-        $navbar['curr']['month'] = $currMonth->format('m');
-        $navbar['curr']['year'] = $currMonth->format('Y');
-        $navbar['prev']['month'] = $prevMonth->format('m');
-        $navbar['prev']['year'] = $prevMonth->format('Y');
-        $navbar['next']['month'] = $nextMonth->format('m');
-        $navbar['next']['year'] = $nextMonth->format('Y');
+        $navbar = $this->createNavbar($firstDay);
 
         // check if fist day is not sunday
         if ($firstDay->format('w') != 0) {
@@ -132,25 +117,17 @@ class ScheduleController extends Controller
         // gets user on session
         $provider = $this->get('security.context')->getToken()->getUser();
 
-        
-
         // dates for reference
         $dateInitial = new \DateTime(sprintf('%d-%d-%d', $year, $month, $day));
         $dateFinal = clone $dateInitial;
+        $dateTemplate = clone $dateInitial;
 
-        // page title
-        $dateTitle = sprintf(
-            '%s, %d de %s de %d', // title format
-            BundleHelper::weekdayTranslate($dateInitial->format('w')), // day of week
-            $dateInitial->format('d'), // day number
-            BundleHelper::monthTranslate($dateInitial->format('F')), // name of month
-            $dateInitial->format('Y')
-        );
+        // nav bar
+        $navbar = $this->createNavbar($dateTemplate, 'day');
 
-        
         $dateInitial->modify('+6 hours');
         $dateFinal->modify('+1 day');
-        
+
         // gets all active products
         $productList = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
             array(
@@ -158,17 +135,17 @@ class ScheduleController extends Controller
                 'isActive' => true
             )
         );
-        
+
         // main schedule
         $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(
             array(
                 'provider' => $provider,
             )
         );
-        
+
         // loads service
         $scheduleService = $this->get('marcoshoya_marquejogo.service.schedule');
-        
+
         // start composite
         $scheduleComposite = new ScheduleComposite();
         for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
@@ -187,7 +164,7 @@ class ScheduleController extends Controller
                     $entity->setAvailable(false);
                     $entity->setAlocated(0);
                 }
-                
+
                 $item->addProduct($entity, $k);
             }
 
@@ -195,8 +172,8 @@ class ScheduleController extends Controller
         }
 
         return array(
-            'dateTitle' => $dateTitle,
             'schedule' => $scheduleComposite,
+            'navbar' => $navbar
         );
     }
 
@@ -216,8 +193,13 @@ class ScheduleController extends Controller
         $entity = $this->createEntity($request);
         $form = $this->createEditForm($entity);
 
+        $date = $entity->getDate();
+        $navbar = $this->createNavbar($date);
+
         return array(
             'form' => $form->createView(),
+            'entity' => $entity,
+            'navbar' => $navbar
         );
     }
 
@@ -235,8 +217,10 @@ class ScheduleController extends Controller
     public function updateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $this->createEntity($request);
+
+        $date = $entity->getDate();
+        $navbar = $this->createNavbar($date);
 
         $form = $this->createEditForm($entity);
         $form->handleRequest($request);
@@ -247,15 +231,16 @@ class ScheduleController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('schedule_show', array(
-                'year' => $entity->getDate()->format('Y'),
-                'month' => $entity->getDate()->format('m'),
-                'day' => $entity->getDate()->format('d'),
+                        'year' => $entity->getDate()->format('Y'),
+                        'month' => $entity->getDate()->format('m'),
+                        'day' => $entity->getDate()->format('d'),
             )));
         }
 
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
+            'navbar' => $navbar,
         );
     }
 
@@ -276,7 +261,7 @@ class ScheduleController extends Controller
         if (!$product instanceof \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct) {
             throw $this->createNotFoundException('Unable to find ProviderProduct entity.');
         }
-        
+
         $provider = $product->getProvider();
         $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(array(
             'provider' => $provider
@@ -336,6 +321,48 @@ class ScheduleController extends Controller
         ;
 
         return $form;
+    }
+
+    private function createNavbar($firstDay, $modify = 'month')
+    {
+        // nav bar above calendar
+        $currMonth = clone $firstDay;
+        $prevMonth = clone $firstDay;
+        $prevMonth->modify("-1 {$modify}");
+        $nextMonth = clone $firstDay;
+        $nextMonth->modify("+1 {$modify}");
+
+        $navbar['curr']['title']['index'] = sprintf(
+            '%s de %d', // template
+            BundleHelper::monthTranslate($currMonth->format('F')), // month
+            $currMonth->format('Y') // year
+        );
+        $navbar['curr']['title']['edit'] = sprintf(
+            '%s %d %s, %d', // title format
+            BundleHelper::weekdayTranslate($currMonth->format('w')), // day of week
+            $currMonth->format('d'), // day number
+            BundleHelper::monthTranslate($currMonth->format('F')), // name of month
+            $currMonth->format('Y')
+        );
+        $navbar['curr']['title']['show'] = sprintf(
+            '%s, %d de %s de %d', // title format
+            BundleHelper::weekdayTranslate($currMonth->format('w')), // day of week
+            $currMonth->format('d'), // day number
+            BundleHelper::monthTranslate($currMonth->format('F')), // name of month
+            $currMonth->format('Y')
+        );
+        $navbar['curr']['date'] = $currMonth;
+        $navbar['curr']['month'] = $currMonth->format('m');
+        $navbar['curr']['year'] = $currMonth->format('Y');
+        $navbar['curr']['day'] = $currMonth->format('d');
+        $navbar['prev']['month'] = $prevMonth->format('m');
+        $navbar['prev']['year'] = $prevMonth->format('Y');
+        $navbar['prev']['day'] = $prevMonth->format('d');
+        $navbar['next']['month'] = $nextMonth->format('m');
+        $navbar['next']['year'] = $nextMonth->format('Y');
+        $navbar['next']['day'] = $nextMonth->format('d');
+
+        return $navbar;
     }
 
 }

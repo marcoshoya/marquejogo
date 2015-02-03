@@ -1,0 +1,23 @@
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                <span class="help-block">{{ error.message }}</span>
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block location_widget %}
+    
+    <label class="col-md-2">Estado</label>
+    <div class="col-md-2">
+        {{ form_widget(form.state, { 'attr': {'class': 'form-control', 'onChange': 'library.stateChange(this)'} }) }}
+    </div>
+
+    <label class="col-md-2 control-label">Cidade</label>
+    <div class="col-md-4">
+        {{ form_widget(form.city, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+
+{% endblock %}

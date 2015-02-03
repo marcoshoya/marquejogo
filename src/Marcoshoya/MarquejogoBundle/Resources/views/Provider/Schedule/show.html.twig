@@ -9,15 +9,15 @@
     <div class="page-header">
         <div class="pull-right form-inline">
             <div class="btn-group">
-                <a href="#" class="btn btn-warning active" data-calendar-view="month">Ver mês</a>
+                <a href="{{ path('schedule', {"year": navbar.curr.year , "month": navbar.curr.month}) }}" class="btn btn-warning active" data-calendar-view="month">Ver mês</a>
             </div>
             <div class="btn-group">
-                <a href="#" class="btn btn-primary" data-calendar-nav="prev"><< Anterior</a>
-                <a href="#" class="btn btn-default" data-calendar-nav="today">Hoje</a>
-                <a href="#" class="btn btn-primary" data-calendar-nav="next">Próximo >></a>
+                <a href="{{ path('schedule_show', {"year": navbar.prev.year , "month": navbar.prev.month, "day": navbar.prev.day}) }}" class="btn btn-primary" data-calendar-nav="prev"><< Anterior</a>
+                <a href="{{ path('schedule_show', {"year": "now"|date('Y') , "month": "now"|date('m'), "day": "now"|date('d')}) }}" class="btn btn-default" data-calendar-nav="today">Hoje</a>
+                <a href="{{ path('schedule_show', {"year": navbar.next.year , "month": navbar.next.month, "day": navbar.next.day}) }}" class="btn btn-primary" data-calendar-nav="next">Próximo >></a>
             </div>
         </div>
-        <h3>{{ dateTitle }} </h3>
+        <h3>{{ navbar.curr.title.show }}</h3>
     </div>
 
     <div class="row">
