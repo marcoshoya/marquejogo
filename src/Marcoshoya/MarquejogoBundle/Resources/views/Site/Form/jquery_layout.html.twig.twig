@@ -18,7 +18,7 @@
                 {% endif %}
 
                         var $configs = $.extend({
-                        minDate: new Date({{ min_year }}),
+                        minDate: new Date(),
                                 maxDate: new Date({{ max_year }})
                         }, $.datepicker.regional['{{ culture }}'],{{ configs|json_encode|raw }} );                {% if widget != "single_text" %}
                                         var $year = $('#{{ form.year.vars.id }}');

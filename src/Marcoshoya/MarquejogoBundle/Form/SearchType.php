@@ -22,7 +22,7 @@ class SearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {   
         $min = date('Y, m, d');
-        $max = date('Y, m, d', strtotime("+4 months"));
+        $max = date('Y, m, d', strtotime("+2 months"));
         
         $builder
             ->add('city', 'genemu_jqueryautocomplete_entity', array(
