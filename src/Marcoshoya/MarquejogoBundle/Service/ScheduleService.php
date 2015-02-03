@@ -6,6 +6,7 @@ use Marcoshoya\MarquejogoBundle\Component\Schedule\ISchedule;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Entity\Schedule;
+use Marcoshoya\MarquejogoBundle\Entity\ProviderProduct;
 
 /**
  * ProductService
@@ -44,6 +45,33 @@ class ScheduleService extends BaseService implements ISchedule
             $query = $qb->getQuery();
 
             return $query->execute();
+
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
+        }
+    }
+    
+    public function getItemByProductAndDate(Schedule $schedule, ProviderProduct $product, \DateTime $date)
+    {
+        try {
+
+            $qb = $this->getEm()->createQueryBuilder();
+            $qb
+                ->select('s')
+                ->from('MarcoshoyaMarquejogoBundle:ScheduleItem', 's')
+                ->where('s.schedule = :schedule')
+                ->andWhere('s.providerProduct = :providerProduct')
+                ->andWhere($qb->expr()->eq('s.date', ':date'))
+                ->setParameters(array(
+                    'schedule' => $schedule,
+                    'providerProduct' => $product,
+                    'date' => $date,
+                ))
+                ->setMaxResults(1);
+            
+            $query = $qb->getQuery();
+
+            return $query->getOneOrNullResult();
 
         } catch (\Exception $ex) {
             $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());

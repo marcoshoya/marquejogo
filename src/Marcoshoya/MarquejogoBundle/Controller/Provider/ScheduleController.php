@@ -132,13 +132,7 @@ class ScheduleController extends Controller
         // gets user on session
         $provider = $this->get('security.context')->getToken()->getUser();
 
-        // gets all active products
-        $productList = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
-            array(
-                'provider' => $provider,
-                'isActive' => true
-            )
-        );
+        
 
         // dates for reference
         $dateInitial = new \DateTime(sprintf('%d-%d-%d', $year, $month, $day));
@@ -153,11 +147,30 @@ class ScheduleController extends Controller
             $dateInitial->format('Y')
         );
 
-        // start composite
+        
         $dateInitial->modify('+6 hours');
         $dateFinal->modify('+1 day');
-        $schedule = new ScheduleComposite();
-
+        
+        // gets all active products
+        $productList = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
+            array(
+                'provider' => $provider,
+                'isActive' => true
+            )
+        );
+        
+        // main schedule
+        $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(
+            array(
+                'provider' => $provider,
+            )
+        );
+        
+        // loads service
+        $scheduleService = $this->get('marcoshoya_marquejogo.service.schedule');
+        
+        // start composite
+        $scheduleComposite = new ScheduleComposite();
         for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
 
             $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
@@ -165,15 +178,25 @@ class ScheduleController extends Controller
             $item->setDate($dateTime);
 
             foreach ($productList as $k => $product) {
-                $item->addProduct($product, $k);
+                $entity = $scheduleService->getItemByProductAndDate($schedule, $product, $dateTime);
+                if (!$entity) {
+                    $entity = new ScheduleItem();
+                    $entity->setProviderProduct($product);
+                    $entity->setDate($dateTime);
+                    $entity->setPrice(0.00);
+                    $entity->setAvailable(false);
+                    $entity->setAlocated(0);
+                }
+                
+                $item->addProduct($entity, $k);
             }
 
-            $schedule->add($item, $hour);
+            $scheduleComposite->add($item, $hour);
         }
 
         return array(
             'dateTitle' => $dateTitle,
-            'schedule' => $schedule,
+            'schedule' => $scheduleComposite,
         );
     }
 

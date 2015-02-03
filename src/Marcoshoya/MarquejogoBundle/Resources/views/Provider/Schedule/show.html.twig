@@ -26,26 +26,43 @@
                 <div id="cal-day-box">
                     <div class="row-fluid clearfix cal-row-head">
                         <div class="span1 col-xs-1 cal-cell">Hora</div>
-                        <div class="span8 col-xs-8 cal-cell">Quadra(s)</div>
-                        <div class="span3 col-xs-3 cal-cell">Ação</div>
+                        <div class="span8 col-xs-3 cal-cell">Quadra(s)</div>
+                        <div class="span3 col-xs-2 cal-cell">Valor</div>
+                        <div class="span3 col-xs-2 cal-cell">Disponível</div>
+                        <div class="span3 col-xs-2 cal-cell">Ação</div>
                     </div>
                     <div class="clearfix" id="cal-day-panel" style="height: 960px;">
                         <div id="cal-day-panel-hour">
                             {% for item in schedule.all %}
                                 <div class="cal-day-hour">
-                                    {% for key, product in item.allproduct %}
+                                    {% for key, scheduleItem in item.allproduct %}
                                         <div class="row-fluid cal-day-hour-part">
                                             <div class="span1 col-xs-1"><b>{{ key == 0 ? item.show : '' }}</b></div>
-                                            <div class="span8 col-xs-8">
-                                                {{ product.name }}
+                                            <div class="span8 col-xs-3">
+                                                
+                                                {{ scheduleItem.providerProduct.name }}
                                             </div>
-                                            <div class="span3 col-xs-3">
+                                            <div class="span3 col-xs-2">
+                                                {% if scheduleItem.price %}
+                                                    <p align="center"> {{ scheduleItem.price }}</p>
+                                                {% else %}
+                                                    <p align="center">---</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="span3 col-xs-2">
+                                                {% if scheduleItem.available %}
+                                                    <p align="center"> <i class="fa fa-check"> </i></p>
+                                                {% else %}
+                                                    <p align="center"> <i class="fa fa-close"> </i></p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="span3 col-xs-2">
                                                 <a href="{{ path('schedule_edit',
                                                     {
                                                         'year': item.date.format('Y'),
                                                         'month': item.date.format('m'),
                                                         'day': item.date.format('d'),
-                                                        'product': product.id,
+                                                        'product': scheduleItem.providerProduct.id,
                                                         'hour': item.date.format('H'),
                                                     }
                                                 ) }}">Configurar</a>
