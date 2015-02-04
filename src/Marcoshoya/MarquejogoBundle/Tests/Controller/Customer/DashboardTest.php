@@ -15,29 +15,30 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class DashboardTest extends WebTestCase
 {
+
     /**
      * @var \Symfony\Bundle\FrameworkBundle\Client
      */
     protected $client = null;
-    
+
     /**
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
-    
+
     /**
      * Setup functions
      */
     public function setUp()
     {
         $this->client = static::createClient();
-        
+
         $this->em = static::$kernel->getContainer()
             ->get('doctrine')
             ->getManager()
         ;
     }
-    
+
     /**
      * Make login on admin
      */
@@ -46,16 +47,16 @@ class DashboardTest extends WebTestCase
         $session = $this->client->getContainer()->get('session');
 
         $firewall = 'website';
-        
-        $customer = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find(1);
-        if (!$customer) {
-            $this->fail("Customer not found");
-        }
-        
+
+        $customer = $this->getMock('\Marcoshoya\MarquejogoBundle\Entity\Customer');
+        $customer->expects($this->once())
+            ->method('getRoles')
+            ->will($this->returnValue(array('ROLE_CUSTOMER')));
+
         $token = new UsernamePasswordToken($customer, null, $firewall, $customer->getRoles());
         $this->client->getContainer()->get('security.context')->setToken($token);
-        
-        $session->set('_security_'.$firewall, serialize($token));
+
+        $session->set('_security_' . $firewall, serialize($token));
         $session->save();
 
         $cookie = new Cookie($session->getName(), $session->getId());
@@ -67,9 +68,9 @@ class DashboardTest extends WebTestCase
      */
     public function testDashboard()
     {
-        $this->logIn();
+        $this->logIn();     
         $crawler = $this->client->request('GET', '/cliente/');
-        
+
         $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('ROLE_CUSTOMER'));
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sair")')->count());
