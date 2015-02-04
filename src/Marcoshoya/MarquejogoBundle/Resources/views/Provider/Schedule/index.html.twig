@@ -42,19 +42,24 @@
                         <div class="cal-row-fluid cal-before-eventlist">
                             {% set weekend = [0, 6] %}
                             {% for day in week %}
-                                <div class="cal-cell1 cal-cell" onclick="location.href='{{ path('schedule_show', {"year": day.format('Y'), "month": day.format('m'), "day": day.format('j') }) }}';">
-                                    
-                                        <div class="cal-month-day {{ 
-            (day.format('Y-m') < navbar.curr.date.format('Y-m')) or 
-            (day.format('Y-m') > navbar.curr.date.format('Y-m')) ? 'cal-day-outmonth' : 
-                (day.format('Y-m-d') == "now"|date('Y-m-d')) ? 'cal-day-today' :
-                    (day.format('w') in weekend) ? 'cal-day-weekend' : 'cal-day-inmonth' }}">
-                                            
-                                            <span class="pull-right" data-cal-date="{{ day.format('Y-m-d') }}">
-                                                {{ day.format('j') }}
-                                            </span>
-                                        </div>
-                                    
+                                <div class="cal-cell1 cal-cell" onclick="location.href = '{{ path('schedule_show', {"year": day.date.format('Y'), "month": day.date.format('m'), "day": day.date.format('j') }) }}';">
+
+                                    <div class="cal-month-day {{ 
+            (day.date.format('Y-m') < navbar.curr.date.format('Y-m')) or 
+            (day.date.format('Y-m') > navbar.curr.date.format('Y-m')) ? 'cal-day-outmonth' : 
+                (day.date.format('Y-m-d') == "now"|date('Y-m-d')) ? 'cal-day-today' :
+                    (day.date.format('w') in weekend) ? 'cal-day-weekend' : 'cal-day-inmonth' }}">
+
+                                        <span class="pull-right" data-cal-date="{{ day.date.format('Y-m-d') }}">
+                                            {{ day.date.format('j') }}
+                                        </span>
+                                        {% if day.book %}
+                                            <div class="events-list">
+                                                <span title="Dia com reserva" class="pull-left event event-warning"></span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
                                 </div>
                             {% endfor %}
                         </div>
@@ -64,6 +69,15 @@
 
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <p align='left'>
+                <span title="Dia com reserva" class="pull-left event event-warning"></span>
+                Dia com reserva
+            </p>
+        </div>
+    </div>
+
     <!-- /.row -->
 
 {% endblock %}
