@@ -35,10 +35,11 @@
                         <div id="cal-day-panel-hour">
                             {% for item in schedule.all %}
                                 <div class="cal-day-hour">
-                                    {% for key, scheduleItem in item.allproduct %}
+                                    {% set count = 0 %}
+                                    {% for scheduleItem in item.allproduct(item.date.getTimestamp) %}
                                         <div class="row-fluid cal-day-hour-part {{ scheduleItem.alocated ? 'day-highlight dh-event-warning' : '' }}">
                                             <div class="span1 col-xs-1">
-                                                <b>{{ key == 0 ? item.show : '' }}</b>
+                                                <b>{{ count == 0 ? item.show : '' }}</b>
                                             </div>
                                             <div class="span8 col-xs-3">
                                                 {{ scheduleItem.providerProduct.name }}
@@ -59,7 +60,7 @@
                                             </div>
                                             <div class="span3 col-xs-2">
                                                 {% if not scheduleItem.alocated %}
-                                                <a href="{{ path('schedule_edit',
+                                                    <a href="{{ path('schedule_edit',
                                                     {
                                                         'year': item.date.format('Y'),
                                                         'month': item.date.format('m'),
@@ -69,10 +70,12 @@
                                                     }
                                                 ) }}">Configurar</a>
                                                 {% else %}
-                                                    <a href="#">Ver reserva</a>
+                                                    {% set book = item.getBook(item.date.getTimestamp, scheduleItem.providerProduct.id) %}
+                                                    <a href="{{ path('book_show', {"id": book.id}) }}">Ver reserva</a>
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {% set count = count + 1 %}
                                     {% endfor %}
                                 </div>
                                 <div style="clear: both"></div>

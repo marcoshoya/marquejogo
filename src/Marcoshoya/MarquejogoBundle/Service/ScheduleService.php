@@ -3,7 +3,6 @@
 namespace Marcoshoya\MarquejogoBundle\Service;
 
 use Marcoshoya\MarquejogoBundle\Component\Schedule\ISchedule;
-use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
 use Marcoshoya\MarquejogoBundle\Entity\ProviderProduct;
 use Marcoshoya\MarquejogoBundle\Entity\Schedule;
@@ -162,7 +161,6 @@ class ScheduleService extends BaseService implements ISchedule
             )
         );
 
-
         // start composite
         $scheduleComposite = new ScheduleComposite();
         for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
@@ -172,6 +170,7 @@ class ScheduleService extends BaseService implements ISchedule
             $item->setDate($dateTime);
 
             foreach ($productList as $k => $product) {
+                $book = null;
                 $entity = $this->getItemByProductAndDate($schedule, $product, $dateTime);
                 if (!$entity) {
                     $entity = new ScheduleItem();
@@ -180,9 +179,17 @@ class ScheduleService extends BaseService implements ISchedule
                     $entity->setPrice(0.00);
                     $entity->setAvailable(false);
                     $entity->setAlocated(0);
+                } else {
+                    if ($entity->getAlocated()) {
+                        $book = $this->getBookByProductAndDate($provider, $product, $dateTime);
+                    }
                 }
-
-                $item->addProduct($entity, $k);
+                
+                if (null !== $book) {
+                    $item->addBook($book, $dateTime->getTimestamp(), $product->getId());
+                }
+                
+                $item->addProduct($entity, $dateTime->getTimestamp(), $product->getId());
             }
 
             $scheduleComposite->add($item, $hour);
@@ -246,6 +253,7 @@ class ScheduleService extends BaseService implements ISchedule
     }
 
     /**
+     * Gets all book by date
      * 
      * @param Provider $provider
      * @param \DateTime $datetime
@@ -273,29 +281,16 @@ class ScheduleService extends BaseService implements ISchedule
             $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
         }
     }
-
-    public function getallProductBySearch(Schedule $schedule, SearchDTO $search)
-    {
-        try {
-
-            $qb = $this->getEm()->createQueryBuilder()
-                ->select('s')
-                ->from('MarcoshoyaMarquejogoBundle:ScheduleItem', 's')
-                ->where('s.schedule = :schedule')
-                ->andWhere('s.date = :date')
-                ->setParameters(array(
-                'schedule' => $schedule,
-                'date' => $search->getDate(),
-            ));
-
-            $query = $qb->getQuery();
-
-            return $query->execute();
-        } catch (\Exception $ex) {
-            $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
-        }
-    }
-
+    
+    /**
+     * Get a scheduleItem By Product And Date
+     * 
+     * @param Schedule $schedule
+     * @param ProviderProduct $product
+     * @param \DateTime $date
+     * 
+     * @return ScheduleItem|null
+     */
     public function getItemByProductAndDate(Schedule $schedule, ProviderProduct $product, \DateTime $date)
     {
         try {
@@ -321,5 +316,40 @@ class ScheduleService extends BaseService implements ISchedule
             $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
         }
     }
+    
+    /**
+     * Get a book By Product And Date
+     * 
+     * @param Schedule $schedule
+     * @param ProviderProduct $product
+     * @param \DateTime $date
+     * 
+     * @return ScheduleItem|null
+     */
+    public function getBookByProductAndDate(Provider $provider, ProviderProduct $product, \DateTime $date)
+    {
+        try {
 
+            $qb = $this->getEm()->createQueryBuilder();
+            $qb
+                ->select('b')
+                ->from('MarcoshoyaMarquejogoBundle:Book', 'b')
+                ->innerJoin('b.bookItem', 'bi')
+                ->where('b.provider = :provider')
+                ->andWhere('bi.product = :product')
+                ->andWhere($qb->expr()->eq('b.date', ':date'))
+                ->setParameters(array(
+                    'provider' => $provider,
+                    'product' => $product->getId(),
+                    'date' => $date,
+                ))
+                ->setMaxResults(1);
+
+            $query = $qb->getQuery();
+
+            return $query->getOneOrNullResult();
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
+        }
+    }
 }

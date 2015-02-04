@@ -20,6 +20,11 @@ class ScheduleItem extends ScheduleComponent
      * @var array
      */
     private $productList = array();
+    
+    /**
+     * @var array
+     */
+    private $bookList = array();
 
     /**
      * @inheritDoc
@@ -55,11 +60,11 @@ class ScheduleItem extends ScheduleComponent
      * @param Entity $product
      * @param integer|string $idx
      */
-    public function addProduct($product, $idx)
+    public function addProduct($product, $time, $idx)
     {
-        unset($this->productList[$idx]);
+        unset($this->productList[$time][$idx]);
 
-        $this->productList[$idx] = $product;
+        $this->productList[$time][$idx] = $product;
     }
 
     /**
@@ -67,8 +72,26 @@ class ScheduleItem extends ScheduleComponent
      *
      * @return array
      */
-    public function allProduct()
+    public function allProduct($time)
     {
-        return $this->productList;
+        return $this->productList[$time];
+    }
+    
+    /**
+     * Add a book on item
+     *
+     * @param Entity $book
+     * @param integer|string $idx
+     */
+    public function addBook($book, $time, $idx)
+    {
+        unset($this->bookList[$time][$idx]);
+
+        $this->bookList[$time][$idx] = $book;
+    }
+    
+    public function getBook($time, $idx)
+    {
+        return isset($this->bookList[$time][$idx]) ? $this->bookList[$time][$idx] : null;
     }
 }

@@ -8,9 +8,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * DashboardTest
- * 
+ *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
- * 
+ *
  * @see http://symfony.com/doc/current/cookbook/testing/simulating_authentication.html
  */
 class DashboardTest extends WebTestCase
@@ -62,13 +62,13 @@ class DashboardTest extends WebTestCase
         $cookie = new Cookie($session->getName(), $session->getId());
         $this->client->getCookieJar()->set($cookie);
     }
-    
+
     /**
      * General test for dashboard
      */
     public function testDashboard()
     {
-        $this->logIn();     
+        $this->logIn();
         $crawler = $this->client->request('GET', '/cliente/');
 
         $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('ROLE_CUSTOMER'));

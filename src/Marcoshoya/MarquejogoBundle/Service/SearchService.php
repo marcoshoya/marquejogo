@@ -5,7 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchCollection;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\LocationCity;
-use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
@@ -15,11 +15,12 @@ use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
  */
 class SearchService extends BaseService
 {
+
     /**
      * @var Marcoshoya\MarquejogoBundle\Service\AutocompleteService
      */
     public $autocomplete;
-    
+
     /**
      * Get autocomplete observer
      *
@@ -35,7 +36,7 @@ class SearchService extends BaseService
             throw new \InvalidArgumentException("Object have to be instance of AutocompleteService");
         }
     }
-    
+
     /**
      * Set session
      * 
@@ -54,14 +55,14 @@ class SearchService extends BaseService
         $search = new SearchDTO();
         $search->setDate($dateTime);
         $search->setAutocomplete($autocomplete);
-        
+
         if ($this->getSession()->has(SearchDTO::session)) {
             $this->getSession()->remove(SearchDTO::session);
         }
-        
+
         $this->getSession()->set(SearchDTO::session, serialize($search));
     }
-    
+
     /**
      * Get search session
      * 
@@ -71,13 +72,13 @@ class SearchService extends BaseService
     {
         if ($this->getSession()->has(SearchDTO::session)) {
             $object = $this->getSession()->get(SearchDTO::session);
-            
+
             return unserialize($object);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Get standard search data in array
      * 
@@ -89,14 +90,14 @@ class SearchService extends BaseService
         if (null === $searchDTO) {
             $searchDTO = new SearchDTO();
         }
-        
+
         return array(
             'city' => null !== $searchDTO->getAutocomplete() ? $searchDTO->getAutocomplete()->getNameField() : null,
             'date' => null !== $searchDTO->getDate() ? $searchDTO->getDate() : null,
             'hour' => null !== $searchDTO->getDate() ? $searchDTO->getDate()->format('H') : date('H'),
         );
     }
-    
+
     /**
      * Do the search
      *
@@ -141,6 +142,28 @@ class SearchService extends BaseService
                 ->findBy(array('city' => $city));
 
             return $providers;
+        } catch (\Exception $ex) {
+            $this->getLogger()->error("SearchService error: " . $ex->getMessage());
+        }
+    }
+
+    public function getallProductBySearch(Schedule $schedule, SearchDTO $search)
+    {
+        try {
+
+            $qb = $this->getEm()->createQueryBuilder()
+                ->select('s')
+                ->from('MarcoshoyaMarquejogoBundle:ScheduleItem', 's')
+                ->where('s.schedule = :schedule')
+                ->andWhere('s.date = :date')
+                ->setParameters(array(
+                    'schedule' => $schedule,
+                    'date' => $search->getDate(),
+                ));
+
+            $query = $qb->getQuery();
+
+            return $query->execute();
         } catch (\Exception $ex) {
             $this->getLogger()->error("SearchService error: " . $ex->getMessage());
         }

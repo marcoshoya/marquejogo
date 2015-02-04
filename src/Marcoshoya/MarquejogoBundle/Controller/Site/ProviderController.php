@@ -146,7 +146,7 @@ class ProviderController extends Controller
      */
     private function getProducts(Provider $provider, SearchDTO $searchDTO = null)
     {
-        $serviceSchedule = $this->get('marcoshoya_marquejogo.service.schedule');
+        $searchSchedule = $this->get('marcoshoya_marquejogo.service.search');
         $products = array();
 
         // get search
@@ -155,7 +155,7 @@ class ProviderController extends Controller
                 ->getRepository('MarcoshoyaMarquejogoBundle:Schedule')
                 ->findOneBy(array('provider' => $provider));
             // get products available to sell by date
-            $products = $serviceSchedule->getallProductBySearch($schedule, $searchDTO);
+            $products = $searchSchedule->getallProductBySearch($schedule, $searchDTO);
         }
 
         return $products;
