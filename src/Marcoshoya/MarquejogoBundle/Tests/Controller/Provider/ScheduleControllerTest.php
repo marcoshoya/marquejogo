@@ -11,50 +11,27 @@ use Marcoshoya\MarquejogoBundle\Tests\Controller\Provider\DashboardTest;
  */
 class ScheduleControllerTest extends DashboardTest
 {
-    /*
-    public function testCompleteScenario()
+
+    public function testCalendar()
     {
-        // Create a new client to browse the application
-        $client = static::createClient();
+        $this->logIn();
 
-        // Create a new entry in the database
-        $crawler = $client->request('GET', '/schedule/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /schedule/");
-        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
+        // get initial dates
+        $current = new \DateTime();
+        $navbar = $this->scheduleService->createNavbar($current);
 
-        // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
-            'marcoshoya_marquejogobundle_schedule[field_name]'  => 'Test',
-            // ... other fields to fill
-        ));
+        //#1 main calendar
+        $uri = $this->router->generate('schedule', array('year' => $current->format('Y'), 'month' => $current->format('m')));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-
-        // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
-
-        // Edit the entity
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
-
-        $form = $crawler->selectButton('Update')->form(array(
-            'marcoshoya_marquejogobundle_schedule[field_name]'  => 'Foo',
-            // ... other fields to fill
-        ));
-
-        $client->submit($form);
-        $crawler = $client->followRedirect();
-
-        // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
-
-        // Delete the entity
-        $client->submit($crawler->selectButton('Delete')->form());
-        $crawler = $client->followRedirect();
-
-        // Check the entity has been delete on the list
-        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
+        $crawler = $this->client->request('GET', $uri);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter("h3:contains(\"{$navbar['curr']['title']['index']}\")")->count());
+        
+        // #2 day page
+        $uri = $this->router->generate('schedule_show', array('year' => $current->format('Y'), 'month' => $current->format('m'), "day" => $current->format('d')));
+        
+        $crawler = $this->client->request('GET', $uri);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter("h3:contains(\"{$navbar['curr']['title']['show']}\")")->count());
     }
-
-    */
 }
