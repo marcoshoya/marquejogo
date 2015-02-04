@@ -13,9 +13,9 @@ security:
         admin:
             entity: { class: MarcoshoyaMarquejogoBundle:AdmUser, property: username }
         provider:
-            entity: { class: MarcoshoyaMarquejogoBundle:Provider, property: email }
+            entity: { class: MarcoshoyaMarquejogoBundle:Provider, property: username }
         customer:
-            entity: { class: MarcoshoyaMarquejogoBundle:Customer, property: email }
+            entity: { class: MarcoshoyaMarquejogoBundle:Customer, property: username }
 
     firewalls:
         site:

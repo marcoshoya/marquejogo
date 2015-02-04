@@ -9,8 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Form\ScheduleItemType;
 use Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
-use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleItem as ScheduleCompositeItem;
-use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleComposite;
 
 /**
  * ScheduleController controller.
@@ -34,34 +32,21 @@ class ScheduleController extends Controller
      */
     public function indexAction($year, $month)
     {
-        // initial vars
-        $now = $schedule = $navbar = array();
-
         // loads service
         $scheduleService = $this->get('marcoshoya_marquejogo.service.schedule');
 
         // gets user on session
         $provider = $this->get('security.context')->getToken()->getUser();
 
-        // Calendar start
-        $now = $scheduleService->getNow();
-        $firstDay = $scheduleService->getFirstdayMonth($year, $month);
-
         // navbar
-        $navbar = $scheduleService->createNavbar($firstDay);
+        $navbar = $scheduleService->createNavbar($year, $month);
+         
+        // creates the calendar
+        $schedule = $scheduleService->createCalendarMonth($year, $month, $provider);
 
-        $schedule = $scheduleService->createMonthCalendar($firstDay, $provider);
-
-        /*         * *
-
-          echo '<pre>';
-          print_r($schedule);
-          echo '</pre>';
-         */
         return array(
             'schedule' => $schedule,
             'navbar' => $navbar,
-            'now' => $now,
         );
     }
 
@@ -78,66 +63,18 @@ class ScheduleController extends Controller
     {
         // loads service
         $scheduleService = $this->get('marcoshoya_marquejogo.service.schedule');
-        
-        // starts doctrine manager
-        $em = $this->getDoctrine()->getManager();
 
         // gets user on session
         $provider = $this->get('security.context')->getToken()->getUser();
-
-        // dates for reference
-        $dateInitial = new \DateTime(sprintf('%d-%d-%d', $year, $month, $day));
-        $dateFinal = clone $dateInitial;
-        $dateTemplate = clone $dateInitial;
-
+        
         // nav bar
-        $navbar = $scheduleService->createNavbar($dateTemplate, 'day');
-
-        $dateInitial->modify('+6 hours');
-        $dateFinal->modify('+1 day');
-
-        // gets all active products
-        $productList = $em->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
-            array(
-                'provider' => $provider,
-                'isActive' => true
-            )
-        );
-
-        // main schedule
-        $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(
-            array(
-                'provider' => $provider,
-            )
-        );
-
-        // start composite
-        $scheduleComposite = new ScheduleComposite();
-        for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
-
-            $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
-            $item = new ScheduleCompositeItem();
-            $item->setDate($dateTime);
-
-            foreach ($productList as $k => $product) {
-                $entity = $scheduleService->getItemByProductAndDate($schedule, $product, $dateTime);
-                if (!$entity) {
-                    $entity = new ScheduleItem();
-                    $entity->setProviderProduct($product);
-                    $entity->setDate($dateTime);
-                    $entity->setPrice(0.00);
-                    $entity->setAvailable(false);
-                    $entity->setAlocated(0);
-                }
-
-                $item->addProduct($entity, $k);
-            }
-
-            $scheduleComposite->add($item, $hour);
-        }
+        $navbar = $scheduleService->createNavbar($year, $month, $day, 'day');
+        
+        // creates the day calendar
+        $schedule = $scheduleService->createCalendarDay($provider, $year, $month, $day);
 
         return array(
-            'schedule' => $scheduleComposite,
+            'schedule' => $schedule,
             'navbar' => $navbar
         );
     }
@@ -162,7 +99,7 @@ class ScheduleController extends Controller
         $form = $this->createEditForm($entity);
 
         $date = $entity->getDate();
-        $navbar = $scheduleService->createNavbar($date);
+        $navbar = $scheduleService->createNavbar($date->format('Y'), $date->format('m'), $date->format('d'));
 
         return array(
             'form' => $form->createView(),
@@ -191,7 +128,7 @@ class ScheduleController extends Controller
         $entity = $this->createEntity($request);
 
         $date = $entity->getDate();
-        $navbar = $scheduleService->createNavbar($date);
+        $navbar = $scheduleService->createNavbar($date->format('Y'), $date->format('m'), $date->format('d'));
 
         $form = $this->createEditForm($entity);
         $form->handleRequest($request);

@@ -5,8 +5,11 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 use Marcoshoya\MarquejogoBundle\Component\Schedule\ISchedule;
 use Marcoshoya\MarquejogoBundle\Component\Search\SearchDTO;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
-use Marcoshoya\MarquejogoBundle\Entity\Schedule;
 use Marcoshoya\MarquejogoBundle\Entity\ProviderProduct;
+use Marcoshoya\MarquejogoBundle\Entity\Schedule;
+use Marcoshoya\MarquejogoBundle\Entity\ScheduleItem;
+use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleItem as ScheduleCompositeItem;
+use Marcoshoya\MarquejogoBundle\Component\Schedule\ScheduleComposite;
 use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
@@ -18,18 +21,29 @@ class ScheduleService extends BaseService implements ISchedule
 {
 
     /**
-     * Gets now date
+     * Gets a datetime
      * 
-     * @return array
+     * @param integer $year
+     * @param integer $month
+     * @param integer $day
+     * 
+     * @return \DateTime
      */
-    public function getNow()
+    public function getDate($year = null, $month = null, $day = null)
     {
-        $current = new \DateTime();
-        $now['day'] = $current->format('j');
-        $now['month'] = BundleHelper::monthTranslate($current->format('F'));
-        $now['year'] = $current->format('Y');
+        if (null === $year) {
+            $year = date('Y');
+        }
 
-        return $now;
+        if (null === $month) {
+            $month = date('m');
+        }
+
+        if (null === $day) {
+            $day = date('d');
+        }
+
+        return new \DateTime(date(sprintf('%d-%d-%d 00:00:00', $year, $month, $day)));
     }
 
     /**
@@ -42,7 +56,7 @@ class ScheduleService extends BaseService implements ISchedule
      */
     public function getFirstdayMonth($year, $month)
     {
-        return new \DateTime(date(sprintf('%d-%d-01', $year, $month)));
+        return $this->getDate($year, $month, 01);
     }
 
     /**
@@ -69,9 +83,12 @@ class ScheduleService extends BaseService implements ISchedule
      * 
      * @return array
      */
-    public function createMonthCalendar(\DateTime $firstDay, Provider $provider = null)
+    public function createCalendarMonth($year, $month, Provider $provider = null)
     {
         $schedule = $navbar = array();
+
+        // first day
+        $firstDay = $this->getFirstdayMonth($year, $month);
 
         // last day of month
         $lastDay = $this->getLastdayMonth($firstDay);
@@ -121,6 +138,59 @@ class ScheduleService extends BaseService implements ISchedule
         return $schedule;
     }
 
+    public function createCalendarDay(Provider $provider, $year, $month, $day)
+    {
+        // dates for reference
+        $dateInitial = $this->getDate($year, $month, $day);
+        $dateFinal = clone $dateInitial;
+
+        $dateInitial->modify('+6 hours');
+        $dateFinal->modify('+1 day');
+
+        // gets all active products
+        $productList = $this->getEm()->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')->findBy(
+            array(
+                'provider' => $provider,
+                'isActive' => true
+            )
+        );
+
+        // main schedule
+        $schedule = $this->getEm()->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(
+            array(
+                'provider' => $provider,
+            )
+        );
+
+
+        // start composite
+        $scheduleComposite = new ScheduleComposite();
+        for ($hour = $dateInitial->getTimestamp(); $hour < $dateFinal->getTimestamp(); $hour = strtotime('+1 hour', $hour)) {
+
+            $dateTime = new \DateTime(date('Y-m-d H:i:s', $hour));
+            $item = new ScheduleCompositeItem();
+            $item->setDate($dateTime);
+
+            foreach ($productList as $k => $product) {
+                $entity = $this->getItemByProductAndDate($schedule, $product, $dateTime);
+                if (!$entity) {
+                    $entity = new ScheduleItem();
+                    $entity->setProviderProduct($product);
+                    $entity->setDate($dateTime);
+                    $entity->setPrice(0.00);
+                    $entity->setAvailable(false);
+                    $entity->setAlocated(0);
+                }
+
+                $item->addProduct($entity, $k);
+            }
+
+            $scheduleComposite->add($item, $hour);
+        }
+        
+        return $scheduleComposite;
+    }
+
     /**
      * Creates the navbar on top calendar
      * 
@@ -129,10 +199,12 @@ class ScheduleService extends BaseService implements ISchedule
      * 
      * @return array
      */
-    public function createNavbar(\DateTime $firstDay, $modify = 'month')
+    public function createNavbar($year, $month, $day = 01, $modify = 'month')
     {
         // nav bar above calendar
         $navbar = array();
+
+        $firstDay = $this->getDate($year, $month, $day);
 
         $currMonth = clone $firstDay;
         $prevMonth = clone $firstDay;
@@ -172,7 +244,7 @@ class ScheduleService extends BaseService implements ISchedule
 
         return $navbar;
     }
-    
+
     /**
      * 
      * @param Provider $provider
@@ -197,18 +269,6 @@ class ScheduleService extends BaseService implements ISchedule
             $query = $qb->getQuery();
 
             return $query->execute();
-        } catch (\Exception $ex) {
-            $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
-        }
-    }
-
-    public function getallProduct(Provider $provider)
-    {
-        try {
-
-            return $this->getEm()
-                    ->getRepository('MarcoshoyaMarquejogoBundle:ProviderProduct')
-                    ->findBy(array('provider' => $provider));
         } catch (\Exception $ex) {
             $this->getLogger()->error("ScheduleService error: " . $ex->getMessage());
         }
