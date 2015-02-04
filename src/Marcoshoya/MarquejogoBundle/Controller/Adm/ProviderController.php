@@ -48,7 +48,7 @@ class ProviderController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        
+
         $entity = new Provider();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -60,11 +60,11 @@ class ProviderController extends Controller
 
             $service = $this->get('marcoshoya_marquejogo.service.person');
             $service->update($entity);
-            
+
             // creates a standard schedule
             $schedule = new \Marcoshoya\MarquejogoBundle\Entity\Schedule();
             $schedule->setProvider($entity);
-            
+
             $em->persist($schedule);
             $em->flush();
 
@@ -291,14 +291,20 @@ class ProviderController extends Controller
         try {
 
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
 
+            $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Provider')->find($id);
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Provider entity.');
             }
 
+            $schedule = $em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(array(
+                'provider' => $entity
+            ));
+            
+            $em->remove($schedule);
             $em->remove($entity);
             $em->flush();
+            
         } catch (\Exception $e) {
             $this->get('logger')->error('{Provider} Error: ' . $e->getMessage());
         }
