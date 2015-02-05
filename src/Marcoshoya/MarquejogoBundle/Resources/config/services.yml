@@ -8,7 +8,7 @@ services:
     marcoshoya_marquejogo.service.base:
         abstract:  true
         class: Marcoshoya\MarquejogoBundle\Service\BaseService
-        arguments: ["@doctrine.orm.entity_manager", "@logger", "@session"]
+        arguments: ["@doctrine.orm.entity_manager", "@logger", "@session", "@security.context"]
 
     marcoshoya_marquejogo.service.person:
         class: Marcoshoya\MarquejogoBundle\Service\PersonService

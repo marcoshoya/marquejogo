@@ -45,15 +45,20 @@ class BookController extends Controller
      */
     public function informationAction(Provider $provider)
     {
+        $customer = $this->getCustomer();
+
+        // gets book data on session
         $book = $this->getBook($provider);
         if (null === $book) {
             return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
         }
-        
-        $form = $this->createInformationForm($provider, $customer = null);
+
+        $form = $this->createInformationForm($provider, $customer);
+        $formLogin = $this->createLoginForm($provider, $customer);
 
         return array(
             'form' => $form->createView(),
+            'formLogin' => $formLogin->createView(),
             'book' => $book,
         );
     }
@@ -73,8 +78,13 @@ class BookController extends Controller
         if (null === $book) {
             return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
         }
-        
-        $form = $this->createInformationForm($provider, $customer = null);
+
+        // customer data
+        $customer = $this->getCustomer();
+
+        $formLogin = $this->createLoginForm($provider, $customer);
+        $form = $this->createInformationForm($provider, $customer);
+
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->getData();
@@ -84,7 +94,7 @@ class BookController extends Controller
             $service->setBookSession($provider, $book);
 
             try {
-                
+
                 $book->setProvider($provider);
                 $bookObject = $service->doBook($book);
 
@@ -96,6 +106,51 @@ class BookController extends Controller
 
         return array(
             'form' => $form->createView(),
+            'formLogin' => $formLogin->createView(),
+            'book' => $book,
+        );
+    }
+
+    /**
+     * Do login
+     * 
+     * @Route("/quadra{id}/doLogin", name="book_dologin")
+     * @ParamConverter("provider", class="MarcoshoyaMarquejogoBundle:Provider")
+     * @Template("MarcoshoyaMarquejogoBundle:Site/Book:information.html.twig")
+     * @Method({"POST"})
+     */
+    public function dologinAction(Request $request, Provider $provider)
+    {
+        $book = $this->getBook($provider);
+        if (null === $book) {
+            return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
+        }
+
+        $entity = new Customer();
+        $formLogin = $this->createLoginForm($provider, $entity);
+        $form = $this->createInformationForm($provider, null);
+
+        $formLogin->handleRequest($request);
+        if ($formLogin->isValid()) {
+            $data = $formLogin->getData();
+
+            $service = $this->get('marcoshoya_marquejogo.service.person');
+            $user = $service->getUser($data);
+
+            if (null !== $user) {
+
+                return $this->redirect($this->generateUrl('book_information', array(
+                            'id' => $provider->getId()
+                )));
+            }
+
+            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
+        }
+
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'formLogin' => $formLogin->createView(),
             'book' => $book,
         );
     }
@@ -118,13 +173,13 @@ class BookController extends Controller
         $date = $book->getDate();
         $dateTitle = sprintf('%s de %s as %dh', $date->format('d'), BundleHelper::monthTranslate($date->format('F')), $date->format('H')
         );
-        
+
         $service = $this->get('marcoshoya_marquejogo.service.book');
         $service->clearBookSession($provider);
-        
+
         $em = $this->getDoctrine()->getManager();
         $bookObject = $em->getRepository("MarcoshoyaMarquejogoBundle:Book")->find($book->getId());
-        
+
         return array(
             'provider' => $provider,
             'dateTitle' => $dateTitle,
@@ -195,6 +250,60 @@ class BookController extends Controller
             $this->get('logger')->info("BookController error: " . $ex->getMessage());
             return null;
         }
+    }
+
+    public function getCustomer()
+    {
+        $customer = null;
+        if ($this->get('security.context')->isGranted('ROLE_CUSTOMER')) {
+            $customer = $this->get('security.context')->getToken()->getUser();
+        }
+
+        return $customer;
+    }
+
+    /**
+     * Create a login form
+     *
+     * @param Customer $entity
+     * @return CustomerType
+     */
+    private function createLoginForm(Provider $provider, Customer $entity = null)
+    {
+        if (null === $entity) {
+            $entity = new Customer();
+        }
+
+        $form = $this->createForm(new CustomerType(), $entity, array(
+            'action' => $this->generateUrl('book_dologin', array('id' => $provider->getId())),
+            'method' => 'POST',
+            'validation_groups' => array('login'),
+        ));
+
+        $form
+            ->add('username', 'text', array(
+                'required' => true,
+                'trim' => true
+            ))
+            ->add('password', 'password', array(
+                'required' => true,
+                'trim' => true
+            ))
+            ->remove('name')
+            ->remove('cpf')
+            ->remove('gender')
+            ->remove('position')
+            ->remove('birthday')
+            ->remove('phone')
+            ->remove('address')
+            ->remove('number')
+            ->remove('complement')
+            ->remove('neighborhood')
+            ->remove('city')
+            ->remove('state')
+        ;
+
+        return $form;
     }
 
     /**

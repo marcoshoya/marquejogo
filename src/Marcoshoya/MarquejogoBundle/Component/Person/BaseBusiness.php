@@ -6,23 +6,19 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\SecurityContext;
-use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
-use Marcoshoya\MarquejogoBundle\Component\Person\BusinessCustomer;
-use Marcoshoya\MarquejogoBundle\Component\Person\BusinessProvider;
-use Marcoshoya\MarquejogoBundle\Component\Person\BusinessAdm;
 
 /**
- * PersonDelegate
+ * BaseBusiness
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class PersonDelegate
+class BaseBusiness
 {
     /**
-     * @var Doctrine\ORM\EntityManager 
+     * @var Doctrine\ORM\EntityManager
      */
     protected $em;
-    
+
     /**
      * @var Symfony\Bridge\Monolog\Logger
      */
@@ -37,9 +33,9 @@ class PersonDelegate
      * @var Symfony\Component\Security\Core\SecurityContext
      */
     protected $security;
-
+    
     /**
-     * BaseService constructor
+     * BaseBusiness constructor
      * 
      * @param EntityManager $em
      * @param Logger $logger
@@ -57,23 +53,4 @@ class PersonDelegate
         $this->session = $session;
         $this->security = $security;
     }
-    
-    public function getBusinessService(UserInterface $user)
-    {
-        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Customer) {
-            
-            return new BusinessCustomer($this->em, $this->logger, $this->session, $this->security);
-        }
-        
-        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Provider) {
-            
-            return new BusinessProvider($this->em, $this->logger, $user);
-        }
-        
-        if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {
-            return new BusinessAdm($this->em);
-        }
-    }
-    
-    
 }

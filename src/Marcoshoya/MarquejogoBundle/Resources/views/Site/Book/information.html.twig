@@ -9,6 +9,50 @@
     <div class="container-overview">
         {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Book:overview', {book: book})) }}
     </div>
+    
+    
+
+    <div class="container-data">
+        <table class="booking-data">
+            <tbody>
+                <tr>
+                    <td>
+                        {{ render(controller('MarcoshoyaMarquejogoBundle:Provider/Dashboard:flash')) }}
+                        <div class="booking-data-container">
+                            <div class="booking-data-title">
+                                Acesse sua conta
+                            </div>
+                            
+                            <div class="booking-data-user">
+                                {{ form_start(formLogin, {'attr': {'novalidate': 'novalidate'}} ) }}
+                                {{ form_row (formLogin._token) }}
+                                <fieldset> 
+                                    <div class="booking-data-user-group-col-md-2">
+                                        <label class="col-md-2">{{ form_label(formLogin.username, 'E-mail') }}</label>
+                                        <div class="col-md-1">
+                                            {{ form_widget(formLogin.username, { 'attr': {'class': 'booking-data-user-control'} }) }}
+                                            {{ form_errors(formLogin.username) }}
+                                        </div>
+                                    </div>
+                                    <div class="booking-data-user-group-col-md-2">
+                                        <label class="col-md-2">{{ form_label(formLogin.password, 'Senha') }}</label>
+                                        <div class="col-md-1">
+                                            {{ form_widget(formLogin.password, { 'attr': {'class': 'booking-data-user-control'} }) }}
+                                            {{ form_errors(formLogin.password) }}
+                                        </div>
+                                    </div>
+                                    <div class="booking-data-user-submit">
+                                        <input type="submit" class="btn" value="Entrar" />
+                                    </div>
+                                </fieldset>
+                                {{ form_end(formLogin) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <div class="container-data">
         <table class="booking-data">

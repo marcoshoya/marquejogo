@@ -5,6 +5,7 @@ namespace Marcoshoya\MarquejogoBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\SecurityContext;
 use Marcoshoya\MarquejogoBundle\Component\Person\PersonDelegate;
 
 /**
@@ -31,22 +32,35 @@ class BaseService
     private $session;
     
     /**
+     * @var Symfony\Component\Security\Core\SecurityContext
+     */
+    private $security;
+    
+    /**
      * @var PersonDelegate
      */
     private $personDelegate;
 
     /**
-     * Constructor
-     *
+     * BaseService constructor
+     * 
      * @param EntityManager $em
      * @param Logger $logger
+     * @param Session $session
+     * @param SecurityContext $security
      */
-    public function __construct(EntityManager $em, Logger $logger, Session $session)
-    {
+    public function __construct(
+        EntityManager $em, 
+        Logger $logger, 
+        Session $session, 
+        SecurityContext $security
+    ) {
+
         $this->em = $em;
         $this->logger = $logger;
         $this->session = $session;
-        $this->personDelegate = new PersonDelegate($em, $logger); 
+        $this->security = $security;
+        $this->personDelegate = new PersonDelegate($em, $logger, $session, $security); 
     }
 
     /**
@@ -83,5 +97,15 @@ class BaseService
     public function getSession()
     {
         return $this->session;
+    }
+    
+    /**
+     * Get session
+     *
+     * @return Symfony\Component\Security\Core\SecurityContext
+     */
+    public function getSecurity()
+    {
+        return $this->security;
     }
 }
