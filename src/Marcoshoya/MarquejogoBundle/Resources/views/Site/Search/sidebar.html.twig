@@ -1,36 +1,36 @@
-<form action="" method="post" >
-    <fieldset>
-        <div class="form-group">
-            <label class="col-md-2">Onde</label>
-            <div class="col-md-1">
-                <input type="text" class="form-control form-where" />
-            </div>
+{{ form_start(formSidebar, {'attr': {'novalidate': 'novalidate'}} ) }}
+{{ form_row (formSidebar._token) }}
+<fieldset>
+    <div class="form-group">
+        <label class="col-md-2">{{ form_label(formSidebar.city, 'Cidade') }}</label>
+        <div class="col-md-1">
+            {{ form_widget(formSidebar.city, { 'attr': {'class': 'form-control form-where'} }) }}
+            {{ form_errors(formSidebar.city) }}
         </div>
 
-        <div class="form-group form-sidebar-date">
-            <label class="col-md-2">Data</label>
-            <div class="col-md-1">
-                <input type="text" class="form-control form-date" />
-            </div>
+    </div>
+
+    <div class="form-group form-sidebar-date">
+        <label class="col-md-2">{{ form_label(formSidebar.date, 'Data') }}</label>
+        <div class="col-md-1">
+            {{ form_widget(formSidebar.date, { 'attr': {'class': 'form-control form-date'} }) }}
+            {{ form_errors(formSidebar.date) }}
         </div>
+    </div>
 
-        <div class="form-group form-sidebar-hour">
-            <label class="col-md-2">Horário</label>
-            <div class="col-md-1">
-                <select class="form-control form-date">
-                    <option>00:00</option>
-                    <option>01:00</option>
-                    <option>02:00</option>
-                    <option>03:00</option>
-                </select>
-            </div>
+    <div class="form-group form-sidebar-hour">
+        <label class="col-md-2">{{ form_label(formSidebar.hour, 'Horário') }}</label>
+        <div class="col-md-1">
+            {{ form_widget(formSidebar.hour, { 'attr': {'class': 'form-control form-date'} }) }}
+            {{ form_errors(formSidebar.hour) }}
         </div>
+    </div>
 
-        <div class="clear"> </div>
+    <div class="clear"> </div>
 
-        <div class="form-sidebar-submit">
-            <input class="btn btn-sidebar-search" type="submit" value="Pesquisar" />
-        </div>
+    <div class="form-sidebar-submit">
+        <input class="btn btn-sidebar-search" type="submit" value="Pesquisar" />
+    </div>
 
-    </fieldset>
-</form>
+</fieldset>
+{{ form_end(formSidebar) }}

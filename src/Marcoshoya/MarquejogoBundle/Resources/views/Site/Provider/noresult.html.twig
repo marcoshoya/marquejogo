@@ -3,8 +3,8 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     {{ form_stylesheet(formAvail) }}
+    {{ form_stylesheet(formSidebar) }}
 {% endblock %}
 
 {% block javascripts %}
@@ -17,12 +17,13 @@
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/camera.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/custom.js') }}"></script>
     {{ form_javascript(formAvail) }}
+    {{ form_javascript(formSidebar) }}
 {% endblock %}
 
 {% block container %}
 
     <div class="container-left">
-        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar')) }}
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar', {'formSidebar': formSidebar})) }}
     </div>
 
     <div class="container-provider">

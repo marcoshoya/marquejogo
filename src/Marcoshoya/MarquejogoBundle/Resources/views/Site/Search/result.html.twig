@@ -1,9 +1,24 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Site:inside.html.twig' %}
 
+{% form_theme formSidebar 'MarcoshoyaMarquejogoBundle:Site/Form:fields_search.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ form_stylesheet(formSidebar) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.js') }}"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/datepicker-pt-BR.js') }}"></script>
+    {{ form_javascript(formSidebar) }}
+{% endblock %}
+
 {% block container %}
 
     <div class="container-left">
-        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar')) }}
+        {{ render(controller('MarcoshoyaMarquejogoBundle:Site/Search:sidebar', {'formSidebar': formSidebar})) }}
     </div>
 
     <div class="container-right">
