@@ -156,6 +156,9 @@ class BookService extends BaseService implements IBook
         $this->getEm()->persist($bookObject);
         $this->getEm()->flush();
 
+
+        $this->setAlocated($bookDTO);
+
         return $bookObject;
     }
 
@@ -197,6 +200,49 @@ class BookService extends BaseService implements IBook
         $this->getEm()->flush();
 
         return $customer;
+    }
+
+    /**
+     * Sets room unavailable to sell
+     * 
+     * @param BookDTO $bookDTO
+     */
+    private function setAlocated(BookDTO $bookDTO)
+    {
+        $rooms = array();
+        foreach ($bookDTO->getAllItem() as $item) {
+            $rooms[] = $item->getProviderProduct()->getId();
+        }
+
+        $qb = $this->getEm()->createQueryBuilder();
+        $qb->select(array('s', 'si'))
+            ->from('MarcoshoyaMarquejogoBundle:Schedule', 's')
+            ->innerJoin('s.scheduleItem', 'si')
+            ->where('s.provider = :provider')
+            ->andWhere($qb->expr()->in('si.providerProduct', ':product'))
+            ->andWhere($qb->expr()->eq('si.date', ':date'))
+            ->setParameters(array(
+                'provider' => $bookDTO->getProvider(),
+                'product' => $rooms,
+                'date' => $bookDTO->getDate(),
+        ));
+
+        $results = $qb->getQuery()->getResult();
+
+        try {
+            
+            foreach ($results as $schedule) {
+                foreach ($schedule->getScheduleItem() as $item) {
+                    $item->setAlocated(1);
+                    $this->getEm()->persist($item);
+                }
+            }
+            
+            $this->getEm()->flush();
+            
+        } catch (\Exception $ex) {
+            $this->getLogger()->error('BookService error: ' . $ex->getError());
+        }     
     }
 
 }

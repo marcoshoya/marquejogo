@@ -107,8 +107,7 @@ class Customer implements UserInterface
     
     /**
      * @ORM\OneToMany(targetEntity="Team", mappedBy="owner", cascade={"persist"}) 
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"book"})
-     * */
+     */
     private $team;
     
     /**

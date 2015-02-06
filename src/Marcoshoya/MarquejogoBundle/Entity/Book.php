@@ -29,7 +29,7 @@ class Book
     private $provider;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="book")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="book", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      */
     private $customer;
@@ -61,6 +61,11 @@ class Book
     public function __construct()
     {
         $this->bookItem = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function __toString()
+    {
+        return $this->id;
     }
 
     /**
