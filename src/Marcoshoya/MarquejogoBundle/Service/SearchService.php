@@ -146,7 +146,15 @@ class SearchService extends BaseService
             $this->getLogger()->error("SearchService error: " . $ex->getMessage());
         }
     }
-
+    
+    /**
+     * Gets all products available to sell by search criteria
+     * 
+     * @param Schedule $schedule
+     * @param SearchDTO $search
+     * 
+     * @return array
+     */
     public function getallProductBySearch(Schedule $schedule, SearchDTO $search)
     {
         try {
@@ -156,9 +164,11 @@ class SearchService extends BaseService
                 ->from('MarcoshoyaMarquejogoBundle:ScheduleItem', 's')
                 ->where('s.schedule = :schedule')
                 ->andWhere('s.date = :date')
+                ->andWhere('s.alocated = :alocated')
                 ->setParameters(array(
                     'schedule' => $schedule,
                     'date' => $search->getDate(),
+                    'alocated' => 0,
                 ));
 
             $query = $qb->getQuery();

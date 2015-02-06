@@ -6,7 +6,6 @@ use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 use Marcoshoya\MarquejogoBundle\Service\BaseService;
 use Marcoshoya\MarquejogoBundle\Service\AutocompleteService;
 
-
 /**
  * PersonService delegates who is called to get user
  *
@@ -14,24 +13,30 @@ use Marcoshoya\MarquejogoBundle\Service\AutocompleteService;
  */
 class PersonService extends BaseService
 {
-    
+
     /**
      * @var Marcoshoya\MarquejogoBundle\Service\AutocompleteService
      */
     public $autocomplete;
-    
+
     /**
      * Get user
-     * 
+     *
      * @param UserInterface $user
-     * 
+     *
      * @return Customer|Provider|AdmUser
      */
     public function getUser(UserInterface $user)
     {
         $service = $this->getPersonDelegate()->getBusinessService($user);
-        
-        return $service->getUser($user);
+        $entity = $service->getUser($user);
+        if (null !== $entity) {
+            $service->doAuth($entity);
+
+            return $entity;
+        }
+
+        return null;
     }
 
     /**
@@ -49,7 +54,7 @@ class PersonService extends BaseService
             throw new \InvalidArgumentException("Object have to be instance of AutocompleteService");
         }
     }
-    
+
     /**
      * Update entity
      *
@@ -61,10 +66,10 @@ class PersonService extends BaseService
         $service = $this->getPersonDelegate()->getBusinessService($provider);
         $service->update($provider, $autocomplete);
     }
-    
+
     /**
      * Get all images
-     * 
+     *
      * @param UserInterface $user
      * @return type
      */
@@ -72,4 +77,5 @@ class PersonService extends BaseService
     {
         return $this->getPersonDelegate()->getBusinessService($user)->getAllPicture();
     }
+
 }

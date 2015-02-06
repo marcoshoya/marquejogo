@@ -2,33 +2,21 @@
 
 namespace Marcoshoya\MarquejogoBundle\Component\Person;
 
-use Doctrine\ORM\EntityManager;
+use Marcoshoya\MarquejogoBundle\Component\Person\BaseBusiness;
 use Marcoshoya\MarquejogoBundle\Component\Person\PersonInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * BusinessCustomer
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class BusinessCustomer implements PersonInterface
+class BusinessCustomer extends BaseBusiness implements PersonInterface
 {
-
-    /**
-     * @var Doctrine\ORM\EntityManager;
-     */
-    protected $em;
+    const providerKey = 'customer';
     
-    /**
-     * Constructor
-     * 
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
     /**
      * Get user
      * 
@@ -47,6 +35,36 @@ class BusinessCustomer implements PersonInterface
         }
 
         return $customer;
+    }
+    
+    /**
+     * Do the auth
+     * 
+     * @param Customer $entity
+     * @return boolean
+     * @throws AccessDeniedHttpException
+     */
+    public function doAuth(UserInterface $entity)
+    {
+        try {
+            
+            $token = new UsernamePasswordToken($entity, null, self::providerKey, $entity->getRoles());
+
+            $this->security->setToken($token);
+            $this->session->set('_security_main', serialize($token));
+
+            if (!$this->security->isGranted('ROLE_CUSTOMER')) {
+                throw new AccessDeniedHttpException();
+            }
+            
+            return true;
+
+        } catch (AccessDeniedHttpException $ex) {
+            $this->security->setToken(null);
+            $this->logger->error('BusinessCustomer error: ' . $ex->getMessage());
+            
+            return false;
+        }
     }
 
 }

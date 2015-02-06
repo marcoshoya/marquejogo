@@ -15,19 +15,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Team
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
      * @Assert\NotBlank(message="Campo obrigatório", groups={"book"})
      */
     private $name;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Customer", inversedBy="team")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
@@ -35,13 +36,13 @@ class Team
     private $owner;
 
     /**
-     * 
-     * @return string
+     * @inheritDoc
      */
     public function __toString()
     {
         return $this->name;
     }
+
     /**
      * Get id
      *
@@ -97,4 +98,5 @@ class Team
     {
         return $this->owner;
     }
+
 }

@@ -20,8 +20,9 @@ class AvailType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $min = date('Y, m, d');
-        $max = date('Y, m, d', strtotime("+4 months"));
+        // js bug with month format
+        $min = sprintf('%s, %s, %s', date('Y'), date('m')-1, date('d'));
+        $max = sprintf('%s, %s, %s', date('Y'), (date('m')-1)+4, date('d'));
         
         $builder
             ->add('provider', 'hidden')
