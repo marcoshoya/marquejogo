@@ -1,7 +1,38 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
 
 {% block container %}
-    
+
     <h1>Bem vindo {{ app.security.getToken().getUser().getName() }}</h1>
-    
+
+    <table class="customer-dash">
+        <tr>
+            <td>
+                <a href="#">
+                    <img src="/bundles/marcoshoyamarquejogo/images/customer/schedule.png" /> <br />
+                    Minhas reservas
+                </a>
+            </td>
+            <td>
+                <a href="#">
+                    <img src="/bundles/marcoshoyamarquejogo/images/customer/profile.png" /> <br />
+                    Meu dados
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="#">
+                    <img src="/bundles/marcoshoyamarquejogo/images/customer/players.png" /> <br />
+                    Meu Amigos
+                </a>
+            </td>
+            <td>
+                <a href="#">
+                    <img src="/bundles/marcoshoyamarquejogo/images/customer/team.png" /> <br />
+                    Meus Times
+                </a>
+            </td>
+        </tr>
+    </table>
+
 {% endblock %}
