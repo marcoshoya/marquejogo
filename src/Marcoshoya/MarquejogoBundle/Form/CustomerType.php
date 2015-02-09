@@ -5,9 +5,12 @@ namespace Marcoshoya\MarquejogoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Doctrine\ORM\EntityRepository;
 
 class CustomerType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,19 +22,36 @@ class CustomerType extends AbstractType
             ->add('password')
             ->add('name')
             ->add('cpf')
-            ->add('gender')
-            ->add('position')
-            ->add('birthday')
+            ->add('gender', 'choice', array(
+                'placeholder' => 'Escolha seu gênero',
+                'choices' => array('male' => 'Masculino', 'female' => 'Feminino')
+            ))
+            ->add('position', 'choice', array(
+                'placeholder' => 'Escolha sua posição',
+                'choices' => $this->getPositionChoice()
+            ))
+            ->add('birthday', 'birthday', array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy',
+            ))
             ->add('phone')
             ->add('address')
             ->add('number')
             ->add('complement')
             ->add('neighborhood')
             ->add('city')
-            ->add('state')
+            ->add('state', 'entity', array(
+                'class' => 'MarcoshoyaMarquejogoBundle:LocationState',
+                'property' => 'name',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->where('s.country = 31')
+                        ->orderBy('s.uf', 'ASC');
+                },
+            ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -50,4 +70,15 @@ class CustomerType extends AbstractType
     {
         return 'marcoshoya_marquejogobundle_customer';
     }
+
+    private function getPositionChoice()
+    {
+        return array(
+            'goalkeeper' => 'Goleiro',
+            'defender' => 'Defensor',
+            'middle' => 'Meio',
+            'attacker' => 'Atacante'
+        );
+    }
+
 }

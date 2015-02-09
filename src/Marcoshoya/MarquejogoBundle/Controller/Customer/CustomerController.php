@@ -55,7 +55,7 @@ class CustomerController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
+
             $this->get('session')->clear();
 
             // do the auth
@@ -86,7 +86,7 @@ class CustomerController extends Controller
     {
         if ($this->get('session')->has('register_email')) {
             $email = $this->get('session')->get('register_email');
-            $entity->setEmail($email);
+            $entity->setUsername($email);
         }
 
         $form = $this->createForm(new CustomerType(), $entity, array(
@@ -113,27 +113,26 @@ class CustomerController extends Controller
     /**
      * Displays a form to edit an existing Customer entity.
      *
-     * @Route("/{id}/edit", name="dados_edit")
+     * @Route("/dados/editar", name="customer_edit")
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id)
+    public function editAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($id);
+        $user = $this->get('security.context')->getToken()->getUser();
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($user->getId());
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         );
     }
 
@@ -147,11 +146,15 @@ class CustomerController extends Controller
     private function createEditForm(Customer $entity)
     {
         $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('dados_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('customer_update'),
             'method' => 'PUT',
+            'validation_groups' => array('edit'),
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form
+            ->add('username', 'hidden')
+            ->add('password', 'hidden')
+        ;
 
         return $form;
     }
@@ -159,78 +162,34 @@ class CustomerController extends Controller
     /**
      * Edits an existing Customer entity.
      *
-     * @Route("/{id}", name="dados_update")
+     * @Route("/dados/editar", name="customer_update")
      * @Method("PUT")
-     * @Template("MarcoshoyaMarquejogoBundle:Customer:edit.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Customer:edit.html.twig")
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($id);
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($user->getId());
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('dados_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('customer_edit'));
         }
 
         return array(
             'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form' => $editForm->createView(),
         );
-    }
-
-    /**
-     * Deletes a Customer entity.
-     *
-     * @Route("/{id}", name="dados_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Customer entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('dados'));
-    }
-
-    /**
-     * Creates a form to delete a Customer entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-                ->setAction($this->generateUrl('dados_delete', array('id' => $id)))
-                ->setMethod('DELETE')
-                ->add('submit', 'submit', array('label' => 'Delete'))
-                ->getForm()
-        ;
     }
 
 }

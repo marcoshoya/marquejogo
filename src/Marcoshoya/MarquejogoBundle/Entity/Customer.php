@@ -44,44 +44,49 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book", "edit"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "edit"})
      */
     private $cpf;
 
     /**
      * @ORM\Column(type="string", nullable=false, columnDefinition="ENUM('male', 'female')")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $gender;
 
     /**
      * @ORM\Column(type="string", nullable=false, columnDefinition="ENUM('goalkeeper', 'defender', 'middle', 'attacker')")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $position;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $birthday;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book", "edit"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $number;
 
@@ -92,16 +97,19 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $neighborhood;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $state;
     
