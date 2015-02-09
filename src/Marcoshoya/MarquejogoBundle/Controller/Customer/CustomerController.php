@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Marcoshoya\MarquejogoBundle\Entity\Customer;
 use Marcoshoya\MarquejogoBundle\Form\CustomerType;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Customer controller
@@ -154,6 +155,17 @@ class CustomerController extends Controller
         $form
             ->add('username', 'hidden')
             ->add('password', 'hidden')
+            ->add('state', 'entity', array(
+                'placeholder' => 'Escolha um estado',
+                'data' => $entity->getState(),
+                'class' => 'MarcoshoyaMarquejogoBundle:LocationState',
+                'property' => 'name',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->where('s.country = 31')
+                        ->orderBy('s.uf', 'ASC');
+                },
+            ))
         ;
 
         return $form;
@@ -182,6 +194,8 @@ class CustomerController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Dados atualizados com sucesso!');
 
             return $this->redirect($this->generateUrl('customer_edit'));
         }

@@ -31,14 +31,14 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=150, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register", "book"})
-     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register", "book", "edit"})
+     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register", "book", "edit"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register", "book", "edit"})
      */
     private $password;
 
@@ -108,7 +108,8 @@ class Customer implements UserInterface
     private $city;
 
     /**
-     * @ORM\Column(type="string", length=2, nullable=true)
+     * @ORM\ManyToOne(targetEntity="LocationState")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $state;
@@ -461,10 +462,10 @@ class Customer implements UserInterface
     /**
      * Set state
      *
-     * @param string $state
+     * @param \Marcoshoya\MarquejogoBundle\Entity\LocationState $state
      * @return Customer
      */
-    public function setState($state)
+    public function setState(\Marcoshoya\MarquejogoBundle\Entity\LocationState $state = null)
     {
         $this->state = $state;
 
@@ -474,7 +475,7 @@ class Customer implements UserInterface
     /**
      * Get state
      *
-     * @return string
+     * @return \Marcoshoya\MarquejogoBundle\Entity\LocationState 
      */
     public function getState()
     {

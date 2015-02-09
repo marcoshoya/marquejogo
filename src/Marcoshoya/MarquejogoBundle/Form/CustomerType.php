@@ -5,8 +5,6 @@ namespace Marcoshoya\MarquejogoBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
-use Doctrine\ORM\EntityRepository;
 
 class CustomerType extends AbstractType
 {
@@ -40,15 +38,7 @@ class CustomerType extends AbstractType
             ->add('complement')
             ->add('neighborhood')
             ->add('city')
-            ->add('state', 'entity', array(
-                'class' => 'MarcoshoyaMarquejogoBundle:LocationState',
-                'property' => 'name',
-                'query_builder' => function(EntityRepository $er) {
-                    return $er->createQueryBuilder('s')
-                        ->where('s.country = 31')
-                        ->orderBy('s.uf', 'ASC');
-                },
-            ))
+            ->add('state')
         ;
     }
 
