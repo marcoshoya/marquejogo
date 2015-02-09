@@ -25,6 +25,11 @@ class DashboardTest extends WebTestCase
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
+    
+    /**
+     * @var Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    protected $router;
 
     /**
      * Setup functions
@@ -37,21 +42,28 @@ class DashboardTest extends WebTestCase
             ->get('doctrine')
             ->getManager()
         ;
+        
+        $this->router = static::$kernel->getContainer()
+            ->get('router')
+        ;
     }
 
     /**
      * Make login on admin
      */
-    protected function logIn()
+    protected function logIn($customer = null)
     {
         $session = $this->client->getContainer()->get('session');
 
         $firewall = 'website';
 
-        $customer = $this->getMock('\Marcoshoya\MarquejogoBundle\Entity\Customer');
-        $customer->expects($this->once())
-            ->method('getRoles')
-            ->will($this->returnValue(array('ROLE_CUSTOMER')));
+        if (null === $customer) {
+            // mock a customer
+            $customer = $this->getMock('\Marcoshoya\MarquejogoBundle\Entity\Customer');
+            $customer->expects($this->once())
+                ->method('getRoles')
+                ->will($this->returnValue(array('ROLE_CUSTOMER')));
+        }
 
         $token = new UsernamePasswordToken($customer, null, $firewall, $customer->getRoles());
         $this->client->getContainer()->get('security.context')->setToken($token);
@@ -74,5 +86,6 @@ class DashboardTest extends WebTestCase
         $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('ROLE_CUSTOMER'));
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Sair")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Bem vindo")')->count());
     }
 }

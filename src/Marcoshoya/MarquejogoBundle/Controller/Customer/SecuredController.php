@@ -123,7 +123,7 @@ class SecuredController extends Controller
 
     /**
      * @Route("/doRegister", name="customer_doregister")
-     * @Template("MarcoshoyaMarquejogoBundle:Customer/Dashboard:login.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Secured:login.html.twig")
      */
     public function registerAction(Request $request)
     {
@@ -136,7 +136,7 @@ class SecuredController extends Controller
             if ($formRegister->isValid()) {
 
                 $data = $formRegister->getData();
-                $this->get('session')->set('register_email', $data->getEmail());
+                $this->get('session')->set('register_email', $data->getUsername());
 
                 return $this->redirect($this->generateUrl('customer_new'));
             }
