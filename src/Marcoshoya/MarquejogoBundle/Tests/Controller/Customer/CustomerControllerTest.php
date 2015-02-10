@@ -4,52 +4,125 @@ namespace Marcoshoya\MarquejogoBundle\Tests\Controller;
 
 use Marcoshoya\MarquejogoBundle\Tests\Controller\Customer\DashboardTest;
 
+/**
+ * CustomerControllerTest
+ *
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
+ */
 class CustomerControllerTest extends DashboardTest
 {
-    /*
-    public function testCompleteScenario()
+    /**
+     * Tests customer register form
+     *
+     * GET /cliente/cadastrar/
+     * HTTP/1.1 200 OK
+     */
+    public function testRegister()
     {
-        // Create a new client to browse the application
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', $this->router->generate('customer_new'));
 
-        // Create a new entry in the database
-        $crawler = $client->request('GET', '/dados/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /dados/");
-        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
+        $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY'));
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('h1:contains("Novo cadastro")')->count());
 
-        // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
-            'marcoshoya_marquejogobundle_customer[field_name]'  => 'Test',
-            // ... other fields to fill
+        // validate form
+        $form = $crawler->selectButton('Cadastrar')->form(array(
+            'marcoshoya_marquejogobundle_customer[name]' => '',
+            'marcoshoya_marquejogobundle_customer[cpf]' => '',
+            'marcoshoya_marquejogobundle_customer[phone]' => '',
+            'marcoshoya_marquejogobundle_customer[username]' => '',
+            'marcoshoya_marquejogobundle_customer[password]' => '',
         ));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->submit($form);
+        $this->assertGreaterThan(0, $crawler->filter('span:contains("Campo obrigatório")')->count());
 
-        // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
 
-        // Edit the entity
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
-
-        $form = $crawler->selectButton('Update')->form(array(
-            'marcoshoya_marquejogobundle_customer[field_name]'  => 'Foo',
-            // ... other fields to fill
+        // persist
+        $form = $crawler->selectButton('Cadastrar')->form(array(
+            'marcoshoya_marquejogobundle_customer[name]' => 'Register customer',
+            'marcoshoya_marquejogobundle_customer[cpf]' => '123.456.789-10',
+            'marcoshoya_marquejogobundle_customer[phone]' => '41 9999-8888',
+            'marcoshoya_marquejogobundle_customer[username]' => 'registertest@marquejogo.com',
+            'marcoshoya_marquejogobundle_customer[password]' => 'password',
         ));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
+        $this->client->submit($form);
+        $crawler = $this->client->followRedirect();
 
-        // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
-
-        // Delete the entity
-        $client->submit($crawler->selectButton('Delete')->form());
-        $crawler = $client->followRedirect();
-
-        // Check the entity has been delete on the list
-        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('h1:contains("Bem vindo Register customer")')->count());
     }
 
-    */
+    /**
+     * Tests customer edit form
+     *
+     * GET /cliente/dados/editar/
+     * HTTP/1.1 200 OK
+     */
+    public function testEditprofile()
+    {
+        $customer = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Customer')
+            ->findOneBy(array('username' => 'registertest@marquejogo.com'));
+
+        if (!$customer) {
+            $this->fail('testEditprofile: customer not found.');
+        }
+
+        $this->logIn($customer);
+
+        $crawler = $this->client->request('GET', $this->router->generate('customer_edit'));
+        
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Meus dados")')->count());
+        
+        // validate form
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_customer[username]' => $customer->getUsername(),
+            'marcoshoya_marquejogobundle_customer[password]' => $customer->getPassword(),
+            'marcoshoya_marquejogobundle_customer[name]' => $customer->getName(),
+            'marcoshoya_marquejogobundle_customer[cpf]' => $customer->getCpf(),
+            'marcoshoya_marquejogobundle_customer[gender]' => $customer->getGender(),
+            'marcoshoya_marquejogobundle_customer[position]' => $customer->getPosition(),
+            'marcoshoya_marquejogobundle_customer[birthday]' => $customer->getBirthday(),
+            'marcoshoya_marquejogobundle_customer[phone]' => $customer->getPhone(),
+            'marcoshoya_marquejogobundle_customer[address]' => $customer->getAddress(),
+            'marcoshoya_marquejogobundle_customer[number]' => $customer->getNumber(),
+            'marcoshoya_marquejogobundle_customer[neighborhood]' => $customer->getNeighborhood(),
+            'marcoshoya_marquejogobundle_customer[city]' => $customer->getCity(),
+            'marcoshoya_marquejogobundle_customer[state]' => $customer->getState(),
+            
+        ));
+
+        $crawler = $this->client->submit($form);
+        $this->assertGreaterThan(0, $crawler->filter('span:contains("Campo obrigatório")')->count());
+        
+        // validate form
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_customer[username]' => $customer->getUsername(),
+            'marcoshoya_marquejogobundle_customer[password]' => $customer->getPassword(),
+            'marcoshoya_marquejogobundle_customer[name]' => $customer->getName(),
+            'marcoshoya_marquejogobundle_customer[cpf]' => $customer->getCpf(),
+            'marcoshoya_marquejogobundle_customer[gender]' => 'male',
+            'marcoshoya_marquejogobundle_customer[position]' => 'defender',
+            'marcoshoya_marquejogobundle_customer[birthday]' => '15/11/1989',
+            'marcoshoya_marquejogobundle_customer[phone]' => $customer->getPhone(),
+            'marcoshoya_marquejogobundle_customer[address]' => '1st Street',
+            'marcoshoya_marquejogobundle_customer[number]' => '10-50',
+            'marcoshoya_marquejogobundle_customer[neighborhood]' => 'Oldtown',
+            'marcoshoya_marquejogobundle_customer[city]' => 'Curitiba',
+            'marcoshoya_marquejogobundle_customer[state]' => 6,
+            
+        ));
+        
+        $this->client->submit($form);
+        $crawler = $this->client->followRedirect();
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("sucesso")')->count());
+        
+        $this->em->remove($customer);
+        $this->em->flush();
+        
+    }
 }

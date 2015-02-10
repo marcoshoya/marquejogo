@@ -24,5 +24,15 @@ class DashboardController extends Controller
     {
         return array();
     }
+    
+    /**
+     * Flash action
+     *
+     * @return string
+     */
+    public function flashAction()
+    {
+        return $this->render('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash.html.twig', array());
+    }
 
 }

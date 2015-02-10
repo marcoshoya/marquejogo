@@ -12,7 +12,7 @@ class TeamType extends AbstractType
 {
     protected $em;
     
-    public function __construct($em)
+    public function __construct($em = null)
     {
         $this->em = $em;
     }
@@ -25,25 +25,27 @@ class TeamType extends AbstractType
     {
         $builder
             ->add('owner', 'entity_hidden', array(
-                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Provider',
-                'data' => null,
-                'data_class' => null,
+                'class' => 'Marcoshoya\MarquejogoBundle\Entity\Customer',
             ))
         ;
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
-            $team = $event->getData();
-            $form = $event->getForm();
-            $customer = $team->getOwner();
-            if ($customer->getId()) {
-                $choices = $this->getChoices($customer);
-                $form->add('name', 'choice', array(
-                    'choices' => $choices
-                    ));
-            } else {
-                $form->add('name');
-            }
-        });
+        
+        if (null !== $this->em) {
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+                $team = $event->getData();
+                $form = $event->getForm();
+                $customer = $team->getOwner();
+                if ($customer->getId()) {
+                    $choices = $this->getChoices($customer);
+                    $form->add('name', 'choice', array(
+                        'choices' => $choices
+                        ));
+                } else {
+                    $form->add('name');
+                }
+            });
+        } else {
+            $builder->add('name');
+        }
     }
 
     /**
@@ -64,6 +66,12 @@ class TeamType extends AbstractType
         return 'marcoshoya_marquejogobundle_team';
     }
     
+    /**
+     * get choices
+     * 
+     * @param type $customer
+     * @return array
+     */
     private function getChoices($customer)
     {
         $teams = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Team')

@@ -1,0 +1,74 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block container %}
+
+    <h1>Minhas Reservas</h1>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p align="right">
+                <a href="{{ path('customer_dash') }}" class="btn btn-lg btn-link">Voltar</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Reservas</div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table  class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Status</th>
+                                <th>Local</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th width="20%">Ação</th>
+                            </tr>
+                        </thead>
+                        {% if entities %}
+                            <tbody>
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td>{{ entity.id }}</td>
+                                        <td>{{ entity.status }}</td>
+                                        <td>{{ entity.provider }}</td>
+                                        <td>{{ entity.date.format('d/m/Y') }}</td>
+                                        <td>{{ entity.date.format('H:i') }}</td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="{{ path('customer_book_invite', {"id": entity.id}) }}">Convidar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('customer_book_show', {"id": entity.id}) }}">Visualizar</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5">
+                                        <p align="center">Nenhum resultado encontrado</p>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

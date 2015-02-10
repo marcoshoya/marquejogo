@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CustomerType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -19,9 +20,18 @@ class CustomerType extends AbstractType
             ->add('password')
             ->add('name')
             ->add('cpf')
-            ->add('gender')
-            ->add('position')
-            ->add('birthday')
+            ->add('gender', 'choice', array(
+                'placeholder' => 'Escolha seu gênero',
+                'choices' => array('male' => 'Masculino', 'female' => 'Feminino')
+            ))
+            ->add('position', 'choice', array(
+                'placeholder' => 'Escolha sua posição',
+                'choices' => $this->getPositionChoice()
+            ))
+            ->add('birthday', 'birthday', array(
+                'widget' => 'single_text',
+                'format' => 'dd/MM/yyyy',
+            ))
             ->add('phone')
             ->add('address')
             ->add('number')
@@ -31,7 +41,7 @@ class CustomerType extends AbstractType
             ->add('state')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -50,4 +60,15 @@ class CustomerType extends AbstractType
     {
         return 'marcoshoya_marquejogobundle_customer';
     }
+
+    private function getPositionChoice()
+    {
+        return array(
+            'goalkeeper' => 'Goleiro',
+            'defender' => 'Defensor',
+            'middle' => 'Meio',
+            'attacker' => 'Atacante'
+        );
+    }
+
 }

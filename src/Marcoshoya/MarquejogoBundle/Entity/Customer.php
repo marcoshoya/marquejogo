@@ -31,57 +31,62 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(name="email", type="string", length=150, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register", "book"})
-     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"unique", "login", "register", "book", "edit"})
+     * @Assert\Email(message="Formato do email inválido", groups={"unique", "login", "register", "book", "edit"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=40, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"login", "register", "book", "edit"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book", "edit"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "edit"})
      */
     private $cpf;
 
     /**
      * @ORM\Column(type="string", nullable=false, columnDefinition="ENUM('male', 'female')")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $gender;
 
     /**
      * @ORM\Column(type="string", nullable=false, columnDefinition="ENUM('goalkeeper', 'defender', 'middle', 'attacker')")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $position;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $birthday;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"register", "book", "edit"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=25, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $number;
 
@@ -92,16 +97,20 @@ class Customer implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $neighborhood;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $city;
 
     /**
-     * @ORM\Column(type="string", length=2, nullable=true)
+     * @ORM\ManyToOne(targetEntity="LocationState")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"edit"})
      */
     private $state;
     
@@ -453,10 +462,10 @@ class Customer implements UserInterface
     /**
      * Set state
      *
-     * @param string $state
+     * @param \Marcoshoya\MarquejogoBundle\Entity\LocationState $state
      * @return Customer
      */
-    public function setState($state)
+    public function setState(\Marcoshoya\MarquejogoBundle\Entity\LocationState $state = null)
     {
         $this->state = $state;
 
@@ -466,7 +475,7 @@ class Customer implements UserInterface
     /**
      * Get state
      *
-     * @return string
+     * @return \Marcoshoya\MarquejogoBundle\Entity\LocationState 
      */
     public function getState()
     {

@@ -1,0 +1,72 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block container %}
+
+    <h1>Meus Times</h1>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p align="right">
+                <a href="{{ path('customer_dash') }}" class="btn btn-lg btn-link">Voltar</a>
+                <a href="{{ path('customer_team_new') }}" class="btn btn-success">Inserir novo</a>
+
+            </p>
+        </div>
+    </div>
+
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash')) }}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Times</div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table  class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th width="20%">Ação</th>
+                            </tr>
+                        </thead>
+                        {% if entities %}
+                            <tbody>
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td>{{ entity.id }}</td>
+                                        <td>{{ entity.name }}</td>
+                                        <td>
+                                            <ul>
+                                                <li>
+                                                    <a href="{{ path('customer_team_edit', {"id": entity.id}) }}">Editar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('customer_team_player', {"id": entity.id}) }}">Jogadores</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3">
+                                        <p align="center">Nenhum resultado encontrado</p>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

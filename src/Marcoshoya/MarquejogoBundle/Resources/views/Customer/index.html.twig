@@ -10,10 +10,31 @@
         <title>MarqueJogo.com - Área do Cliente</title>
 
         {% block stylesheets %}
-            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />
+            <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/site/style2.css') }}" rel="stylesheet" type="text/css" />            
 
-            <style> 
+            <style>
+
+                table.customer-dash {
+                    width: 100%;
+                    border-spacing: 25px;
+                    border-collapse: separate !important;
+                    margin-bottom: 50px;
+                }
+                
+                table.customer-dash tr td {
+                    text-align: center;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+                
+                table.customer-dash a {
+                    text-decoration: none;
+                    color: #070
+                }
+                table.customer-dash a:hover {
+                    text-decoration: underline;
+                }
+                
 
             </style>
 

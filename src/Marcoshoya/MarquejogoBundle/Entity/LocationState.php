@@ -45,6 +45,14 @@ class LocationState
      * @ORM\OneToMany(targetEntity="LocationCity", mappedBy="state")
      * */
     private $city;
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     /**
      * {@inheritdoc}
