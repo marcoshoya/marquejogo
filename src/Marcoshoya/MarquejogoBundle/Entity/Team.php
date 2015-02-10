@@ -25,7 +25,7 @@ class Team
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @Assert\NotBlank(message="Campo obrigatório", groups={"book"})
+     * @Assert\NotBlank(message="Campo obrigatório", groups={"book", "register"})
      */
     private $name;
 

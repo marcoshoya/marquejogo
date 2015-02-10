@@ -1,15 +1,53 @@
-{% extends '::base.html.twig' %}
+{% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
 
-{% block body -%}
-    <h1>Team creation</h1>
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Customer/Form:fields_register.html.twig' %}
 
-    {{ form(form) }}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('times') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% block container %}
+
+    <h1>Inserir novo time</h1>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+    {{ form_row (form._token) }}
+    
+    {{ form_row (form.owner) }}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p align="right">
+                <a href="{{ path('customer_team_list') }}" class="btn btn-lg btn-link">Voltar</a>
+                <button type="submit" class="submit btn btn-success" value="Salvar" alt="Salvar" title="Salvar">
+                    <i class="fa fa-save"></i> Salvar
+                </button>
+            </p>
+        </div>
+    </div>
+
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash')) }}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Inserir novo
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="form-group {% if not form.name.vars.valid %} has-error {% endif %}">
+                        <label class="col-md-2">{{ form_label(form.name, 'Nome') }}</label>
+                        <div class="col-md-10">
+                            {{ form_widget(form.name, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

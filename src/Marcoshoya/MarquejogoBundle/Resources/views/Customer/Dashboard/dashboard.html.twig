@@ -3,6 +3,8 @@
 {% block container %}
 
     <h1>Bem vindo {{ app.security.getToken().getUser().getName() }}</h1>
+    
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash')) }}
 
     <table class="customer-dash">
         <tr>
@@ -27,7 +29,7 @@
                 </a>
             </td>
             <td>
-                <a href="#">
+                <a href="{{ path('customer_team_list') }}">
                     <img src="/bundles/marcoshoyamarquejogo/images/customer/team.png" /> <br />
                     Meus Times
                 </a>

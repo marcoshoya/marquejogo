@@ -1,55 +1,103 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Tests\Controller;
+namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Customer;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Marcoshoya\MarquejogoBundle\Tests\Controller\Customer\DashboardTest;
+use Marcoshoya\MarquejogoBundle\Entity\Customer;
 
-class TeamControllerTest extends WebTestCase
+/**
+ * TeamControllerTest
+ * 
+ * @author Marcos Lazarin <marcoshoya at gmail dot com>
+ */
+class TeamControllerTest extends DashboardTest
 {
-    /*
+
+    /**
+     * Tests customer team functions
+     * 
+     * GET /cliente/time
+     * HTTP/1.1 200 OK
+     */
     public function testCompleteScenario()
     {
-        // Create a new client to browse the application
-        $client = static::createClient();
+        // creates a new customer to test
+        $customer = new Customer();
+        $customer->setName('Team test customer');
+        $customer->setCpf('123.456.789-10');
+        $customer->setPhone('41 9999-8888');
+        $customer->setUsername('teamtest@marquejogo.com');
+        $customer->setPassword('password');
+        $this->em->persist($customer);
+        $this->em->flush();
+
+        $this->logIn($customer);
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/times/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /times/");
-        $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
+        $crawler = $this->client->request('GET', $this->router->generate('customer_team_list'));
 
-        // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
-            'marcoshoya_marquejogobundle_team[field_name]'  => 'Test',
-            // ... other fields to fill
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('h1:contains("Meus Times")')->count());
+
+        $crawler = $this->client->click($crawler->selectLink('Inserir novo')->link());
+        $this->assertGreaterThan(0, $crawler->filter('h1:contains("Inserir novo time")')->count());
+        
+        
+
+        // Fill in the form and submit it (form fail)
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_team[owner]' => $customer->getId(),
+            'marcoshoya_marquejogobundle_team[name]' => '',
         ));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->submit($form);
+        $this->assertGreaterThan(0, $crawler->filter('span:contains("Campo obrigatório")')->count());
 
-        // Check data in the show view
-        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test")')->count(), 'Missing element td:contains("Test")');
+        // Fill in the form and submit it (form valid)
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_team[name]' => 'Test Team',
+        ));
+
+        $this->client->submit($form);
+        $crawler = $this->client->followRedirect();
+
+        // Check data in the list view
+        $this->assertGreaterThan(0, $crawler->filter('td:contains("Test Team")')->count());
 
         // Edit the entity
-        $crawler = $client->click($crawler->selectLink('Edit')->link());
+        $crawler = $this->client->click($crawler->selectLink('Editar')->link());
 
-        $form = $crawler->selectButton('Update')->form(array(
-            'marcoshoya_marquejogobundle_team[field_name]'  => 'Foo',
-            // ... other fields to fill
+        // Fill in the form and submit it (form fail)
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_team[name]' => '',
         ));
 
-        $client->submit($form);
-        $crawler = $client->followRedirect();
+        $crawler = $this->client->submit($form);
+        $this->assertGreaterThan(0, $crawler->filter('span:contains("Campo obrigatório")')->count());
 
-        // Check the element contains an attribute with value equals "Foo"
-        $this->assertGreaterThan(0, $crawler->filter('[value="Foo"]')->count(), 'Missing element [value="Foo"]');
+        // Fill in the form and submit it (form valid)
+        $form = $crawler->selectButton('Salvar')->form(array(
+            'marcoshoya_marquejogobundle_team[name]' => 'Test Team edited',
+        ));
+        $this->client->submit($form);
+        $crawler = $this->client->followRedirect();
+
 
         // Delete the entity
-        $client->submit($crawler->selectButton('Delete')->form());
-        $crawler = $client->followRedirect();
+        $team = $this->em->getRepository("MarcoshoyaMarquejogoBundle:Team")->findOneBy(array(
+            'owner' => $customer
+        ));
+
+        $this->em->remove($team);
+        $this->em->flush();
 
         // Check the entity has been delete on the list
-        $this->assertNotRegExp('/Foo/', $client->getResponse()->getContent());
+        $crawler = $this->client->request('GET', $this->router->generate('customer_team_list'));
+        $this->assertNotRegExp('/Test Team edited/', $this->client->getResponse()->getContent());
+
+        $this->em->remove($customer);
+        $this->em->flush();
+        
     }
 
-    */
 }

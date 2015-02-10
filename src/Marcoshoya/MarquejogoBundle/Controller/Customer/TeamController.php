@@ -1,6 +1,6 @@
 <?php
 
-namespace Marcoshoya\MarquejogoBundle\Controller;
+namespace Marcoshoya\MarquejogoBundle\Controller\Customer;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,7 +13,7 @@ use Marcoshoya\MarquejogoBundle\Form\TeamType;
 /**
  * Team controller.
  *
- * @Route("/times")
+ * @Route("/time")
  */
 class TeamController extends Controller
 {
@@ -21,26 +21,33 @@ class TeamController extends Controller
     /**
      * Lists all Team entities.
      *
-     * @Route("/", name="times")
+     * @Route("/listar", name="customer_team_list")
      * @Method("GET")
      * @Template()
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->findAll();
+        $customer = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($user->getId());
+
+
+        $entities = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->findBy(array(
+            'owner' => $customer
+        ));
 
         return array(
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new Team entity.
      *
-     * @Route("/", name="times_create")
+     * @Route("/novo", name="customer_team_create")
      * @Method("POST")
-     * @Template("MarcoshoyaMarquejogoBundle:Team:new.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Team:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -53,12 +60,14 @@ class TeamController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('times_show', array('id' => $entity->getId())));
+            $this->get('session')->getFlashBag()->add('success', 'Time inserido com sucesso!');
+
+            return $this->redirect($this->generateUrl('customer_team_list'));
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -71,110 +80,92 @@ class TeamController extends Controller
      */
     private function createCreateForm(Team $entity)
     {
+        $user = $this->get('security.context')->getToken()->getUser();
+        $entity->setOwner($user);
+
         $form = $this->createForm(new TeamType(), $entity, array(
-            'action' => $this->generateUrl('times_create'),
+            'action' => $this->generateUrl('customer_team_create'),
             'method' => 'POST',
+            'validation_groups' => array('register')
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
+        
         return $form;
     }
 
     /**
      * Displays a form to create a new Team entity.
      *
-     * @Route("/new", name="times_new")
+     * @Route("/novo", name="customer_team_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
         $entity = new Team();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Finds and displays a Team entity.
-     *
-     * @Route("/{id}", name="times_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Team entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'form' => $form->createView(),
         );
     }
 
     /**
      * Displays a form to edit an existing Team entity.
      *
-     * @Route("/{id}/edit", name="times_edit")
+     * @Route("/{id}/editar", name="customer_team_edit")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
 
         $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Team entity.');
         }
+        
+        // verifies if user is the owner
+        if ($entity->getOwner()->getId() !== $user->getId()) {
+            $this->get('session')->getFlashBag()->add('error', 'Não é possível acessar esse time.');
+
+            return $this->redirect($this->generateUrl('customer_team_list'));
+        }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Team entity.
-    *
-    * @param Team $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Team entity.
+     *
+     * @param Team $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Team $entity)
     {
         $form = $this->createForm(new TeamType(), $entity, array(
-            'action' => $this->generateUrl('times_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('customer_team_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'validation_groups' => array('register')
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
+
     /**
      * Edits an existing Team entity.
      *
-     * @Route("/{id}", name="times_update")
+     * @Route("/{id}/editar", name="customer_team_update")
      * @Method("PUT")
-     * @Template("MarcoshoyaMarquejogoBundle:Team:edit.html.twig")
+     * @Template("MarcoshoyaMarquejogoBundle:Customer/Team:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
@@ -186,62 +177,34 @@ class TeamController extends Controller
             throw $this->createNotFoundException('Unable to find Team entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Time atualizado com sucesso!');
 
-            return $this->redirect($this->generateUrl('times_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('customer_team_list'));
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $editForm->createView(),
         );
     }
-    /**
-     * Deletes a Team entity.
-     *
-     * @Route("/{id}", name="times_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Team entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('times'));
-    }
 
     /**
-     * Creates a form to delete a Team entity by id.
+     * Lists all Team players
      *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/{id}/jogadores", name="customer_team_player")
+     * @Method("GET")
+     * @Template()
      */
-    private function createDeleteForm($id)
+    public function playerAction()
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('times_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+
+        return array();
     }
+
 }
