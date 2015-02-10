@@ -1,0 +1,89 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block container %}
+
+    <h1>Listar jogadores</h1>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p align="right">
+                <a href="{{ path('customer_team_list') }}" class="btn btn-lg btn-link">Voltar</a>
+                {% if owner %}
+                    <a href="{{ path('customer_team_new') }}" class="btn btn-success">Convidar amigo</a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash')) }}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ team.name }}</div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <table  class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="12%">#</th>
+                                <th>Nome</th>
+                                <th width="25%">Posição</th>
+                                <th width="15%">Ativo</th>
+                                    {% if owner %}
+                                    <th width="15%">Ação</th>
+                                    {% endif %}
+                            </tr>
+                        </thead>
+                        {% if players %}
+                            <tbody>
+                                {% for entity in players %}
+                                    <tr>
+                                        <td>{{ entity.player.id }}</td>
+                                        <td>{{ entity.player.name }}</td>
+                                        <td>{{ entity.player.positionName }}</td>
+                                        <td align="center">
+                                            {% if entity.isActive %}
+                                                <i class="fa fa-check"></i>
+                                            {% else %}
+                                                <i class="fa fa-times"></i>
+                                            {% endif %}
+                                        </td>
+                                        {% if owner %}
+                                            <td>
+
+                                                <ul>
+                                                    <li>
+                                                        {% if user.id != entity.player.id %}
+                                                            <a href="{{ path('customer_team_player_delete', {"id": team.id, "player": entity.player.id}) }}" onclick="return confirm('Deseja excluir o jogador do time?')">Excluir</a>
+                                                        {% endif %}
+                                                    </li>
+                                                </ul>
+
+                                            </td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">
+                                        <p align="center">Nenhum resultado encontrado</p>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
