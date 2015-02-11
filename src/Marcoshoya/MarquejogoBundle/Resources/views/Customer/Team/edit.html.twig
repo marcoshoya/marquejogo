@@ -13,7 +13,7 @@
 
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
     {{ form_row (form._token) }}
-    
+
     {{ form_row (form.owner) }}
 
     <div class="row">
@@ -49,5 +49,6 @@
             </div>
         </div>
     </div>
+    {{ form_end(form) }}
 
 {% endblock %}

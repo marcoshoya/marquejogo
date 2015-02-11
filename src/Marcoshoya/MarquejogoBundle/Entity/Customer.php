@@ -152,6 +152,22 @@ class Customer implements UserInterface
     {
         return BundleHelper::positionName($this->getPosition());
     }
+    
+    /**
+     * Gets locate formated
+     * 
+     * @return string
+     */
+    public function getLocate()
+    {
+        if ($this->getState() instanceof \Marcoshoya\MarquejogoBundle\Entity\LocationState) {
+            
+            return sprintf('%s/%s', ucwords($this->getCity()), ucwords($this->getState()->getName()));
+        } else {
+            
+            return 'n/a';
+        }
+    }
 
     /**
      * @inheritDoc
