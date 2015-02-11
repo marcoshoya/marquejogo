@@ -10,7 +10,7 @@
         <div class="header-menu">
             <ul>
                 {% if app.user and is_granted('ROLE_CUSTOMER', app.security.getToken().getUser()) %}
-                    <li><a href="{{ path('customer_dash') }}">Reservas</a></li>
+                    <li><a href="{{ path('customer_dash') }}">Painel</a></li>
                     <li><a href="{{ path('customer_logout') }}">Sair</a></li>
                 {% else %}
                     <li><a href="{{ path('customer_login') }}">Acesse sua conta</a></li>

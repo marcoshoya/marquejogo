@@ -1,8 +1,16 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block container %}
 
-    <h1>Bem vindo {{ app.security.getToken().getUser().getName() }}</h1>
+    <div class="page-header">
+        <h1>Bem vindo {{ app.security.getToken().getUser().getName() }}</h1>
+    </div>
+    
     
     {{ render(controller('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash')) }}
 
@@ -15,23 +23,15 @@
                 </a>
             </td>
             <td>
-                <a href="{{ path('customer_edit') }}">
-                    <img src="/bundles/marcoshoyamarquejogo/images/customer/profile.png" /> <br />
-                    Meu dados
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="">
-                    <img src="/bundles/marcoshoyamarquejogo/images/customer/players.png" /> <br />
-                    Meu Amigos
-                </a>
-            </td>
-            <td>
                 <a href="{{ path('customer_team_list') }}">
                     <img src="/bundles/marcoshoyamarquejogo/images/customer/team.png" /> <br />
                     Meus Times
+                </a>
+            </td>
+            <td>
+                <a href="{{ path('customer_edit') }}">
+                    <img src="/bundles/marcoshoyamarquejogo/images/customer/profile.png" /> <br />
+                    Meu dados
                 </a>
             </td>
         </tr>
