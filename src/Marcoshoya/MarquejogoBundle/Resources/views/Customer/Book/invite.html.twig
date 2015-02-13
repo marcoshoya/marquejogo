@@ -1,0 +1,91 @@
+{% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block container %}
+
+    <div class="page-header">
+        <h1>Convidar amigo</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <p align="right">
+                <a href="#" class="btn btn-lg btn-link">Voltar</a>
+            </p>
+        </div>
+    </div>
+
+    {{ render(controller('MarcoshoyaMarquejogoBundle:Customer/Dashboard:flash')) }}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
+                    {{ form_row (form._token) }}
+                    <div class="form-group {% if not form.email.vars.valid %} has-error {% endif %}">
+                        <label class="col-md-2">{{ form_label(form.email, 'E-mail') }}</label>
+                        <div class="col-md-8">
+                            {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form_widget(form.buscar, { 'attr': {'class': 'submit btn btn-success'} }) }}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <table  class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Posição</th>
+                        <th>Cidade</th>
+                        <th width="15%">Ação</th>
+                    </tr>
+                </thead>
+                {% if results %}
+                    <tbody>
+                        {% for entity in results %}
+                            <tr>
+                                <td>{{ entity.name }}</td>
+                                <td>{{ entity.positionName }}</td>
+                                <td>{{ entity.locate }}</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ path('customer_team_invite_submit', {"id": team.id, "player": entity.id}) }}" onclick="return confirm('Deseja convidar o jogador para o time?')">Enviar</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                {% else %}
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <p align="center">Nenhum resultado encontrado</p>
+                            </td>
+                        </tr>
+                    </tfoot>
+                {% endif %}
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

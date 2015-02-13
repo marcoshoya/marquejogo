@@ -9,8 +9,10 @@
 
 {% block container %}
 
-    <h1>Inserir novo time</h1>
-
+    <div class="page-header">
+        <h1>Inserir novo time</h1>
+    </div>
+    
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}} ) }}
     {{ form_row (form._token) }}
 
