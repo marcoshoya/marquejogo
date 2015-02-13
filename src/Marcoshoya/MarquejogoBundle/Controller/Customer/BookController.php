@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Controller\Customer;
 
 #use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -56,9 +57,41 @@ class BookController extends Controller
      */
     public function inviteAction(Book $entity)
     {
+        $data = array();
+        
+        $form = $this->createSearchFriendForm($data, $entity);
+        
         return array(
+            'results' => null,
+            'form' => $form->createView(), 
             'entity' => $entity
         );
+    }
+    
+    /**
+     * Creates the form
+     * 
+     * @param array $data
+     * @param Team $entity
+     * 
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createSearchFriendForm($data, Book $entity)
+    {
+        $form = $this->createFormBuilder($data, array(
+                'action' => $this->generateUrl('customer_book_show', array('id' => $entity->getId())),
+                'method' => 'POST',
+            ))
+            ->add('email', 'email', array(
+                'constraints' => array(
+                    new Assert\NotBlank(array('message' => 'Campo obrigátorio')),
+                    new Assert\Email(array('message' => 'Formato do e-mail inválido')),
+            )))
+            ->add('buscar', 'submit')
+            ->getForm()
+        ;
+
+        return $form;
     }
 
 }

@@ -4,10 +4,13 @@ namespace Marcoshoya\MarquejogoBundle\Controller\Customer;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Validator\Constraints as Assert;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Marcoshoya\MarquejogoBundle\Entity\Team;
+use Marcoshoya\MarquejogoBundle\Entity\TeamPlayer;
 use Marcoshoya\MarquejogoBundle\Form\TeamType;
 
 /**
@@ -17,6 +20,19 @@ use Marcoshoya\MarquejogoBundle\Form\TeamType;
  */
 class TeamController extends Controller
 {
+
+    /**
+     * Verify if user logged is team owner
+     * 
+     * @param Team $entity
+     * @return boolean
+     */
+    private function isOwner(Team $entity)
+    {
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        return ($entity->getOwner()->getId() !== $user->getId()) ? false : true;
+    }
 
     /**
      * Lists all Team entities.
@@ -88,7 +104,7 @@ class TeamController extends Controller
             'method' => 'POST',
             'validation_groups' => array('register')
         ));
-        
+
         return $form;
     }
 
@@ -120,15 +136,14 @@ class TeamController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
 
         $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Team entity.');
         }
-        
+
         // verifies if user is the owner
-        if ($entity->getOwner()->getId() !== $user->getId()) {
+        if (!$this->isOwner($entity)) {
             $this->get('session')->getFlashBag()->add('error', 'Não é possível acessar esse time.');
 
             return $this->redirect($this->generateUrl('customer_team_list'));
@@ -182,7 +197,7 @@ class TeamController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            
+
             $this->get('session')->getFlashBag()->add('success', 'Time atualizado com sucesso!');
 
             return $this->redirect($this->generateUrl('customer_team_list'));
@@ -198,13 +213,186 @@ class TeamController extends Controller
      * Lists all Team players
      *
      * @Route("/{id}/jogadores", name="customer_team_player")
+     * @ParamConverter("entity", class="MarcoshoyaMarquejogoBundle:Team")
      * @Method("GET")
      * @Template()
      */
-    public function playerAction()
+    public function playerAction(Team $entity)
     {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        return array();
+        $owner = $this->isOwner($entity);
+
+        $players = $em->getRepository('MarcoshoyaMarquejogoBundle:TeamPlayer')->findBy(array(
+            'team' => $entity
+        ));
+
+        return array(
+            'team' => $entity,
+            'players' => $players,
+            'owner' => $owner,
+            'user' => $user
+        );
+    }
+
+    /**
+     * Delete player from team
+     *
+     * @Route("/{id}/jogador/{player}/excluir", name="customer_team_player_delete")
+     * @Method("GET")
+     * @Template()
+     */
+    public function playerdeleteAction($id, $player)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Team entity.');
+        }
+
+        // verifies if user is the owner
+        if (!$this->isOwner($entity)) {
+            $this->get('session')->getFlashBag()->add('error', 'Não é possível acessar esse time.');
+
+            return $this->redirect($this->generateUrl('customer_team_list'));
+        }
+
+        try {
+
+            $teamPlayer = $em->getRepository('MarcoshoyaMarquejogoBundle:TeamPlayer')->findOneBy(array(
+                'team' => $entity,
+                'player' => $player
+            ));
+
+            $em->remove($teamPlayer);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Jogador excluido com sucesso!');
+        } catch (\Exception $ex) {
+            $this->get('logger')->error('playerdeleteAction error: ' . $ex->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Ocorreu um erro ao excluir o jogador');
+        }
+
+        return $this->redirect($this->generateUrl('customer_team_player', array(
+                    'id' => $id
+        )));
+    }
+
+    /**
+     * Invite a friend to team
+     *
+     * @Route("/{id}/convidar", name="customer_team_player_invite")
+     * @ParamConverter("entity", class="MarcoshoyaMarquejogoBundle:Team")
+     * @Template()
+     */
+    public function playerinviteAction(Request $request, Team $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->get('session');
+        $data = $results = array();
+
+        if ($session->has('customer_search_friend')) {
+            $data['email'] = $session->get('customer_search_friend');
+
+            $results = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->findBy(array(
+                'username' => $data['email']
+            ));
+        }
+
+        $form = $this->createSearchFriendForm($data, $entity);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+
+            $data = $form->getData();
+            $session->set('customer_search_friend', $data['email']);
+
+            return $this->redirect($this->generateUrl('customer_team_player_invite', array('id' => $entity->getId())));
+        }
+
+        return array(
+            'team' => $entity,
+            'form' => $form->createView(),
+            'results' => $results,
+        );
+    }
+
+    /**
+     * Submits the invitation
+     *
+     * @Route("/{id}/jogador/{player}/convidar", name="customer_team_invite_submit")
+     * @Method("GET")
+     * @Template()
+     */
+    public function invitesubmitAction($id, $player)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('MarcoshoyaMarquejogoBundle:Team')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Team entity.');
+        }
+
+        // verifies if user is the owner
+        if (!$this->isOwner($entity)) {
+            $this->get('session')->getFlashBag()->add('error', 'Não é possível acessar esse time.');
+
+            return $this->redirect($this->generateUrl('customer_team_list'));
+        }
+
+        try {
+
+            $customer = $em->getRepository('MarcoshoyaMarquejogoBundle:Customer')->find($player);
+            if (!$customer) {
+                throw $this->createNotFoundException('Unable to find Customer entity.');
+            }
+
+            $teamPlayer = new TeamPlayer($id, $player);
+            $teamPlayer->setTeam($entity);
+            $teamPlayer->setPlayer($customer);
+            $teamPlayer->setIsActive(false);
+            
+            $em->persist($teamPlayer);
+            $em->flush();
+
+            $this->get('session')->getFlashBag()->add('success', 'Jogador convidado com sucesso!');
+            
+        } catch (\Exception $ex) {
+            $this->get('logger')->error('playerdeleteAction error: ' . $ex->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Ocorreu um erro ao convidar o jogador');
+        }
+
+        return $this->redirect($this->generateUrl('customer_team_player', array(
+                    'id' => $id
+        )));
+    }
+
+    /**
+     * Creates the form
+     * 
+     * @param array $data
+     * @param Team $entity
+     * 
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createSearchFriendForm($data, Team $entity)
+    {
+        $form = $this->createFormBuilder($data, array(
+                'action' => $this->generateUrl('customer_team_player_invite', array('id' => $entity->getId())),
+                'method' => 'POST',
+            ))
+            ->add('email', 'email', array(
+                'constraints' => array(
+                    new Assert\NotBlank(array('message' => 'Campo obrigátorio')),
+                    new Assert\Email(array('message' => 'Formato do e-mail inválido')),
+            )))
+            ->add('buscar', 'submit')
+            ->getForm()
+        ;
+
+        return $form;
     }
 
 }

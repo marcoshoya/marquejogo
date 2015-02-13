@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
+use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 
 /**
  * Customer entity class
@@ -140,6 +141,32 @@ class Customer implements UserInterface
     public function __toString()
     {
         return $this->name;
+    }
+    
+    /**
+     * Gets position name
+     * 
+     * @return type
+     */
+    public function getPositionName()
+    {
+        return BundleHelper::positionName($this->getPosition());
+    }
+    
+    /**
+     * Gets locate formated
+     * 
+     * @return string
+     */
+    public function getLocate()
+    {
+        if ($this->getState() instanceof \Marcoshoya\MarquejogoBundle\Entity\LocationState) {
+            
+            return sprintf('%s/%s', ucwords($this->getCity()), ucwords($this->getState()->getName()));
+        } else {
+            
+            return 'n/a';
+        }
     }
 
     /**

@@ -9,7 +9,7 @@ namespace Marcoshoya\MarquejogoBundle\Helper;
  */
 class BundleHelper
 {
- 
+
     /**
      * Dump a doctrine object
      * 
@@ -49,6 +49,23 @@ class BundleHelper
             case 'voley': return 'Vôleibol';
             case 'swiss': return 'Futebol suiço';
             default: return $type;
+        }
+    }
+    
+    /**
+     * Gets position name
+     * 
+     * @param string $pos
+     * @return string
+     */
+    public static function positionName($pos)
+    {
+        switch ($pos) {
+            case 'goalkeeper': return 'goleiro';
+            case 'defender': return 'defensor';
+            case 'middle': return 'meio';
+            case 'attacker': return 'atacante';
+            default: return 'n/a';
         }
     }
 
@@ -106,7 +123,7 @@ class BundleHelper
         $string = preg_replace($accents_regex, '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'));
         $string = preg_replace("/[^a-z0-9]/u", "-", $string);
         $string = preg_replace("/[-]+/u", "-", $string);
-        
+
         return $string;
     }
 
