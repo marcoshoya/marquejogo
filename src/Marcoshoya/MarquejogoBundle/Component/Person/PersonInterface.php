@@ -17,4 +17,11 @@ interface PersonInterface {
      * @return string
      */
     public function getUser(UserInterface $user);
+    
+    /**
+     * Makes authentication
+     * 
+     * @param UserInterface $user
+     */
+    public function doAuth(UserInterface $user);
 }

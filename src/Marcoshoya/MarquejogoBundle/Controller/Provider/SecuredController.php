@@ -54,10 +54,11 @@ class SecuredController extends Controller
             $user = $service->getUser($data);
 
             if (null !== $user) {
-                $this->doAuth($user);
 
                 return $this->redirect($this->generateUrl('provider_dash'));
             }
+            
+            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
         }
 
         return array(
@@ -103,32 +104,6 @@ class SecuredController extends Controller
         return $form;
     }
 
-    /**
-     *
-     * @param AdmUser $entity
-     * @return boolean
-     * @throws AccessDeniedHttpException
-     */
-    private function doAuth(Provider $entity)
-    {
-        try {
-            $providerKey = 'provider';
-            $token = new UsernamePasswordToken($entity, null, $providerKey, $entity->getRoles());
-
-            $this->get('security.context')->setToken($token);
-
-            $session = $this->getRequest()->getSession();
-            $session->set('_security_main', serialize($token));
-
-            if (!$this->get('security.context')->isGranted(array('ROLE_PROVIDER'))) {
-                throw new AccessDeniedHttpException();
-            }
-
-        } catch (AccessDeniedHttpException $ex) {
-            $this->get('security.context')->setToken(null);
-            $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
-            $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
-        }
-    }
+    
 
 }

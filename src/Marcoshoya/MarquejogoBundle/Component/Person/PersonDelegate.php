@@ -18,21 +18,22 @@ use Marcoshoya\MarquejogoBundle\Component\Person\BusinessAdm;
  */
 class PersonDelegate
 {
+
     /**
      * @var Doctrine\ORM\EntityManager 
      */
     protected $em;
-    
+
     /**
      * @var Symfony\Bridge\Monolog\Logger
      */
     protected $logger;
-    
+
     /**
      * @var Symfony\Component\HttpFoundation\Session\Session
      */
     protected $session;
-    
+
     /**
      * @var Symfony\Component\Security\Core\SecurityContext
      */
@@ -47,33 +48,30 @@ class PersonDelegate
      * @param SecurityContext $security
      */
     public function __construct(
-        EntityManager $em, 
-        Logger $logger, 
-        Session $session, 
-        SecurityContext $security
-    ) {
+    EntityManager $em, Logger $logger, Session $session, SecurityContext $security
+    )
+    {
         $this->em = $em;
         $this->logger = $logger;
         $this->session = $session;
         $this->security = $security;
     }
-    
+
     public function getBusinessService(UserInterface $user)
     {
         if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Customer) {
-            
+
             return new BusinessCustomer($this->em, $this->logger, $this->session, $this->security);
         }
-        
+
         if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\Provider) {
-            
-            return new BusinessProvider($this->em, $this->logger, $user);
+
+            return new BusinessProvider($this->em, $this->logger, $this->session, $this->security);
         }
-        
+
         if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {
             return new BusinessAdm($this->em);
         }
     }
-    
-    
+
 }

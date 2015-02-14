@@ -2,36 +2,38 @@
 
 namespace Marcoshoya\MarquejogoBundle\Component\Person;
 
-use Doctrine\ORM\EntityManager;
 use Marcoshoya\MarquejogoBundle\Entity\Provider;
+use Marcoshoya\MarquejogoBundle\Component\Person\BaseBusiness;
 use Marcoshoya\MarquejogoBundle\Component\Person\PersonInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
 use Marcoshoya\MarquejogoBundle\Service\AutocompleteService;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * BusinessProvider
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class BusinessProvider implements PersonInterface
+class BusinessProvider extends BaseBusiness implements PersonInterface
 {
-
     /**
-     * @var Doctrine\ORM\EntityManager;
+     * @var string
      */
-    protected $em;
+    const providerKey = 'provider';
     
-    protected $provider;
-
     /**
-     * Constructor
-     *
-     * @param EntityManager $em
+     * @var \Marcoshoya\MarquejogoBundle\Entity\Provider
      */
-    public function __construct(EntityManager $em, $logger, $provider)
+    private $provider;
+    
+    /**
+     * Sets provider
+     * 
+     * @param Provider $provider
+     */
+    public function setProvider(Provider $provider)
     {
-        $this->em = $em;
-        $this->logger = $logger;
         $this->provider = $provider;
     }
 
@@ -51,8 +53,39 @@ class BusinessProvider implements PersonInterface
 
             return null;
         }
+        
+        // sets provider object
+        $this->setProvider($provider);
 
         return $provider;
+    }
+    
+    /**
+     * Do auth
+     * 
+     * @param Provider $entity
+     * @return boolean
+     * @throws AccessDeniedHttpException
+     */
+    public function doAuth(UserInterface $entity)
+    {
+        try {
+
+            $token = new UsernamePasswordToken($entity, null, self::providerKey, $entity->getRoles());
+
+            $this->security->setToken($token);
+            $this->session->set('_security_main', serialize($token));
+
+            if (!$this->security->isGranted(array('ROLE_PROVIDER'))) {
+                throw new AccessDeniedHttpException();
+            }
+            
+            return true;
+
+        } catch (AccessDeniedHttpException $ex) {
+            $this->security->setToken(null);
+            $this->logger->error('BusinessProvider error: ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -71,6 +104,7 @@ class BusinessProvider implements PersonInterface
             // notify observers
             $provider->attach($autocomplete);
             $provider->notify();
+            
         } catch (\Exception $e) {
             $this->logger->error("BusinessProvider error: " . $e->getMessage());
         }
@@ -92,7 +126,7 @@ class BusinessProvider implements PersonInterface
 
             return $picture;
         } catch (\Exception $ex) {
-            $this->getLogger()->error("BusinessProvider error: " . $ex->getMessage());
+            $this->logger->error("BusinessProvider error: " . $ex->getMessage());
         }
     }
     
@@ -112,7 +146,7 @@ class BusinessProvider implements PersonInterface
 
             return $picture;
         } catch (\Exception $ex) {
-            $this->getLogger()->error("BusinessProvider error: " . $ex->getMessage());
+            $this->logger->error("BusinessProvider error: " . $ex->getMessage());
         }
     }
 
