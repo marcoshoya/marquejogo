@@ -39,7 +39,7 @@ class SearchService extends BaseService
 
     /**
      * Set session
-     * 
+     *
      * @param array $data
      */
     public function setSearchSession($data = array())
@@ -61,11 +61,13 @@ class SearchService extends BaseService
         }
 
         $this->getSession()->set(SearchDTO::session, serialize($search));
+        
+        return $search;
     }
 
     /**
      * Get search session
-     * 
+     *
      * @return SearchDTO|null
      */
     public function getSearchSession()
@@ -81,7 +83,7 @@ class SearchService extends BaseService
 
     /**
      * Get standard search data in array
-     * 
+     *
      * @return array
      */
     public function getSearchData()
@@ -107,11 +109,16 @@ class SearchService extends BaseService
      */
     public function doSearch(SearchDTO $search)
     {
-        $city = $search->getAutocomplete()->getCity();
+        $collection = new SearchCollection();
 
+        if (null === $search->getAutocomplete()) {
+
+            return $collection;
+        }
+
+        $city = $search->getAutocomplete()->getCity();
         $results = $this->getProviderByCity($city);
 
-        $collection = new SearchCollection();
         if ($results) {
             foreach ($results as $provider) {
                 $idx = $provider->getId();
@@ -146,13 +153,13 @@ class SearchService extends BaseService
             $this->getLogger()->error("SearchService error: " . $ex->getMessage());
         }
     }
-    
+
     /**
      * Gets all products available to sell by search criteria
-     * 
+     *
      * @param Schedule $schedule
      * @param SearchDTO $search
-     * 
+     *
      * @return array
      */
     public function getallProductBySearch(Schedule $schedule, SearchDTO $search)
