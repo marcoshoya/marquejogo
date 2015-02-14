@@ -55,6 +55,7 @@ class SearchService extends BaseService
         $search = new SearchDTO();
         $search->setDate($dateTime);
         $search->setAutocomplete($autocomplete);
+        $search->setSlug($slug);
 
         if ($this->getSession()->has(SearchDTO::session)) {
             $this->getSession()->remove(SearchDTO::session);

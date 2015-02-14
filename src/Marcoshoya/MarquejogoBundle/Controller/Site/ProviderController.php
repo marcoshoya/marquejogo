@@ -177,12 +177,10 @@ class ProviderController extends Controller
             // gets the service
             $service = $this->get('marcoshoya_marquejogo.service.search');
             // form data
-            $data = $form->getData();
-            $service->setSearchSession($data);
+            $data = $formSidebar->getData();
+            $search = $service->setSearchSession($data);
 
-            $slug = BundleHelper::sluggable($data['city']);
-
-            return $this->redirect($this->generateUrl('search_result', array('city' => $slug)));
+            return $this->redirect($this->generateUrl('search_result', array('city' => $search->getSlug())));
         }
 
         // get products available to sell

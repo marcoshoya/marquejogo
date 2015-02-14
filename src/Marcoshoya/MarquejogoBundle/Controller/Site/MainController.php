@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Marcoshoya\MarquejogoBundle\Helper\BundleHelper;
 use Marcoshoya\MarquejogoBundle\Form\SearchType;
 
 /**
@@ -48,11 +47,9 @@ class MainController extends Controller
             $service = $this->get('marcoshoya_marquejogo.service.search');
             // form data
             $data = $form->getData();
-            $service->setSearchSession($data);
+            $search = $service->setSearchSession($data);
 
-            $slug = BundleHelper::sluggable($data['city']);
-
-            return $this->redirect($this->generateUrl('search_result', array('city' => $slug)));
+            return $this->redirect($this->generateUrl('search_result', array('city' => $search->getSlug())));
         }
 
         return array(

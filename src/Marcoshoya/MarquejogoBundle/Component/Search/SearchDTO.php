@@ -23,6 +23,11 @@ class SearchDTO
      * @var \DateTime
      */
     private $date = null;
+    
+    /**
+     * @var string
+     */
+    private $slug = null;
 
     /**
      * Set autocomplete
@@ -63,5 +68,24 @@ class SearchDTO
     {
         return $this->date;
     }
-
+    
+    /**
+     * Set city slug
+     * 
+     * @param string $slug
+     */
+    public function setSlug($slug = null)
+    {
+        $this->slug = $slug;
+    }
+    
+    /**
+     * Get city slug
+     * 
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
 }
