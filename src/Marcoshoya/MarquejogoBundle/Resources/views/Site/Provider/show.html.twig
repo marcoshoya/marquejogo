@@ -6,7 +6,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/camera.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+    <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
     {{ form_stylesheet(formAvail) }}
     {{ form_stylesheet(formSidebar) }}
 {% endblock %}
@@ -14,9 +14,8 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.min.js') }}"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery-ui.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/datepicker-pt-BR.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.mobile.customized.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/jquery.easing.1.3.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/camera.js') }}"></script>
     <script type="text/javascript" src="{{ asset('/bundles/marcoshoyamarquejogo/js/custom.js') }}"></script>
@@ -110,7 +109,7 @@
                                 {% set data = schedule.providerProduct.vars.label|split('|') %}
                                 <td class="product-type">{{ data[0] }}</td>
                                 <td>{{ data[1] }}</td>
-                                <td>{{ schedule.price.vars.value|number_format(2, '.', ',') }}
+                                <td>{{ schedule.price.vars.value|number_format(2, '.', ',') }} / h
                                     {{ form_widget(schedule.price) }}
                                 </td>
                                 <td>
