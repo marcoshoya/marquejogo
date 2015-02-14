@@ -20,6 +20,11 @@ class MainControllerTest extends WebTestCase
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
+    
+    /**
+     * @var Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    protected $router;
 
     /**
      * Setup functions
@@ -32,14 +37,18 @@ class MainControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager()
         ;
+        
+        $this->router = static::$kernel->getContainer()
+            ->get('router')
+        ;
     }
 
     /**
      * Test main
      */
     public function testMain()
-    {
-        $crawler = $this->client->request('GET', '/');
+    {   
+        $crawler = $this->client->request('GET', $this->router->generate('marquejogo_homepage'));
 
         $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY'));
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
