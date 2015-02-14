@@ -27,7 +27,7 @@ class MainControllerTest extends WebTestCase
     protected $router;
 
     /**
-     * Setup functions
+     * {@inheritDoc}
      */
     public function setUp()
     {
@@ -53,5 +53,14 @@ class MainControllerTest extends WebTestCase
         $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY'));
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("MarqueJogo.com")')->count());
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->em->close();
     }
 }

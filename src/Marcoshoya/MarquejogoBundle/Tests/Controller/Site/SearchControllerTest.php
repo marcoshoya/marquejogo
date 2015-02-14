@@ -11,8 +11,12 @@ use Marcoshoya\MarquejogoBundle\Tests\Controller\Site\MainControllerTest;
  */
 class SearchControllerTest extends MainControllerTest
 {
+
     /**
-     * Test search
+     * Tests main page
+     *
+     * GET /
+     * HTTP/1.1 200 OK
      */
     public function testSearch()
     {
@@ -45,6 +49,7 @@ class SearchControllerTest extends MainControllerTest
         $this->client->submit($form);
         $crawler = $this->client->followRedirect();
 
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('h1:contains("Resultados encontrados")')->count());
     }
 
@@ -81,7 +86,7 @@ class SearchControllerTest extends MainControllerTest
     public function testSidebar()
     {
         $crawler = $this->client->request('GET', $this->router->generate('search_result', array(
-            'city' => 'invalid-result'
+                'city' => 'invalid-result'
         )));
 
         // Test form validate
@@ -104,6 +109,8 @@ class SearchControllerTest extends MainControllerTest
         $this->client->submit($form);
         $crawler = $this->client->followRedirect();
 
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertGreaterThan(0, $crawler->filter('h1:contains("Resultados encontrados")')->count());
     }
+
 }
