@@ -53,9 +53,6 @@ class BusinessProvider extends BaseBusiness implements PersonInterface
 
             return null;
         }
-        
-        // sets provider object
-        $this->setProvider($provider);
 
         return $provider;
     }
