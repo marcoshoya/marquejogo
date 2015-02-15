@@ -73,7 +73,8 @@ class PersonDelegate
         }
 
         if ($user instanceof \Marcoshoya\MarquejogoBundle\Entity\AdmUser) {
-            return new BusinessAdm($this->em);
+            
+            return new BusinessAdm($this->em, $this->logger, $this->session, $this->security);
         }
     }
 

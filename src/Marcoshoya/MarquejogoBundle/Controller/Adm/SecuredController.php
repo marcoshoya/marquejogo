@@ -53,12 +53,11 @@ class SecuredController extends Controller
             $user = $service->getUser($data);
 
             if (null !== $user) {
-                $this->doAuth($user);
 
                 return $this->redirect($this->generateUrl('_adm_dash'));
-            } else {
-                $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
             }
+            
+            $this->get('session')->getFlashBag()->add('error', 'Usuário não encontrado');
         }
 
         return array(
@@ -93,31 +92,15 @@ class SecuredController extends Controller
     }
 
     /**
-     * Do authentication
-     *
-     * @param AdmUser $user
-     * @throws AccessDeniedHttpException
+     * @Route("/logout", name="_marquejogo_adm_logout")
+     * @Template()
      */
-    private function doAuth(AdmUser $user)
+    public function logoutAction()
     {
-        try {
-            $providerKey = 'admin';
-            $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $this->get('security.context')->setToken(null);
+        $this->get('request')->getSession()->invalidate();
 
-            $this->get('security.context')->setToken($token);
-
-            $session = $this->getRequest()->getSession();
-            $session->set('_security_main', serialize($token));
-
-            if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-                throw new AccessDeniedHttpException();
-            }
-
-        } catch (AccessDeniedHttpException $ex) {
-            $this->get('security.context')->setToken(null);
-            $this->get('logger')->error('{doAuth} Error: ' . $ex->getMessage());
-            $this->get('session')->getFlashBag()->add('error', 'Credenciais inválidas');
-        }
+        return $this->redirect($this->generateUrl('_adm_dash'));
     }
 
 }

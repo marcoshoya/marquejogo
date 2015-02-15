@@ -2,32 +2,24 @@
 
 namespace Marcoshoya\MarquejogoBundle\Component\Person;
 
-use Doctrine\ORM\EntityManager;
+use Marcoshoya\MarquejogoBundle\Component\Person\BaseBusiness;
 use Marcoshoya\MarquejogoBundle\Component\Person\PersonInterface;
 use Marcoshoya\MarquejogoBundle\Component\Person\UserInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * BusinessAdm
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class BusinessAdm implements PersonInterface
+class BusinessAdm extends BaseBusiness implements PersonInterface
 {
-
+    
     /**
-     * @var Doctrine\ORM\EntityManager;
+     * @var string
      */
-    protected $em;
-
-    /**
-     * Constructor
-     * 
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
+    const providerKey = 'admin';
     
     /**
      * Get user
@@ -47,6 +39,28 @@ class BusinessAdm implements PersonInterface
         }
 
         return $admuser;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    public function doAuth(UserInterface $user)
+    {
+        try {
+            
+            $token = new UsernamePasswordToken($user, null, self::providerKey, $user->getRoles());
+
+            $this->security->setToken($token);
+            $this->session->set('_security_main', serialize($token));
+
+            if (!$this->security->isGranted('ROLE_ADMIN')) {
+                throw new AccessDeniedHttpException();
+            }
+
+        } catch (AccessDeniedHttpException $ex) {
+            $this->security->setToken(null);
+            $this->logger->error('BusinessAdm error: ' . $ex->getMessage());
+        }
     }
 
 }

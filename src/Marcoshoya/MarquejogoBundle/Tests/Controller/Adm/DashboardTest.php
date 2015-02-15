@@ -26,7 +26,12 @@ class DashboardTest extends WebTestCase
     protected $em = null;
     
     /**
-     * Setup functions
+     * @var Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    protected $router;
+    
+    /**
+     * @inheritDoc
      */
     public function setUp()
     {
@@ -36,6 +41,19 @@ class DashboardTest extends WebTestCase
             ->get('doctrine')
             ->getManager()
         ;
+        
+        $this->router = static::$kernel->getContainer()
+            ->get('router')
+        ;
+    }
+    
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->em->close();
     }
     
     /**
