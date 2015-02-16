@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Site;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Marcoshoya\MarquejogoBundle\Entity\Provider;
 
 /**
  * MainControllerTest
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 class MainControllerTest extends WebTestCase
 {
+
     /**
      * @var \Symfony\Bundle\FrameworkBundle\Client
      */
@@ -20,14 +22,14 @@ class MainControllerTest extends WebTestCase
      * @var \Doctrine\ORM\EntityManager
      */
     protected $em = null;
-    
+
     /**
      * @var Symfony\Bundle\FrameworkBundle\Routing\Router
      */
     protected $router;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function setUp()
     {
@@ -37,30 +39,75 @@ class MainControllerTest extends WebTestCase
             ->get('doctrine')
             ->getManager()
         ;
-        
+
         $this->router = static::$kernel->getContainer()
             ->get('router')
         ;
     }
-
-    /**
-     * Test main
-     */
-    public function testMain()
-    {   
-        $crawler = $this->client->request('GET', $this->router->generate('marquejogo_homepage'));
-
-        $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY'));
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("MarqueJogo.com")')->count());
-    }
     
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function tearDown()
     {
         parent::tearDown();
         $this->em->close();
     }
+    
+    /**
+     * Configure schedule
+     * 
+     * @param Provider $provider
+     * @param \DateTime $date
+     * 
+     * @return \Marcoshoya\MarquejogoBundle\Entity\ScheduleItem
+     */
+    protected function configureSchedule(Provider $provider, \DateTime $date)
+    {
+        try {
+            $product = new \Marcoshoya\MarquejogoBundle\Entity\ProviderProduct();
+            $product->setProvider($provider);
+            $product->setCategory('open');
+            $product->setType('soccer');
+            $product->setCapacity(10);
+            $product->setIsActive(true);
+            $product->setName('Book Product Test');
+
+            $this->em->persist($product);
+            $this->em->flush();
+
+            $schedule = $this->em->getRepository('MarcoshoyaMarquejogoBundle:Schedule')->findOneBy(array(
+                'provider' => $provider
+            ));
+
+            $scheduleItem = new \Marcoshoya\MarquejogoBundle\Entity\ScheduleItem();
+            $scheduleItem->setSchedule($schedule);
+            $scheduleItem->setProviderProduct($product);
+            $scheduleItem->setAlocated(0);
+            $scheduleItem->setPrice(99);
+            $scheduleItem->setAvailable(1);
+            $scheduleItem->setDate($date);
+
+            $this->em->persist($scheduleItem);
+            $this->em->flush();
+            
+            return $scheduleItem;
+            
+        } catch (\Exception $ex) {
+            $this->fail('configureSchedule error: ' . $ex->getMessage());
+        }
+    }
+
+    /**
+     * Test main
+     */
+    public function testMain()
+    {
+        $crawler = $this->client->request('GET', $this->router->generate('marquejogo_homepage'));
+
+        $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY'));
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("MarqueJogo.com")')->count());
+    }
+
 }

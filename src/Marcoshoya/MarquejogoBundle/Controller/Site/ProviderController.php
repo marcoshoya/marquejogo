@@ -85,7 +85,7 @@ class ProviderController extends Controller
             'products' => $products,
             'form' => $form->createView(),
             'formAvail' => $formAvail->createView(),
-            'formSidebar' => $form->createView(),
+            'formSidebar' => $formSidebar->createView(),
         );
     }
 
