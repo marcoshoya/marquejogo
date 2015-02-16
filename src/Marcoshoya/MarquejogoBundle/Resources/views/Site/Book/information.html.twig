@@ -99,13 +99,18 @@
                                             </div>
                                         {% endfor %}
                                     </div>
-                                    <div class="booking-data-user-group-col-md-2">
-                                        <label class="col-md-2">{{ form_label(form.password, 'Password') }}</label>
-                                        <div class="col-md-1">
-                                            {{ form_widget(form.password, { 'attr': {'class': 'booking-data-user-control'} }) }} <span style="float:left">(para acessar a área do cliente)</span>
-                                            {{ form_errors(form.password) }}
+                                    {% if formLogin %}
+                                        <div class="booking-data-user-group-col-md-2">
+                                            <label class="col-md-2">{{ form_label(form.password, 'Password') }}</label>
+                                            <div class="col-md-1">
+                                                {{ form_widget(form.password, { 'attr': {'class': 'booking-data-user-control'} }) }} <span style="float:left">(para acessar a área do cliente)</span>
+                                                {{ form_errors(form.password) }}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% else %}
+                                        {{ form_widget(form.password) }}
+                                    {% endif %}
+
                                     <div class="booking-data-user-submit">
                                         <input type="submit" class="btn" value="Continuar" />
                                     </div>

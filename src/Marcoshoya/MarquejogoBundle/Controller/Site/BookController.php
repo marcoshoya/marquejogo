@@ -71,6 +71,7 @@ class BookController extends Controller
         $service = $this->get('marcoshoya_marquejogo.service.book');
         $book = $this->getBook($provider);
         if (null === $book) {
+            
             return $this->redirect($this->generateUrl('provider_show', array('id' => $provider->getId())));
         }
 
@@ -343,7 +344,7 @@ class BookController extends Controller
 
         $form
             ->add('username')
-            ->add('password', 'password')
+            
             ->add('name')
             ->add('phone')
             ->add('team', 'collection', array(
@@ -360,6 +361,14 @@ class BookController extends Controller
             ->remove('city')
             ->remove('state')
         ;
+        
+        if ($customer->getId()) {
+            $form->add('password', 'hidden', array(
+                'data' => $customer->getPassword()
+            ));
+        } else {
+            $form->add('password', 'password');
+        }
 
         return $form;
     }
