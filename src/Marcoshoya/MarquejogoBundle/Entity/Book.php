@@ -67,6 +67,11 @@ class Book
     {
         return $this->id;
     }
+    
+    public function getStatusName()
+    {
+        return \Marcoshoya\MarquejogoBundle\Helper\BundleHelper::bookStatusName($this->status);
+    }
 
     /**
      * Get id

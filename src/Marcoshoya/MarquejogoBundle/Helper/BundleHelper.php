@@ -51,7 +51,7 @@ class BundleHelper
             default: return $type;
         }
     }
-    
+
     /**
      * Gets position name
      * 
@@ -125,6 +125,17 @@ class BundleHelper
         $string = preg_replace("/[-]+/u", "-", $string);
 
         return $string;
+    }
+
+    public static function bookStatusName($str)
+    {
+        switch ($str) {
+            case 'new': return 'Nova';
+            case 'booked': return 'Confirmada';
+            case 'closed':  return 'Finalizada';
+            case 'cancelled':  return 'Cancelada';
+            default: return 'n\a';
+        }
     }
 
 }
