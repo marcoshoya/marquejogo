@@ -2,14 +2,14 @@
 
 namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Adm;
 
-use Marcoshoya\MarquejogoBundle\Tests\Controller\Adm\DashboardTest;
+use Marcoshoya\MarquejogoBundle\Tests\Controller\Adm\AdmBaseTest;
 
 /**
  * AdmUserControllerTest
  * 
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class AdmUserControllerTest extends DashboardTest
+class AdmUserControllerTest extends AdmBaseTest
 {
     /**
      * It tests all users functions

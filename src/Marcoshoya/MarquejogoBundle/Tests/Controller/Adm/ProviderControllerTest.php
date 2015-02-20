@@ -2,14 +2,14 @@
 
 namespace Marcoshoya\MarquejogoBundle\Tests\Controller\Adm;
 
-use Marcoshoya\MarquejogoBundle\Tests\Controller\Adm\DashboardTest;
+use Marcoshoya\MarquejogoBundle\Tests\Controller\Adm\AdmBaseTest;
 
 /**
  * ProviderControllerTest
  *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  */
-class ProviderControllerTest extends DashboardTest
+class ProviderControllerTest extends AdmBaseTest
 {
 
     /**

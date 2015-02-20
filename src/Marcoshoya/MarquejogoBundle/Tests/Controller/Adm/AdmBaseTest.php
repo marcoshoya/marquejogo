@@ -7,13 +7,11 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
- * DashboardTest
- * 
+ * AdmBaseTest
+ *
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
- * 
- * @see http://symfony.com/doc/current/cookbook/testing/simulating_authentication.html
  */
-class DashboardTest extends WebTestCase
+class AdmBaseTest extends WebTestCase
 {
     /**
      * @var \Symfony\Bundle\FrameworkBundle\Client
@@ -58,6 +56,8 @@ class DashboardTest extends WebTestCase
     
     /**
      * Make login on admin
+     * 
+     * @see http://symfony.com/doc/current/cookbook/testing/simulating_authentication.html
      */
     protected function logIn()
     {
@@ -74,15 +74,10 @@ class DashboardTest extends WebTestCase
     }
     
     /**
-     * General test for dashboard
+     * @inheritDoc
      */
-    public function testDashboard()
+    public function testBase()
     {
-        $this->logIn();
-        $crawler = $this->client->request('GET', '/adm/');
-        
-        $this->assertTrue($this->client->getContainer()->get('security.context')->isGranted('ROLE_ADMIN'));
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("MarqueJogo.com - Administrador")')->count());
+        $this->assertTrue(true);
     }
 }
