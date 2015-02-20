@@ -20,7 +20,16 @@ class DashboardController extends Controller
      */
     public function dashboardAction()
     {
-        return array();
+        $em = $this->getDoctrine()->getManager();
+        
+        $until = new \DateTime();
+        $from = clone $until;
+        $from->modify("-30 days");
+        
+        $entities = $em->getRepository("MarcoshoyaMarquejogoBundle:Book")
+            ->findByPeriod($from, $until);
+        
+        return array('entities' => $entities);
     }
 
     /**
