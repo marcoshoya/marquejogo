@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Book
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @author Marcos Lazarin <marcoshoya at gmail dot com>
  * 
  * @ORM\Table(name="book")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Marcoshoya\MarquejogoBundle\Repository\BookRepository")
  */
 class Book
 {
@@ -48,6 +49,18 @@ class Book
      * @ORM\Column(name="total_price", type="decimal", precision=10, scale=2)
      */
     private $totalPrice;
+    
+    /** 
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created_at", type="datetime") 
+     */
+    private $created;
+    
+    /** 
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated_at", type="datetime") 
+     */
+    private $updated;
     
     /**
      * @ORM\OneToMany(targetEntity="BookItem", mappedBy="book") 
@@ -229,5 +242,51 @@ class Book
     public function getProvider()
     {
         return $this->provider;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return Book
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime 
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return Book
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime 
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 }

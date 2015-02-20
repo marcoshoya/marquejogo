@@ -12,7 +12,7 @@
                 </a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#"> Reservas</a>
+                        <a {{ view == 'report' and item == 'book' ? 'class="active"' : '' }} href="{{ path('adm_report_book') }}"> Reservas</a>
                     </li>
                 </ul>              
             </li>
