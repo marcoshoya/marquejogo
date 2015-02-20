@@ -3,6 +3,7 @@
 namespace Marcoshoya\MarquejogoBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * BookRepository
@@ -11,6 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookRepository extends EntityRepository
 {
+    /**
+     * Find all books by period
+     * 
+     * @param \DateTime $from
+     * @param \DateTime $until
+     * 
+     * @return array
+     */
     public function findByPeriod(\DateTime $from, \DateTime $until)
     {
        $qb = $this->getEntityManager()->createQueryBuilder();
@@ -27,5 +36,22 @@ class BookRepository extends EntityRepository
        $query = $qb->getQuery();
        
        return $query->getResult();
+    }
+    
+    public function countBookByMonth(\DateTime $date)
+    {
+        $sql = "SELECT EXTRACT(month from created_at) as month, count(id) as quantity
+                    FROM book
+                    WHERE EXTRACT(year from created_at) = :year 
+                GROUP BY EXTRACT(month from created_at)";
+        
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('quantity', 'quantity');
+        $rsm->addScalarResult('month', 'month');
+
+        $query = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $query->setParameter('year', $date->format('Y'));
+        
+        return $query->getArrayResult();
     }
 }

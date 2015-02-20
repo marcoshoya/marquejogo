@@ -3,7 +3,6 @@
 namespace Marcoshoya\MarquejogoBundle\Controller\Adm;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -26,13 +25,29 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $until = new \DateTime();
-        $from = clone $until;
-        $from->modify("-30 days");
+        $date = new \DateTime();
+        $books = $em->getRepository('MarcoshoyaMarquejogoBundle:Book')->countBookByMonth($date);
         
-        $entities = $em->getRepository("MarcoshoyaMarquejogoBundle:Book")
-            ->findByPeriod($from, $until);
+        $report = array(
+            1 => array('name' => 'Janeiro', 'quantity' => 0), 
+            2 => array('name' => 'Fevereiro', 'quantity' => 0), 
+            3 => array('name' => 'Março', 'quantity' => 0), 
+            4 => array('name' => 'Abril', 'quantity' => 0), 
+            5 => array('name' => 'Maio', 'quantity' => 0), 
+            6 => array('name' => 'Junho', 'quantity' => 0), 
+            7 => array('name' => 'Julho', 'quantity' => 0), 
+            8 => array('name' => 'Agosto', 'quantity' => 0), 
+            9 => array('name' => 'Setebro', 'quantity' => 0), 
+            10 => array('name' => 'Outubro', 'quantity' => 0), 
+            11 => array('name' => 'Novembro', 'quantity' => 0), 
+            12 => array('name' => 'Dezembro', 'quantity' => 0), 
+        );
         
-        return array('entities' => $entities);
+        
+        foreach ($books as $book) {
+            $report[$book['month']]['quantity'] = $book['quantity'];
+        }
+        
+        return array('report' => $report);
     }
 }
