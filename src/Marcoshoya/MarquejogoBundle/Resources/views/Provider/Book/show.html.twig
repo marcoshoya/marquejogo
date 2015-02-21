@@ -18,16 +18,14 @@
     <div class="row">
         <div class="col-lg-12">
             <p align="right">
-                {% if entity.status == 'new' %}
+                {% if entity.allowCancel %}
                     <a href="{{ path('provider_book_cancel', {"id": entity.id}) }}" class="btn btn-warning" alt="Cancelar" title="Cancelar" onclick="return confirm('Deseja cancelar a reserva?')">
                         Cancelar
                     </a>
+                {% endif %}
+                {% if entity.allowConfirm %}
                     <a href="{{ path('provider_book_confirm', {"id": entity.id}) }}" class="btn btn-success" alt="Confirmar" title="Confirmar" onclick="return confirm('Deseja confirmar a reserva?')">
                         Confirmar
-                    </a>
-                {% elseif entity.status == 'booked' %}
-                    <a href="{{ path('provider_book_cancel', {"id": entity.id}) }}" class="btn btn-warning" alt="Cancelar" title="Cancelar" onclick="return confirm('Deseja cancelar a reserva?')">
-                        Cancelar
                     </a>
                 {% endif %}
             </p>
