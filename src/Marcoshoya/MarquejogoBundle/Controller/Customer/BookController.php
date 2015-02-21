@@ -2,7 +2,7 @@
 
 namespace Marcoshoya\MarquejogoBundle\Controller\Customer;
 
-#use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -78,14 +78,24 @@ class BookController extends Controller
     /**
      * @Route("/reserva/{id}/convidar", name="customer_book_invite")
      * @ParamConverter("book", class="MarcoshoyaMarquejogoBundle:Book")
-     * @Method("GET")
      * @Template()
      */
-    public function inviteAction(Book $entity)
+    public function inviteAction(Book $entity, Request $request)
     {
         $data = array();
         
         $form = $this->createSearchFriendForm($data, $entity);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isValid()) {
+            
+            // @TODO: send email
+            
+            $this->get('session')->getFlashBag()->add('success', 'E-mail enviado com sucesso!');
+            
+            return $this->redirect($this->generateUrl('customer_book_invite', array('id' => $entity->getId())));
+        }
         
         return array(
             'results' => null,
@@ -105,7 +115,7 @@ class BookController extends Controller
     private function createSearchFriendForm($data, Book $entity)
     {
         $form = $this->createFormBuilder($data, array(
-                'action' => $this->generateUrl('customer_book_show', array('id' => $entity->getId())),
+                'action' => $this->generateUrl('customer_book_invite', array('id' => $entity->getId())),
                 'method' => 'POST',
             ))
             ->add('email', 'email', array(
@@ -113,7 +123,7 @@ class BookController extends Controller
                     new Assert\NotBlank(array('message' => 'Campo obrigátorio')),
                     new Assert\Email(array('message' => 'Formato do e-mail inválido')),
             )))
-            ->add('buscar', 'submit')
+            ->add('enviar', 'submit')
             ->getForm()
         ;
 

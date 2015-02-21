@@ -1,5 +1,7 @@
 {% extends 'MarcoshoyaMarquejogoBundle:Customer:index.html.twig' %}
 
+{% form_theme form 'MarcoshoyaMarquejogoBundle:Customer/Form:fields_register.html.twig' %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link href="{{ asset('/bundles/marcoshoyamarquejogo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -35,56 +37,13 @@
                             {{ form_errors(form.email) }}
                         </div>
                         <div class="col-md-2">
-                            {{ form_widget(form.buscar, { 'attr': {'class': 'submit btn btn-success'} }) }}
+                            {{ form_widget(form.enviar, { 'attr': {'class': 'submit btn btn-success'} }) }}
                         </div>
                         <div class="clearfix"></div>
                     </div>
                     {{ form_end(form) }}
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-
-            <table  class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Posição</th>
-                        <th>Cidade</th>
-                        <th width="15%">Ação</th>
-                    </tr>
-                </thead>
-                {% if results %}
-                    <tbody>
-                        {% for entity in results %}
-                            <tr>
-                                <td>{{ entity.name }}</td>
-                                <td>{{ entity.positionName }}</td>
-                                <td>{{ entity.locate }}</td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ path('customer_team_invite_submit', {"id": team.id, "player": entity.id}) }}" onclick="return confirm('Deseja convidar o jogador para o time?')">Enviar</a>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                {% else %}
-                    <tfoot>
-                        <tr>
-                            <td colspan="4">
-                                <p align="center">Nenhum resultado encontrado</p>
-                            </td>
-                        </tr>
-                    </tfoot>
-                {% endif %}
-            </table>
-
         </div>
     </div>
 
