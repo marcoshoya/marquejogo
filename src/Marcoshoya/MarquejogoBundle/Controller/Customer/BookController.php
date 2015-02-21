@@ -50,6 +50,32 @@ class BookController extends Controller
     }
     
     /**
+     * @Route("/reserva/{id}/cancelar", name="customer_book_cancel")
+     * @ParamConverter("book", class="MarcoshoyaMarquejogoBundle:Book")
+     * @Template()
+     */
+    public function cancelAction(Book $entity)
+    {
+        try {
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $entity->setStatus('cancelled');
+            $em->persist($entity);
+            
+            $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Reserva cancelada com sucesso!');
+            
+        } catch (\Exception $ex) {
+            $this->get('logger')->error("cancelAction error: " . $ex->getMessage());
+            $this->get('session')->getFlashBag()->add('error', 'Ocorreu um erro ao cancelar a reserva');
+        }
+        
+        return $this->redirect($this->generateUrl('customer_book_show', array('id' => $entity->getId())));
+    }
+    
+    /**
      * @Route("/reserva/{id}/convidar", name="customer_book_invite")
      * @ParamConverter("book", class="MarcoshoyaMarquejogoBundle:Book")
      * @Method("GET")
